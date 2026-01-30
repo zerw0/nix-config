@@ -4,8 +4,8 @@
     fastfetch
   ];
   xdg.configFile = {
-    "fastfetch/config.jsonrc" = {
-      source = ./config.jsonrc;
+    "fastfetch/config.jsonc" = {
+      source = ./config.jsonc;
     };
   };
 }

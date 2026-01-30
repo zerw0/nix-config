@@ -9,6 +9,7 @@
       imports = [
         ./dots/shell/default.nix
         ./dots/ghostty/default.nix
+        ./dots/fastfetch/default.nix
         ./gitconfig.nix
       ];
 

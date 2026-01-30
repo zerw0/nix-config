@@ -16,7 +16,6 @@
     bat
     ripgrep
     ncdu
-    fastfetch
     htop
     iperf3
     wget

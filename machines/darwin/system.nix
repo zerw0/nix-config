@@ -18,7 +18,12 @@
     ncdu
     fastfetch
     htop
-      ];
+    iperf3
+    wget
+    colima
+    docker
+    docker-compose
+    ];
 
   # Homebrew configuration
   homebrew = {
@@ -50,7 +55,6 @@
       "viber"
       "windows-app"
       "rectangle"
-      "orbstack"
       "appcleaner"
     ];
   };

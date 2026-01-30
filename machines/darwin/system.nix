@@ -1,6 +1,9 @@
 { pkgs, system, username, nixpkgs, ... }:
 
 {
+  imports = [
+    ./key-remap.nix
+  ];
   # Packages available system-wide
   environment.systemPackages = with pkgs; [
     neovim
@@ -40,7 +43,6 @@
       "signal"
       "jellyfin-media-player"
       "cursor"
-      "steam"
       "prismlauncher"
       "moonlight"
       "ungoogled-chromium"

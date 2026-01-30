@@ -9,7 +9,6 @@
       imports = [
         ./dots/shell/default.nix
         ./dots/ghostty/default.nix
-        ./machines/darwin/key-remap.nix
         ./gitconfig.nix
       ];
 

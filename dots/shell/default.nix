@@ -39,34 +39,23 @@
     shellAliases = {
       ".." = "cd ..";
       "..." = "cd ../..";
-      ".3" = "cd ../../..";
-      ".4" = "cd ../../../..";
-      ".5" = "cd ../../../../..";
-
       cat = "bat";
       find = "fd -H";
-
       ls = "eza  --color=always --group-directories-first";
       la = "eza -la --color=always --group-directories-first";
       ll = "eza -l --color=always --group-directories-first";
       lt = "eza-aT --color=always --group-directories-first";
       "l." = "eza -a | egrep '^\\.'";
-
       grep = "grep --color=auto";
       egrep = "egrep --color=auto";
       fgrep = "fgrep --color=auto";
-
       cp = "cp -i";
       mv = "mv -i";
       rm = "rm -i";
-
       df = "df -h";
       free = "free -m";
-
       ipp = "curl ipinfo.io/ip";
-
       sudo = "sudo ";
-
       yt = "yt-dlp --add-metadata -i";
       playlist = "yt-dlp -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' ";
       playlist3 = "yt-dlp -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' ";

@@ -49,7 +49,7 @@
               };
               modules = [
                 inputs.home-manager.darwinModules.home-manager
-                ./machines/darwin/lambda
+                ./machines/darwin/lambda/default.nix
                 ./home.nix
                 {
                   home-manager.extraSpecialArgs = {

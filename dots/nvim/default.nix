@@ -2,7 +2,7 @@
     pkgs,
     lib,
     ...
-};
+}:
 {
     home.packages = with pkgs; [
         ripgrep
@@ -15,7 +15,6 @@
         vimAlias = true;
         defaultEditor = true;
         };
-    };
 
     programs.nixvim = {
         enable = true;
@@ -24,4 +23,4 @@
             contrast = true;
         };
     };
-};
+}

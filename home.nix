@@ -1,4 +1,4 @@
-{ username, ... }:
+{ username, inputs, ... }:
 
 {
   home-manager.useGlobalPkgs = true;
@@ -7,8 +7,7 @@
   home-manager.users.hdjenkov.imports = { config, pkgs, ... }:
     {
       imports = [
-        self.inputs.agenix.homeManagerModules.default
-        self.inputs.nixvim.homeModules.nixvim
+        inputs.nixvim.homeModules.nixvim
         ./dots/shell
         ./dots/ghostty
         ./dots/fastfetch

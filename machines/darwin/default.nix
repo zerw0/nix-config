@@ -1,53 +1,39 @@
-{
-  lib,
-  self,
-  ...
-}:
+{ lib, inputs, ... }:
 let
   entries = builtins.attrNames (builtins.readDir ./.);
   configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
-  homeManagerCfg = userPackages: {
-    home-manager.useGlobalPkgs = false;
-    home-manager.extraSpecialArgs = {
-      inherit (self) inputs;
+
+  mkDarwinConfig = name: inputs.nix-darwin.lib.darwinSystem {
+    system = "aarch64-darwin";
+    specialArgs = {
+      inherit inputs;
+      username = "hdjenkov";
     };
-    home-manager.users.hhdjenkov.imports = [
-      self.inputs.agenix.homeManagerModules.default
-      self.inputs.nixvim.homeModules.nixvim
-      ../../dots/shell
-      ../../dots/nvim
-      ../../dots/ghostty
-      ../../dots/fastfetch
+
+    modules = [
+      inputs.home-manager.darwinModules.home-manager
+      (./. + "/${name}/configuration.nix")
+      {
+        home-manager.useGlobalPkgs = false;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = {
+          inherit inputs;
+        };
+        home-manager.backupFileExtension = "bak";
+        home-manager.users.hdjenkov = {
+          imports = [
+            inputs.nixvim.homeModules.nixvim
+            ../../dots/shell
+            ../../dots/nvim
+            ../../dots/ghostty
+            ../../dots/fastfetch
+          ];
+          home.homeDirectory = lib.mkForce "/Users/hdjenkov";
+        };
+      }
     ];
-    home-manager.backupFileExtension = "bak";
-    home-manager.useUserPackages = userPackages;
   };
 in
 {
-  flake.darwinConfigurations = lib.listToAttrs (
-    builtins.map (
-      name:
-      lib.nameValuePair name (
-        self.inputs.nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          specialArgs = {
-            inherit (self) inputs;
-            self = {
-              darwinModules = self.darwinModules;
-            };
-          };
-
-          modules = [
-            self.inputs.agenix.darwinModules.default
-            self.inputs.home-manager.darwinModules.home-manager
-=            (./. + "/${name}/configuration.nix")
-            (self.inputs.nixpkgs.lib.attrsets.recursiveUpdate (homeManagerCfg true) {
-              home-manager.users.notthebee.home.homeDirectory =
-                self.inputs.nixpkgs.lib.mkForce "/Users/hdjenkov";
-            })
-          ];
-        }
-      )
-    ) configs
-  );
+  flake.darwinConfigurations = lib.genAttrs configs mkDarwinConfig;
 }

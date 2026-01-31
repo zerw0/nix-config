@@ -4,9 +4,11 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.users.${username} = { config, pkgs, ... }:
+  home-manager.users.hdjenkov.imports = { config, pkgs, ... }:
     {
       imports = [
+        self.inputs.agenix.homeManagerModules.default
+        self.inputs.nixvim.homeModules.nixvim
         ./dots/shell
         ./dots/ghostty
         ./dots/fastfetch

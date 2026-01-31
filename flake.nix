@@ -40,7 +40,7 @@
       nix-darwin.lib.darwinSystem {
         inherit system specialArgs;
         modules = [
-          ./machines/darwin/system.nix
+          ./machines/darwin
           home-manager.darwinModules.home-manager
           ./home.nix
         ];

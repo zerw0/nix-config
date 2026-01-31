@@ -1,0 +1,53 @@
+{
+  lib,
+  self,
+  ...
+}:
+let
+  entries = builtins.attrNames (builtins.readDir ./.);
+  configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
+  homeManagerCfg = userPackages: {
+    home-manager.useGlobalPkgs = false;
+    home-manager.extraSpecialArgs = {
+      inherit (self) inputs;
+    };
+    home-manager.users.hhdjenkov.imports = [
+      self.inputs.agenix.homeManagerModules.default
+      self.inputs.nixvim.homeModules.nixvim
+      ../dots/shell
+      ../dots/nvim
+      ../dots/ghostty
+      ../dots/fastfetch
+    ];
+    home-manager.backupFileExtension = "bak";
+    home-manager.useUserPackages = userPackages;
+  };
+in
+{
+  flake.darwinConfigurations = lib.listToAttrs (
+    builtins.map (
+      name:
+      lib.nameValuePair name (
+        self.inputs.nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = {
+            inherit (self) inputs;
+            self = {
+              darwinModules = self.darwinModules;
+            };
+          };
+
+          modules = [
+            self.inputs.agenix.darwinModules.default
+            self.inputs.home-manager.darwinModules.home-manager
+=            (./. + "/${name}/configuration.nix")
+            (self.inputs.nixpkgs.lib.attrsets.recursiveUpdate (homeManagerCfg true) {
+              home-manager.users.notthebee.home.homeDirectory =
+                self.inputs.nixpkgs.lib.mkForce "/Users/hdjenkov";
+            })
+          ];
+        }
+      )
+    ) configs
+  );
+}

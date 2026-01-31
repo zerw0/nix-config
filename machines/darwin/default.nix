@@ -14,10 +14,10 @@ let
     home-manager.users.hhdjenkov.imports = [
       self.inputs.agenix.homeManagerModules.default
       self.inputs.nixvim.homeModules.nixvim
-      ../dots/shell
-      ../dots/nvim
-      ../dots/ghostty
-      ../dots/fastfetch
+      ../../dots/shell
+      ../../dots/nvim
+      ../../dots/ghostty
+      ../../dots/fastfetch
     ];
     home-manager.backupFileExtension = "bak";
     home-manager.useUserPackages = userPackages;

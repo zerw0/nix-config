@@ -7,10 +7,11 @@
   home-manager.users.${username} = { config, pkgs, ... }:
     {
       imports = [
-        ./dots/shell/default.nix
-        ./dots/ghostty/default.nix
-        ./dots/fastfetch/default.nix
+        ./dots/shell
+        ./dots/ghostty
+        ./dots/fastfetch
         ./gitconfig.nix
+        ./dots/nvim
       ];
 
       # Home Manager release compatibility

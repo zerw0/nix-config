@@ -55,6 +55,7 @@
       "windows-app"
       "rectangle"
       "appcleaner"
+      "obs"
     ];
   };
 

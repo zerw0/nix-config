@@ -9,18 +9,21 @@
         nodejs
 ];
 
-    programs.neovim = {
+    programs.nixvim = {
         enable = true;
         viAlias = true;
         vimAlias = true;
         defaultEditor = true;
+        colorscheme = "gruvbox";
+        opts = {
+            termguicolors = true;
+            background = "dark";
         };
-
-    programs.nixvim = {
-        enable = true;
-        colorscheme.gruvbox = {
-            borders = true;
-            contrast = true;
+        colorschemes.gruvbox = {
+            enable = true;
+            settings = {
+                contrast = "hard";
+            };
         };
     };
 }

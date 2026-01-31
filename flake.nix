@@ -5,6 +5,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,43 +31,36 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, ... }:
-  let
-    machinesDir = ./machines/darwin;
-    entries = builtins.attrNames (builtins.readDir machinesDir);
-    configs = builtins.filter (dir: builtins.pathExists (machinesDir + "/${dir}/configuration.nix")) entries;
-
-    mkDarwinConfig = name: nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = {
-        inherit inputs;
-        username = "hdjenkov";
-      };
-
-      modules = [
-        inputs.home-manager.darwinModules.home-manager
-        (machinesDir + "/${name}/configuration.nix")
-        {
-          home-manager.useGlobalPkgs = false;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            inherit inputs;
+  outputs = inputs@{ nixpkgs, nix-darwin, ... }:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      { ... }:
+      {
+        systems = [
+          "aarch64-darwin"
+        ];
+        flake = {
+          darwinConfigurations = {
+            lambda = nix-darwin.lib.darwinSystem {
+              system = "aarch64-darwin";
+              specialArgs = {
+                inherit inputs;
+                system = "aarch64-darwin";
+                username = "hdjenkov";
+              };
+              modules = [
+                inputs.home-manager.darwinModules.home-manager
+                ./machines/darwin/lambda
+                ./home.nix
+                {
+                  home-manager.extraSpecialArgs = {
+                    inherit inputs;
+                  };
+                  home-manager.backupFileExtension = "bak";
+                }
+              ];
+            };
           };
-          home-manager.backupFileExtension = "bak";
-          home-manager.users.hdjenkov = {
-            imports = [
-              inputs.nixvim.homeModules.nixvim
-              ./dots/shell
-              ./dots/nvim
-              ./dots/ghostty
-              ./dots/fastfetch
-            ];
-            home.homeDirectory = nixpkgs.lib.mkForce "/Users/hdjenkov";
-          };
-        }
-      ];
-    };
-  in {
-    darwinConfigurations = nixpkgs.lib.genAttrs configs mkDarwinConfig;
-  };
+        };
+      }
+    );
 }

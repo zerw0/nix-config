@@ -38,29 +38,9 @@
         systems = [
           "aarch64-darwin"
         ];
-        flake = {
-          darwinConfigurations = {
-            lambda = nix-darwin.lib.darwinSystem {
-              system = "aarch64-darwin";
-              specialArgs = {
-                inherit inputs;
-                system = "aarch64-darwin";
-                username = "hdjenkov";
-              };
-              modules = [
-                inputs.home-manager.darwinModules.home-manager
-                ./machines/darwin/lambda/default.nix
-                ./home.nix
-                {
-                  home-manager.extraSpecialArgs = {
-                    inherit inputs;
-                  };
-                  home-manager.backupFileExtension = "bak";
-                }
-              ];
-            };
-          };
-        };
+        imports = [
+          ./machines/darwin/default.nix
+        ];
       }
     );
 }

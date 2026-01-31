@@ -7,29 +7,19 @@ let
     system = "aarch64-darwin";
     specialArgs = {
       inherit inputs;
+      system = "aarch64-darwin";
       username = "hdjenkov";
     };
 
     modules = [
       inputs.home-manager.darwinModules.home-manager
       (./. + "/${name}/configuration.nix")
+      ../../users/hdjenkov
       {
-        home-manager.useGlobalPkgs = false;
-        home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = {
           inherit inputs;
         };
         home-manager.backupFileExtension = "bak";
-        home-manager.users.hdjenkov = {
-          imports = [
-            inputs.nixvim.homeModules.nixvim
-            ../../dots/shell
-            ../../dots/nvim
-            ../../dots/ghostty
-            ../../dots/fastfetch
-          ];
-          home.homeDirectory = lib.mkForce "/Users/hdjenkov";
-        };
       }
     ];
   };

@@ -1,7 +1,7 @@
 { lib, inputs, ... }:
 let
-  entries = builtins.attrNames (builtins.readDir ./.);
-  configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
+  # Explicitly list machine names to avoid builtins.toFile warning
+  configs = [ "lambda" ];
 
   mkDarwinConfig = name: inputs.nix-darwin.lib.darwinSystem {
     system = "aarch64-darwin";

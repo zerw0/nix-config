@@ -28,6 +28,11 @@
             signcolumn = "yes";
             updatetime = 300;
             completeopt = ["menu" "menuone" "noselect"];
+            # Performance opts
+            swapfile = false;
+            backup = false;
+            undofile = true;
+            timeoutlen = 300;
         };
 
         globals = {
@@ -132,7 +137,7 @@
                 settings.options.theme = "gruvbox";
             };
             web-devicons.enable = true;
-            which-key.enable = true;
+            # which-key.enable = true;  # Disabled due to builtins.toFile warning
             indent-blankline.enable = true;
             nvim-autopairs.enable = true;
 

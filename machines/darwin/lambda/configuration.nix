@@ -6,7 +6,6 @@
   ];
   # Packages available system-wide
   environment.systemPackages = with pkgs; [
-    neovim
     eza
     yt-dlp
     ffmpeg

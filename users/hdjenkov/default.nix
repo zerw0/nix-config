@@ -11,6 +11,7 @@
     ../../dots/fastfetch
     ../../gitconfig.nix
     ../../dots/nvim
+    ../../dots/tmux
   ];
 
   # Home Manager release compatibility

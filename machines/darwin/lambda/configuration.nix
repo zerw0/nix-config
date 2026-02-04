@@ -21,6 +21,7 @@
     colima
     docker
     docker-compose
+    nodejs
     ];
 
   # Homebrew configuration
@@ -56,6 +57,7 @@
       "appcleaner"
       "obs"
       "vlc"
+      "affinity"
     ];
   };
 

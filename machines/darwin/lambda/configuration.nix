@@ -56,7 +56,6 @@
       "rectangle"
       "appcleaner"
       "obs"
-      "vlc"
       "affinity"
     ];
   };

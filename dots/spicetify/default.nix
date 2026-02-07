@@ -1,4 +1,4 @@
- pkgs, inputs, ... }:
+{pkgs, inputs, ... }:
 let
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
 in {
@@ -7,8 +7,14 @@ in {
     enabledExtensions = with spicePkgs.extensions; [
       hidePodcasts
       shuffle
+      lastfm
+      volumePercentage
+      beautifulLyrics
     ];
-    theme = spicePkgs.themes.gruvify;
-    colorScheme = "mocha";
+    enabledCustomApps = with spicePkgs.apps; [
+      lyricsPlus
+    ];
+    theme = spicePkgs.themes.defaultDynamic;
+    colorScheme = "Dark-Base";
   };
 }

@@ -41,7 +41,6 @@
       "zen"
       "iina"
       "keka"
-      "spotify"
       "localsend"
       "rustdesk"
       "signal"
@@ -57,6 +56,7 @@
       "betterdisplay"
       "linearmouse"
       "telegram"
+      "lunar-client"
     ];
   };
 

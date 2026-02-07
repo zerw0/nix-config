@@ -38,7 +38,6 @@
       "visual-studio-code"
       "vesktop"
       "tailscale-app"
-      "karabiner-elements"
       "zen"
       "iina"
       "keka"
@@ -54,11 +53,11 @@
       "viber"
       "windows-app"
       "appcleaner"
-      "obs"
       "affinity"
       "betterdisplay"
       "linearmouse"
       "telegram"
+      "hot"
     ];
   };
 
@@ -82,8 +81,8 @@
       };
 
       dock = {
-        orientation = "left";
-        autohide = true;
+        orientation = "bottom";
+        autohide = false;
         autohide-time-modifier = 0.20;
         magnification = true;
         tilesize = 32;
@@ -113,6 +112,13 @@
 
     activationScripts.postActivation.text = ''
       killall Finder || true
+    '';
+
+    activationScripts.hotCorners.text = ''
+      echo "Configuring hot corners..."
+      defaults write com.apple.dock wvous-tl-corner -int 2
+      defaults write com.apple.dock wvous-br-corner -int 14
+      killall Dock || true
     '';
   };
 

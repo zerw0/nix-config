@@ -58,6 +58,7 @@
       "affinity"
       "betterdisplay"
       "linearmouse"
+      "telegram"
     ];
   };
 

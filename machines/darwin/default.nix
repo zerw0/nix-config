@@ -16,6 +16,7 @@ let
       (./. + "/${name}/configuration.nix")
       ../../users/hdjenkov
       {
+        nixpkgs.config.allowUnfree = true;
         home-manager.extraSpecialArgs = {
           inherit inputs;
         };

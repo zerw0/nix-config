@@ -6,13 +6,11 @@
 
   home-manager.users.hdjenkov.imports = [
     inputs.nixvim.homeModules.nixvim
-    inputs.spicetify-nix.homeManagerModules.default
     ../../dots/shell
     ../../dots/ghostty
     ../../dots/fastfetch
     ../../gitconfig.nix
     ../../dots/nvim
-    ../../dots/spicetify
   ];
 
   # Home Manager release compatibility

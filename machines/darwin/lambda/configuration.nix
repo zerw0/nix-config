@@ -38,6 +38,7 @@
       "visual-studio-code"
       "vesktop"
       "tailscale-app"
+      "karabiner-elements"
       "zen"
       "iina"
       "keka"
@@ -46,17 +47,17 @@
       "rustdesk"
       "signal"
       "jellyfin-media-player"
-      "cursor"
       "prismlauncher"
       "moonlight"
       "ungoogled-chromium"
       "heroic"
       "viber"
       "windows-app"
-      "rectangle"
       "appcleaner"
       "obs"
       "affinity"
+      "betterdisplay"
+      "linearmouse"
     ];
   };
 

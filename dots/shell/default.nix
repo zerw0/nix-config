@@ -13,6 +13,7 @@
     "$HOME/.local/bin"
     "/usr/local/bin"
     "/sbin"
+    "$HOME/.android-sdk-macosx/platform-tools/"
   ];
 
   programs.fish = {

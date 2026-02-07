@@ -57,7 +57,6 @@
       "betterdisplay"
       "linearmouse"
       "telegram"
-      "hot"
     ];
   };
 

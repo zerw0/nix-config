@@ -13,6 +13,7 @@ let
 
     modules = [
       inputs.home-manager.darwinModules.home-manager
+      inputs.spicetify-nix.darwinModules.spicetify
       (./. + "/${name}/configuration.nix")
       ../../users/hdjenkov
       {

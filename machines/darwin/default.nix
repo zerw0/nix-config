@@ -7,7 +7,6 @@ let
     system = "aarch64-darwin";
     specialArgs = {
       inherit inputs;
-      system = "aarch64-darwin";
       username = "hdjenkov";
     };
 

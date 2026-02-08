@@ -1,4 +1,4 @@
-{ pkgs, system, username, nixpkgs, ... }:
+{ pkgs, username, ... }:
 
 {
   # Packages available system-wide
@@ -116,8 +116,6 @@
       killall Dock || true
     '';
   };
-
-  nixpkgs.hostPlatform = system;
 
   # Users & shell
   programs.fish.enable = true;

@@ -42,9 +42,11 @@
       {
         systems = [
           "aarch64-darwin"
+          "x86_64-linux"
         ];
         imports = [
           ./machines/darwin/default.nix
+          ./machines/nixos/default.nix
         ];
       }
     );

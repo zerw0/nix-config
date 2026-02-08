@@ -32,6 +32,47 @@
     # '';
   };
 
+  home-manager.users.hdjenkov.xdg.configFile."karabiner/karabiner.json".text = ''
+    {
+      "global": {
+        "show_in_menu_bar": true
+      },
+      "profiles": [
+        {
+          "name": "Default profile",
+          "selected": true,
+          "simple_modifications": [
+            {
+              "from": { "key_code": "grave_accent_and_tilde" },
+              "to": [{ "key_code": "non_us_backslash" }]
+            },
+            {
+              "from": { "key_code": "non_us_backslash" },
+              "to": [{ "key_code": "grave_accent_and_tilde" }]
+            }
+          ],
+          "complex_modifications": {
+            "rules": [
+              {
+                "description": "Caps Lock to Control when held, Escape when tapped",
+                "manipulators": [
+                  {
+                    "type": "basic",
+                    "from": { "key_code": "caps_lock" },
+                    "to": [{ "key_code": "left_control" }],
+                    "to_if_alone": [{ "key_code": "escape" }]
+                  }
+                ]
+              }
+            ]
+          },
+          "devices": [],
+          "virtual_hid_keyboard": { "keyboard_type": "ansi" }
+        }
+      ]
+    }
+  '';
+
   # Session variables
   home-manager.users.hdjenkov.home.sessionVariables = {
     EDITOR = "nvim";

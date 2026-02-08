@@ -1,9 +1,6 @@
 { pkgs, system, username, nixpkgs, ... }:
 
 {
-  imports = [
-    ./key-remap.nix
-  ];
   # Packages available system-wide
   environment.systemPackages = with pkgs; [
     eza
@@ -46,17 +43,16 @@
       "signal"
       "jellyfin-media-player"
       "prismlauncher"
-      "moonlight"
       "ungoogled-chromium"
       "heroic"
       "viber"
       "windows-app"
-      "appcleaner"
-      "affinity"
       "betterdisplay"
       "linearmouse"
+      "karabiner-elements"
       "telegram"
       "lunar-client"
+      "appcleaner"
     ];
   };
 

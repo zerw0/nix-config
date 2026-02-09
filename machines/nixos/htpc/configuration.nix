@@ -8,6 +8,7 @@
   imports = [
     ./filesystems.nix
     ./boot.nix
+    ./tailscale.nix
   ];
 
   # Basic system configuration
@@ -20,7 +21,6 @@
   # Networking
   networking.hostName = "htpc";
   networking.networkmanager.enable = true;
-  services.tailscale.enable = true;
 
   # SSH
   services.openssh.enable = true;

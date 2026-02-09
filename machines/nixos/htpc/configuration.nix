@@ -33,10 +33,14 @@
     allowedUDPPorts = [ 8080 ];
   };
 
-  # Wayland and Cage for Kodi
-  services.cage.enable = true;
-  services.cage.user = "hdjenkov";
-  services.cage.program = "${pkgs.kodi-wayland}/bin/kodi-standalone";
+  # Kodi
+  services.xserver.enable = true;
+  services.xserver.desktopManager.kodi.enable = true;
+  services.displayManager.autoLogin.user = "hdjenkov";
+  services.xserver.displayManager.lightdm.greeter.enable = false;
+
+  # Define a user account
+  users.extraUsers.hdjenkov.isNormalUser = true;
 
   # Sound with PipeWire
   services.pipewire = {

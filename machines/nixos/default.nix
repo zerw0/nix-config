@@ -49,10 +49,10 @@ in
               (./. + "/${name}/configuration.nix")
               ../../users/hdjenkov
               (homeManagerCfg false [ ])
-              {
+              ({ pkgs, ... }: {
                 nixpkgs.config.allowUnfree = true;
                 nix.settings.experimental-features = [ "flakes" "nix-command" ];
-                environment.systemPackages = with self.inputs."nixpkgs${lib.attrsets.attrByPath [ name ] "" nixpkgsMap}"; [
+                environment.systemPackages = with pkgs; [
                   eza
                   ffmpeg
                   fd
@@ -61,7 +61,7 @@ in
                   ncdu
                   wget
                 ];
-              }
+              })
             ];
           }
         )

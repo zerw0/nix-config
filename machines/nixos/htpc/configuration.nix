@@ -42,8 +42,8 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    fsType = "btrfs";
-    options = [ "subvol=log" "compress=zstd" "noatime" ];
+    alsa.support32Bit = true;
+    pulse.enable = true;
   };
 
   # User configuration

@@ -5,6 +5,10 @@
   ...
 }:
 {
+  imports = [
+    ./filesystems.nix
+  ];
+
   # Basic system configuration
   system.stateVersion = "25.11";
 
@@ -38,10 +42,9 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
+    fsType = "btrfs";
+    options = [ "subvol=log" "compress=zstd" "noatime" ];
   };
-  sound.enable = true;
 
   # User configuration
   users.users.hdjenkov = {

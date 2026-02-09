@@ -26,6 +26,7 @@
 
   # SSH
   services.openssh.enable = true;
+  services.openssh.settings.PasswordAuthentication = false;
 
   # Firewall
   networking.firewall = {

@@ -28,8 +28,8 @@
 
   # Firewall
   networking.firewall = {
-    allowedTCPPorts = [ 8080 ];
-    allowedUDPPorts = [ 8080 ];
+    allowedTCPPorts = [ 8080 5000 ];
+    allowedUDPPorts = [ 8080 5353 ];
   };
 
   # Kodi

@@ -36,7 +36,7 @@
   services.xserver.enable = true;
   services.xserver.desktopManager.kodi.enable = true;
   services.xserver.desktopManager.kodi.package = (pkgs.kodi.withPackages (kodiPkgs: with kodiPkgs; [
-    jellycon
+    jellyfin
   ]));
   services.displayManager.autoLogin.user = "hdjenkov";
   services.xserver.displayManager.lightdm.greeter.enable = false;

@@ -40,9 +40,6 @@
   services.displayManager.autoLogin.user = "hdjenkov";
   services.xserver.displayManager.lightdm.greeter.enable = false;
 
-  # Define a user account
-  users.extraUsers.hdjenkov.isNormalUser = true;
-
   # Sound with PipeWire
   services.pipewire = {
     enable = true;
@@ -51,18 +48,21 @@
     pulse.enable = true;
   };
 
-  # Shell
-  programs.fish.enable = true;
-  users.users.hdjenkov.shell = pkgs.fish;
-
   # User configuration
   users.users.hdjenkov = {
     isNormalUser = true;
     hashedPassword = "";
+    shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHggBw49Gg0kyKKp2H44rqhlBEH1z1RdYPQIAU7AJiWe me@zerw.xyz"
+    ];
     extraGroups = [
       "wheel"  # for sudo
       "video"  # for GPU access
       "audio"  # for audio
     ];
   };
+
+  # Shell
+  programs.fish.enable = true;
 }

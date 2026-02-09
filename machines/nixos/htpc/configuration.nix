@@ -7,6 +7,7 @@
 {
   imports = [
     ./filesystems.nix
+    ./boot.nix
   ];
 
   # Basic system configuration
@@ -16,13 +17,10 @@
   time.timeZone = "Europe/Sofia";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   # Networking
   networking.hostName = "htpc";
   networking.networkmanager.enable = true;
+  services.tailscale.enable = true;
 
   # SSH
   services.openssh.enable = true;

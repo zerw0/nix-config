@@ -35,6 +35,9 @@
   # Kodi
   services.xserver.enable = true;
   services.xserver.desktopManager.kodi.enable = true;
+  services.xserver.desktopManager.kodi.package = (pkgs.kodi.withPackages (kodiPkgs: with kodiPkgs; [
+    jellycon
+  ]));
   services.displayManager.autoLogin.user = "hdjenkov";
   services.xserver.displayManager.lightdm.greeter.enable = false;
 
@@ -59,6 +62,23 @@
       "video"  # for GPU access
       "audio"  # for audio
     ];
+  };
+
+  # Hardware acceleration (Intel)
+  nixpkgs.config.packageOverrides = pkgs: {
+    intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
+  };
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      libvdpau-va-gl
+    ];
+  };
+
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
   };
 
   # Shell

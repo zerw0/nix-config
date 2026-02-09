@@ -1,18 +1,12 @@
 { username, inputs, pkgs, ... }:
 
 {
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
-
   home-manager.users.hdjenkov.imports = [
     inputs.nixvim.homeModules.nixvim
-    inputs.spicetify-nix.homeManagerModules.spicetify
     ../../dots/shell
-    ../../dots/ghostty
     ../../dots/fastfetch
     ../../gitconfig.nix
     ../../dots/nvim
-    ../../dots/spicetify
   ];
 
   # Home Manager release compatibility

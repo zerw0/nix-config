@@ -7,7 +7,7 @@
     ../../../dots/ghostty
     ../../../dots/spicetify
   ];
-  
+
   # Allow unfree packages for home-manager
   home-manager.users.hdjenkov.nixpkgs.config.allowUnfree = true;
 

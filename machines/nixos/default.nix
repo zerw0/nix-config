@@ -11,12 +11,7 @@ let
     home-manager.extraSpecialArgs = {
       inherit (self) inputs;
     };
-    home-manager.users.hdjenkov.imports = [
-      self.inputs.nixvim.homeModules.nixvim
-      ../../dots/shell
-      ../../dots/nvim
-    ]
-    ++ extraImports;
+    home-manager.users.hdjenkov.imports = extraImports;
     home-manager.backupFileExtension = "bak";
     home-manager.useUserPackages = userPackages;
   };

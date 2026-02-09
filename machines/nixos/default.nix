@@ -52,6 +52,9 @@ in
               ({ pkgs, ... }: {
                 nixpkgs.config.allowUnfree = true;
                 nix.settings.experimental-features = [ "flakes" "nix-command" ];
+                users.users.hdjenkov.openssh.authorizedKeys.keys = [
+                  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHggBw49Gg0kyKKp2H44rqhlBEH1z1RdYPQIAU7AJiWe me@zerw.xyz"
+                ];
                 environment.systemPackages = with pkgs; [
                   eza
                   ffmpeg

@@ -50,6 +50,10 @@
     pulse.enable = true;
   };
 
+  # Shell
+  programs.fish.enable = true;
+  users.users.hdjenkov.shell = pkgs.fish;
+
   # User configuration
   users.users.hdjenkov = {
     isNormalUser = true;

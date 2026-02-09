@@ -13,7 +13,6 @@ let
     };
     home-manager.users.hdjenkov.imports = [
       self.inputs.nixvim.homeModules.nixvim
-      ../../users/hdjenkov/default.nix
       ../../dots/shell
       ../../dots/nvim
     ]

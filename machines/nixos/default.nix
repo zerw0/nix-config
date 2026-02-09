@@ -1,29 +1,76 @@
-{ lib, inputs, ... }:
+{
+  lib,
+  self,
+  ...
+}:
 let
-  # Explicitly list machine names to avoid builtins.toFile warning
-  configs = [ ];
-
-  mkNixOSConfig = name: inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    specialArgs = {
-      inherit inputs;
-      username = "hdjenkov";
+  entries = builtins.attrNames (builtins.readDir ./.);
+  configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
+  homeManagerCfg = userPackages: extraImports: {
+    home-manager.useGlobalPkgs = false;
+    home-manager.extraSpecialArgs = {
+      inherit (self) inputs;
     };
-
-    modules = [
-      inputs.home-manager.nixosModules.home-manager
-      (./. + "/${name}/configuration.nix")
-      ../../users/hdjenkov
-      {
-        nixpkgs.config.allowUnfree = true;
-        home-manager.extraSpecialArgs = {
-          inherit inputs;
-        };
-        home-manager.backupFileExtension = "bak";
-      }
-    ];
+    home-manager.users.hdjenkov.imports = [
+      self.inputs.nixvim.homeModules.nixvim
+      ../../users/hdjenkov/default.nix
+      ../../dots/shell
+      ../../dots/nvim
+    ]
+    ++ extraImports;
+    home-manager.backupFileExtension = "bak";
+    home-manager.useUserPackages = userPackages;
   };
 in
 {
-  flake.nixosConfigurations = lib.genAttrs configs mkNixOSConfig;
+
+  flake.nixosConfigurations =
+    let
+      nixpkgsMap = {
+        htpc = "-unstable";
+      };
+      systemArchMap = {
+
+      };
+      myNixosSystem =
+        name: self.inputs."nixpkgs${lib.attrsets.attrByPath [ name ] "" nixpkgsMap}".lib.nixosSystem;
+    in
+    lib.listToAttrs (
+      builtins.map (
+        name:
+        lib.nameValuePair name (
+          (myNixosSystem name) {
+            system = lib.attrsets.attrByPath [ name ] "x86_64-linux" systemArchMap;
+            specialArgs = {
+              inherit (self) inputs;
+              self = {
+                nixosModules = self.nixosModules;
+              };
+            };
+
+            modules = [
+              self.inputs."home-manager${
+                lib.attrsets.attrByPath [ name ] "" nixpkgsMap
+              }".nixosModules.home-manager
+              (./. + "/${name}/configuration.nix")
+              ../../users/hdjenkov
+              (homeManagerCfg false [ ])
+              {
+                nixpkgs.config.allowUnfree = true;
+                nix.settings.experimental-features = [ "flakes" "nix-command" ];
+                environment.systemPackages = with self.inputs."nixpkgs${lib.attrsets.attrByPath [ name ] "" nixpkgsMap}"; [
+                  eza
+                  ffmpeg
+                  fd
+                  bat
+                  ripgrep
+                  ncdu
+                  wget
+                ];
+              }
+            ];
+          }
+        )
+      ) configs
+    );
 }

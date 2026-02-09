@@ -45,7 +45,7 @@
       ls = "eza  --color=always --group-directories-first";
       la = "eza -la --color=always --group-directories-first";
       ll = "eza -l --color=always --group-directories-first";
-      lt = "eza-aT --color=always --group-directories-first";
+      lt = "eza -aT --color=always --group-directories-first";
       "l." = "eza -a | egrep '^\\.'";
       grep = "grep --color=auto";
       egrep = "egrep --color=auto";

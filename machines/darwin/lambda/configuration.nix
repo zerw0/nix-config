@@ -1,6 +1,16 @@
-{ pkgs, username, ... }:
+{ pkgs, username, inputs, ... }:
 
 {
+  # Lambda-specific home-manager imports
+  home-manager.users.hdjenkov.imports = [
+    inputs.spicetify-nix.homeManagerModules.spicetify
+    ../../../dots/ghostty
+    ../../../dots/spicetify
+  ];
+  
+  # Allow unfree packages for home-manager
+  home-manager.users.hdjenkov.nixpkgs.config.allowUnfree = true;
+
   # Packages available system-wide
   environment.systemPackages = with pkgs; [
     eza

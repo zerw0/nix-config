@@ -29,6 +29,7 @@
     docker
     docker-compose
     nodejs
+    age
     ];
 
   # Homebrew configuration

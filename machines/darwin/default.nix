@@ -14,6 +14,8 @@ let
       inputs.home-manager.darwinModules.home-manager
       inputs.spicetify-nix.darwinModules.spicetify
       (./. + "/${name}/configuration.nix")
+      ../../dots/spicetify
+      ../../dots/ghostty
       ../../users/hdjenkov
       {
         nixpkgs.config.allowUnfree = true;

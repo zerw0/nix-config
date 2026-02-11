@@ -26,6 +26,25 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false;
 
+  # ZRam
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
+
+  # Avahi
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;  # Enable .local resolution for IPv4
+    allowInterfaces = [ "eno1" ];  # Only announce on main ethernet (not podman/veth)
+    publish = {
+      enable = true;
+      addresses = true;     # Publish hostname.local
+      workstation = true;   # Announce as workstation
+    };
+  };
+
   # Firewall
   networking.firewall = {
     allowedTCPPorts = [ 8080 5000 ];
@@ -58,9 +77,10 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHggBw49Gg0kyKKp2H44rqhlBEH1z1RdYPQIAU7AJiWe me@zerw.xyz"
     ];
     extraGroups = [
-      "wheel"  # for sudo
-      "video"  # for GPU access
-      "audio"  # for audio
+      "wheel"
+      "video"
+      "audio"
+      "input"
     ];
   };
 

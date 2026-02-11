@@ -29,6 +29,7 @@
       "rd.udev.log_level=3"
       "udev.log_priority=3"
       "boot.shell_on_fail"
+      "consoleblank=0"
     ];
     loader = {
       timeout = 0;

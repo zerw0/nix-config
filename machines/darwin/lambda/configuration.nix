@@ -29,6 +29,7 @@
     docker
     docker-compose
     nodejs
+    colima
     age
     ];
 
@@ -97,7 +98,6 @@
 
       trackpad = {
         Clicking = true;
-        TrackpadThreeFingerDrag = true;
       };
 
       finder = {

@@ -89,8 +89,9 @@
 
       dock = {
         orientation = "bottom";
-        autohide = false;
-        autohide-time-modifier = 0.20;
+        autohide = true;
+        autohide-delay = 0.0;
+        autohide-time-modifier = 0.5;
         magnification = true;
         tilesize = 32;
         largesize = 64;

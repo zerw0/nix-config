@@ -27,6 +27,9 @@
       # Disable last login message (macOS)
       touch "$HOME/.hushlogin" 2>/dev/null || true
 
+      # Homebrew shell environment (macOS)
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+
       # Source extra fish files if they exist
       test -f "$HOME/.config/fish/shortcuts.fish"; and source "$HOME/.config/fish/shortcuts.fish"
       test -f "$HOME/.config/fish/colors.fish"; and source "$HOME/.config/fish/colors.fish"

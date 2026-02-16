@@ -26,6 +26,7 @@
     # '';
   };
 
+  home-manager.users.hdjenkov.xdg.configFile."karabiner/karabiner.json".force = true;
   home-manager.users.hdjenkov.xdg.configFile."karabiner/karabiner.json".text = ''
     {
       "global": {

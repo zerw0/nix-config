@@ -31,7 +31,16 @@
     nodejs
     colima
     age
-    ];
+    (python313.withPackages (
+      ps: with ps; [
+        pip
+        requests
+        setuptools
+        pyyaml
+        pyopenssl
+      ]
+    ))
+  ];
 
   # Homebrew configuration
   homebrew = {

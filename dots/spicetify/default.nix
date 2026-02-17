@@ -12,9 +12,8 @@ in {
       beautifulLyrics
     ];
     enabledCustomApps = with spicePkgs.apps; [
-      lyricsPlus
     ];
-    theme = spicePkgs.themes.defaultDynamic;
-    colorScheme = "Dark-Base";
+    theme = spicePkgs.themes.text;
+    colorScheme = "Gruvbox";
   };
 }

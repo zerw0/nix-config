@@ -15,7 +15,7 @@
 
         opts = {
             compatible = false;
-            shell = "fish";
+            shell = "zsh";
             textwidth = 0;
             clipboard = "unnamedplus";
             backspace = "indent,eol,start";

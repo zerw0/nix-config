@@ -12,6 +12,9 @@
   # Home Manager release compatibility
   home-manager.users.hdjenkov.home.stateVersion = "25.11";
 
+  # Set Zsh as the default shell
+  home-manager.users.hdjenkov.programs.zsh.enable = true;
+
   # User packages
   home-manager.users.hdjenkov.home.packages = [
     pkgs.nerd-fonts.caskaydia-cove

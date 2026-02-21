@@ -139,28 +139,12 @@
   };
 
   # Users & shell
-  programs.fish.enable = true;
-  environment.shells = with pkgs; [ fish ];
+  programs.zsh.enable = true;
 
   users.users.${username} = {
     name = username;
     home = "/Users/${username}";
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
   };
   system.primaryUser = "hdjenkov";
-
-  # Ensure macOS login shell is updated for the user
-  system.activationScripts.setDefaultShell.text = ''
-    echo "Setting login shell to fish for ${username}..."
-    # Make sure the shell is registered in /etc/shells
-    if ! grep -q "^/run/current-system/sw/bin/fish$" /etc/shells; then
-      echo "/run/current-system/sw/bin/fish" | sudo tee -a /etc/shells >/dev/null || true
-    fi
-
-    # Update the login shell in the directory service
-    dscl . -create /Users/${username} UserShell /run/current-system/sw/bin/fish || true
-
-    # Also try chsh as a fallback
-    chsh -s /run/current-system/sw/bin/fish "${username}" || true
-  '';
 }

@@ -3,7 +3,6 @@
   programs.ghostty = {
     enable = true;
     package = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
-    enableFishIntegration = true;
     settings = {
       theme = "Gruvbox Dark";
       font-size = 16;

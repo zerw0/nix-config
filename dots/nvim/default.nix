@@ -148,9 +148,14 @@
 
             # Other
             startify.enable = true;
+
         };
 
-        extraPlugins = with pkgs.vimPlugins; [ goyo-vim ];
+        extraPlugins = with pkgs.vimPlugins;
+         [
+            goyo-vim
+            copilot-vim
+        ];
 
         autoCmd = [
             {

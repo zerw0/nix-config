@@ -74,6 +74,7 @@
       "telegram"
       "lunar-client"
       "appcleaner"
+      "cyberduck"
     ];
   };
 

@@ -120,7 +120,7 @@
         ${
           if (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") then
             ''
-              path=("$HOME/.nix-profile/bin" "/run/wrappers/bin" "/etc/profiles/per-user/$USER/bin" "/nix/var/nix/profiles/default/bin" "/run/current-system/sw/bin" "/opt/homebrew/bin" $path)
+              path=("$HOME/.nix-profile/bin" "/run/wrappers/bin" "/etc/profiles/per-user/$USER/bin" "/nix/var/nix/profiles/default/bin" "/run/current-system/sw/bin" "/opt/homebrew/bin" "$HOME/.android-sdk-macosx" $path)
               export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
               alias lsblk="diskutil list"
               ulimit -n 2048

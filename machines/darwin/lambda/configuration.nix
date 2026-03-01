@@ -72,9 +72,9 @@
       "linearmouse"
       "karabiner-elements"
       "telegram"
-      "lunar-client"
       "appcleaner"
       "cyberduck"
+      "jdownloader"
     ];
   };
 

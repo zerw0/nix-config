@@ -3,7 +3,9 @@
 {
   # Lambda-specific home-manager imports
   home-manager.users.hdjenkov.imports = [
+    inputs.spicetify-nix.homeManagerModules.spicetify
     ../../../dots/ghostty
+    ../../../dots/spicetify
   ];
 
   # Allow unfree packages for home-manager
@@ -72,8 +74,6 @@
       "telegram"
       "appcleaner"
       "cyberduck"
-      "jdownloader"
-      "spotify"
     ];
   };
 

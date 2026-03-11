@@ -41,7 +41,8 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, nix-darwin, ... }:
+  outputs =
+    inputs@{ nixpkgs, nix-darwin, ... }:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } (
       { ... }:
       {

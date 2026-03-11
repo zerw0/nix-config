@@ -1,4 +1,9 @@
-{ pkgs, username, inputs, ... }:
+{
+  pkgs,
+  username,
+  inputs,
+  ...
+}:
 
 {
   # Lambda-specific home-manager imports
@@ -16,7 +21,7 @@
     eza
     yt-dlp
     ffmpeg
-    git
+    git-lfs
     fd
     coreutils
     bat
@@ -30,6 +35,8 @@
     docker-compose
     nodejs
     colima
+    nil
+    nixd
     age
     (python313.withPackages (
       ps: with ps; [
@@ -49,8 +56,8 @@
       # Automatically uninstall/zap casks and brews that are no longer listed
       cleanup = "zap";
     };
-    taps = [];
-    brews = [];
+    taps = [ ];
+    brews = [ ];
     casks = [
       "bitwarden"
       "visual-studio-code"
@@ -67,13 +74,13 @@
       "ungoogled-chromium"
       "heroic"
       "viber"
-      "windows-app"
       "betterdisplay"
       "linearmouse"
       "karabiner-elements"
       "telegram"
       "appcleaner"
       "cyberduck"
+      "zed"
     ];
   };
 

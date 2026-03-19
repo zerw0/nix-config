@@ -63,7 +63,6 @@
       "visual-studio-code"
       "vesktop"
       "tailscale-app"
-      "zen"
       "iina"
       "keka"
       "localsend"
@@ -71,7 +70,6 @@
       "signal"
       "jellyfin-media-player"
       "prismlauncher"
-      "ungoogled-chromium"
       "heroic"
       "viber"
       "betterdisplay"
@@ -81,6 +79,8 @@
       "appcleaner"
       "cyberduck"
       "zed"
+      "moonlight"
+      "helium-browser"
     ];
   };
 

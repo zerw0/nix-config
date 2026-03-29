@@ -72,7 +72,6 @@
       "prismlauncher"
       "heroic"
       "viber"
-      "betterdisplay"
       "linearmouse"
       "karabiner-elements"
       "telegram"
@@ -81,6 +80,7 @@
       "zed"
       "moonlight"
       "helium-browser"
+      "obsidian"
     ];
   };
 

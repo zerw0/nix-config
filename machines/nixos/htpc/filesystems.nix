@@ -2,7 +2,11 @@
   fileSystems."/" = {
     device = "/dev/sda2";
     fsType = "btrfs";
-    options = [ "subvol=root" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=root"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   fileSystems."/boot" = {
@@ -14,18 +18,40 @@
   fileSystems."/home" = {
     device = "/dev/sda2";
     fsType = "btrfs";
-    options = [ "subvol=home" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=home"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   fileSystems."/nix" = {
     device = "/dev/sda2";
     fsType = "btrfs";
-    options = [ "subvol=nix" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=nix"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   fileSystems."/var/log" = {
     device = "/dev/sda2";
     fsType = "btrfs";
-    options = [ "subvol=log" "compress=zstd" "noatime" ];
+    options = [
+      "subvol=log"
+      "compress=zstd"
+      "noatime"
+    ];
+  };
+
+  fileSystems."/mnt/storage" = {
+    device = "/dev/sdb1";
+    fsType = "ext4";
+    options = [
+      "subvol=log"
+      "compress=zstd"
+      "noatime"
+    ];
   };
 }

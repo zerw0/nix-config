@@ -36,27 +36,37 @@
   # Avahi
   services.avahi = {
     enable = true;
-    nssmdns4 = true;  # Enable .local resolution for IPv4
-    allowInterfaces = [ "eno1" ];  # Only announce on main ethernet (not podman/veth)
+    nssmdns4 = true; # Enable .local resolution for IPv4
+    allowInterfaces = [ "eno1" ]; # Only announce on main ethernet (not podman/veth)
     publish = {
       enable = true;
-      addresses = true;     # Publish hostname.local
-      workstation = true;   # Announce as workstation
+      addresses = true; # Publish hostname.local
+      workstation = true; # Announce as workstation
     };
   };
 
   # Firewall
   networking.firewall = {
-    allowedTCPPorts = [ 8080 5000 ];
-    allowedUDPPorts = [ 8080 5353 ];
+    allowedTCPPorts = [
+      8080
+      5000
+    ];
+    allowedUDPPorts = [
+      8080
+      5353
+    ];
   };
 
   # Kodi
   services.xserver.enable = true;
   services.xserver.desktopManager.kodi.enable = true;
-  services.xserver.desktopManager.kodi.package = (pkgs.kodi.withPackages (kodiPkgs: with kodiPkgs; [
-    jellyfin
-  ]));
+  services.xserver.desktopManager.kodi.package = (
+    pkgs.kodi.withPackages (
+      kodiPkgs: with kodiPkgs; [
+        jellyfin
+      ]
+    )
+  );
   services.displayManager.autoLogin.user = "hdjenkov";
   services.xserver.displayManager.lightdm.greeter.enable = false;
 
@@ -71,7 +81,6 @@
   # User configuration
   users.users.hdjenkov = {
     isNormalUser = true;
-    hashedPassword = "";
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHggBw49Gg0kyKKp2H44rqhlBEH1z1RdYPQIAU7AJiWe me@zerw.xyz"

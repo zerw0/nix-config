@@ -81,6 +81,7 @@
       "moonlight"
       "helium-browser"
       "obsidian"
+      "hiddenbar"
     ];
   };
 

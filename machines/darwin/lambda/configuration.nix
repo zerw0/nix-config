@@ -33,7 +33,6 @@
     docker
     docker-compose
     nodejs
-    colima
     nil
     nixd
     ansible
@@ -58,7 +57,9 @@
       cleanup = "zap";
     };
     taps = [ ];
-    brews = [ ];
+    brews = [
+      "colima"
+    ];
     casks = [
       "bitwarden"
       "visual-studio-code"

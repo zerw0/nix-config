@@ -37,6 +37,7 @@
     colima
     nil
     nixd
+    ansible
     age
     (python313.withPackages (
       ps: with ps; [
@@ -82,6 +83,7 @@
       "helium-browser"
       "obsidian"
       "hiddenbar"
+      "utm"
     ];
   };
 

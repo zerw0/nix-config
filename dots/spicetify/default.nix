@@ -7,7 +7,6 @@ in {
     enabledExtensions = with spicePkgs.extensions; [
       hidePodcasts
       shuffle
-      lastfm
       volumePercentage
       beautifulLyrics
     ];

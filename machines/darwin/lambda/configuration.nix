@@ -30,7 +30,6 @@
     htop
     iperf3
     wget
-    colima
     docker
     docker-compose
     nodejs
@@ -38,6 +37,7 @@
     nil
     nixd
     ansible
+    go
     age
     (python313.withPackages (
       ps: with ps; [

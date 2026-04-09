@@ -79,12 +79,12 @@
       "telegram"
       "appcleaner"
       "cyberduck"
-      "zed"
       "moonlight"
       "helium-browser"
       "obsidian"
       "hiddenbar"
       "utm"
+      "postman"
     ];
   };
 

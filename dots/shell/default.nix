@@ -129,6 +129,7 @@
               export SSH_AUTH_SOCK=$HOME/.bitwarden-ssh-agent.sock
               alias lsblk="diskutil list"
               ulimit -n 2048
+              export FORGEJO_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s FORGEJO_ACCESS_TOKEN -w)
             ''
           else
             ""

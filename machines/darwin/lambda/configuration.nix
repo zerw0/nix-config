@@ -36,7 +36,10 @@
     nil
     nixd
     ansible
+    minikube
+    kubectl
     go
+    claude-code
     age
     (python313.withPackages (
       ps: with ps; [
@@ -81,10 +84,8 @@
       "cyberduck"
       "moonlight"
       "helium-browser"
-      "obsidian"
       "hiddenbar"
-      "utm"
-      "postman"
+      "claude"
     ];
   };
 

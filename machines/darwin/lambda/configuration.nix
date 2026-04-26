@@ -100,7 +100,10 @@
 
   # agenix identity — macOS uses personal SSH key (no host keys on darwin)
   age.identityPaths = [ "/Users/hdjenkov/.ssh/personal" ];
-  age.secrets.forgejoAccessToken.file = "${inputs.secrets}/forgejoAccessToken.age";
+  age.secrets.forgejoAccessToken = {
+    file = "${inputs.secrets}/forgejoAccessToken.age";
+    owner = "hdjenkov";
+  };
 
   # Security settings (Touch ID for sudo)
   security.pam.services.sudo_local.touchIdAuth = true;

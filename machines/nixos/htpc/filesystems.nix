@@ -48,10 +48,17 @@
   fileSystems."/mnt/storage" = {
     device = "/dev/sdb1";
     fsType = "ext4";
+    options = [ "noatime" ];
+  };
+
+  fileSystems."/var/lib" = {
+    device = "/dev/sda2";
+    fsType = "btrfs";
     options = [
-      "subvol=log"
+      "subvol=lib"
       "compress=zstd"
       "noatime"
     ];
+    neededForBoot = true;
   };
 }

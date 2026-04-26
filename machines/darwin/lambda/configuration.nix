@@ -41,6 +41,7 @@
     go
     claude-code
     age
+    inputs.agenix.packages.aarch64-darwin.default
     (python313.withPackages (
       ps: with ps; [
         pip
@@ -96,6 +97,10 @@
     settings.experimental-features = "nix-command flakes";
     enable = false;
   };
+
+  # agenix identity — macOS uses personal SSH key (no host keys on darwin)
+  age.identityPaths = [ "/Users/hdjenkov/.ssh/personal" ];
+  age.secrets.forgejoAccessToken.file = "${inputs.secrets}/forgejoAccessToken.age";
 
   # Security settings (Touch ID for sudo)
   security.pam.services.sudo_local.touchIdAuth = true;

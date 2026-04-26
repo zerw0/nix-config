@@ -12,6 +12,7 @@ let
 
     modules = [
       inputs.home-manager.darwinModules.home-manager
+      inputs.agenix.darwinModules.default
       (./. + "/${name}/configuration.nix")
       ../../users/hdjenkov
       {

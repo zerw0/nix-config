@@ -66,7 +66,10 @@ in
 
   environment.systemPackages = [ myKodi ];
 
-  users.users.hdjenkov.initialHashedPassword = "";
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.secrets.hashedUserPassword.file = "${inputs.secrets}/hashedUserPassword.age";
+  users.users.hdjenkov.hashedPasswordFile = config.age.secrets.hashedUserPassword.path;
+  security.sudo.wheelNeedsPassword = false;
 
   services.getty.autologinUser = "hdjenkov";
   services.greetd = {

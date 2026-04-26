@@ -305,7 +305,24 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
+        "secrets": "secrets",
         "spicetify-nix": "spicetify-nix"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777222042,
+        "narHash": "sha256-BTxNEyX0OkzTqLXc0J7WBOv6M1iaLZ69FTybHs8LLKk=",
+        "ref": "refs/heads/main",
+        "rev": "0b8df1fa12cd44843eb683fecffec7fbe931cc93",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@git.zerw.xyz/hdjenkov/nix-private.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@git.zerw.xyz/hdjenkov/nix-private.git"
       }
     },
     "spicetify-nix": {

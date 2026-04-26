@@ -46,6 +46,7 @@ in
               self.inputs."home-manager${
                 lib.attrsets.attrByPath [ name ] "" nixpkgsMap
               }".nixosModules.home-manager
+              self.inputs.agenix.nixosModules.default
               (./. + "/${name}/configuration.nix")
               ../../users/hdjenkov
               (homeManagerCfg false [ ])

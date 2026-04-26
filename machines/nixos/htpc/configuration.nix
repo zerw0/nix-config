@@ -70,6 +70,7 @@ in
   age.secrets.hashedUserPassword.file = "${inputs.secrets}/hashedUserPassword.age";
   users.users.hdjenkov.hashedPasswordFile = config.age.secrets.hashedUserPassword.path;
   security.sudo.wheelNeedsPassword = false;
+  security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
   services.getty.autologinUser = "hdjenkov";
   services.greetd = {

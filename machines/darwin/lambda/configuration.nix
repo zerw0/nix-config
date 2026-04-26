@@ -8,9 +8,9 @@
 {
   # Lambda-specific home-manager imports
   home-manager.users.hdjenkov.imports = [
-    inputs.spicetify-nix.homeManagerModules.spicetify
+#inputs.spicetify-nix.homeManagerModules.spicetify
     ../../../dots/ghostty
-    ../../../dots/spicetify
+#../../../dots/spicetify
   ];
 
   # Allow unfree packages for home-manager
@@ -86,6 +86,8 @@
       "helium-browser"
       "hiddenbar"
       "claude"
+      "termius"
+      "spotify"
     ];
   };
 
@@ -150,13 +152,5 @@
     '';
   };
 
-  # Users & shell
-  programs.zsh.enable = true;
-
-  users.users.${username} = {
-    name = username;
-    home = "/Users/${username}";
-    shell = pkgs.zsh;
-  };
   system.primaryUser = "hdjenkov";
 }

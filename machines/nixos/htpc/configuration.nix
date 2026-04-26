@@ -78,21 +78,6 @@
     pulse.enable = true;
   };
 
-  # User configuration
-  users.users.hdjenkov = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHggBw49Gg0kyKKp2H44rqhlBEH1z1RdYPQIAU7AJiWe me@zerw.xyz"
-    ];
-    extraGroups = [
-      "wheel"
-      "video"
-      "audio"
-      "input"
-    ];
-  };
-
   # Hardware acceleration (Intel)
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.packageOverrides = pkgs: {
@@ -111,6 +96,4 @@
     LIBVA_DRIVER_NAME = "iHD";
   };
 
-  # Shell
-  programs.zsh.enable = true;
 }

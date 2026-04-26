@@ -4,6 +4,9 @@
   inputs,
   ...
 }:
+let
+  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellyfin ]);
+in
 {
   imports = [
     ./filesystems.nix
@@ -57,25 +60,31 @@
     ];
   };
 
-  # Kodi
-  services.xserver.enable = true;
-  services.xserver.desktopManager.kodi.enable = true;
-  services.xserver.desktopManager.kodi.package = (
-    pkgs.kodi.withPackages (
-      kodiPkgs: with kodiPkgs; [
-        jellyfin
-      ]
-    )
-  );
-  services.displayManager.autoLogin.user = "hdjenkov";
-  services.xserver.displayManager.lightdm.greeter.enable = false;
+  # Kodi GBM
+  services.pulseaudio.enable = false;
+  services.pipewire.enable = false;
 
-  # Sound with PipeWire
-  services.pipewire = {
+  environment.systemPackages = [ myKodi ];
+
+  users.users.hdjenkov.extraGroups = [ "input" ];
+
+  services.getty.autologinUser = "hdjenkov";
+  services.greetd = {
     enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
+    settings = {
+      initial_session = {
+        command = "${myKodi}/bin/kodi-standalone";
+        user = "hdjenkov";
+      };
+      default_session = {
+        command = "${pkgs.greetd.greetd}/bin/agreety --cmd sway";
+      };
+    };
+  };
+
+  programs.sway = {
+    enable = true;
+    xwayland.enable = false;
   };
 
   # Hardware acceleration (Intel)

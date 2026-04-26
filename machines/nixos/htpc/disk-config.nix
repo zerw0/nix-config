@@ -1,6 +1,23 @@
 {
   disko.devices = {
     disk = {
+      storage = {
+        type = "disk";
+        device = "/dev/sdb";
+        content = {
+          type = "gpt";
+          partitions = {
+            STORAGE = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "ext4";
+                mountpoint = "/mnt/storage";
+              };
+            };
+          };
+        };
+      };
       main = {
         type = "disk";
         device = "/dev/sda";
@@ -17,16 +34,6 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                mountOptions = [ "umask=0077" ];
-              };
-            };
-            STORAGE = {
-              name = "STORAGE";
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/mnt/storage";
                 mountOptions = [ "umask=0077" ];
               };
             };
@@ -56,8 +63,6 @@
                     ];
                     mountpoint = "/home";
                   };
-                  # Sub(sub)volume doesn't need a mountpoint as its parent is mounted
-                  "/home/user" = { };
                   # Parent is not mounted so the mountpoint must be set
                   "/nix" = {
                     mountOptions = [
@@ -83,8 +88,6 @@
                       "noatime"
                     ];
                   };
-                  # This subvolume will be created but not mounted
-                  "/test" = { };
                 };
 
               };

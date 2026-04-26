@@ -4,7 +4,13 @@
 
   services.tailscale.enable = true;
   services.tailscale.authKeyFile = config.age.secrets.tailscaleAuthKey.path;
-  services.tailscale.extraUpFlags = [ "--login-server=https://hs.zerw.xyz" ];
+  services.tailscale.extraUpFlags = [
+    "--login-server=https://hs.zerw.xyz"
+    "--accept-dns=false"
+    "--accept-routes"
+    "--advertise-routes=192.168.0.0/24"
+    "--advertise-exit-node"
+  ];
 
   # Kernel parameters for Tailscale
   boot.kernel.sysctl = {

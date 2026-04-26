@@ -106,7 +106,6 @@
         free = "free -m";
         ipp = "curl ipinfo.io/ip";
         sudo = "sudo ";
-        rebuild = "sudo darwin-rebuild switch --flake $HOME/git/nix-config#lambda --override-input secrets $HOME/git/nix-private";
         yt = "yt-dlp --add-metadata -i";
         playlist = "yt-dlp -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' ";
         playlist3 = "yt-dlp -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' ";
@@ -134,9 +133,7 @@
               export FORGEJO_ACCESS_TOKEN=$(cat ${osConfig.age.secrets.forgejoAccessToken.path})
             ''
           else
-            ''
-              alias rebuild="sudo nixos-rebuild switch --flake $HOME/git/nix-config#$(hostname)"
-            ''
+            ""
         }
 
           export EDITOR=nvim || export EDITOR=vim

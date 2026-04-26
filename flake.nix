@@ -53,6 +53,13 @@
         imports = [
           ./machines/darwin/default.nix
           ./machines/nixos/default.nix
+          {
+            flake.nixosConfigurations.installer = inputs.nixpkgs.lib.nixosSystem {
+              system = "x86_64-linux";
+              specialArgs = { inherit inputs; };
+              modules = [ ./machines/installer/default.nix ];
+            };
+          }
         ];
       }
     );

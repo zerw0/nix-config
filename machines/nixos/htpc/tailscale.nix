@@ -4,6 +4,7 @@
 
   services.tailscale.enable = true;
   services.tailscale.authKeyFile = config.age.secrets.tailscaleAuthKey.path;
+  services.tailscale.loginServer = "https://hs.zerw.xyz";
 
   # Kernel parameters for Tailscale
   boot.kernel.sysctl = {

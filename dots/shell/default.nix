@@ -134,7 +134,9 @@
               export FORGEJO_ACCESS_TOKEN=$(cat ${osConfig.age.secrets.forgejoAccessToken.path})
             ''
           else
-            ""
+            ''
+              alias rebuild="sudo nixos-rebuild switch --flake $HOME/git/nix-config#$(hostname)"
+            ''
         }
 
           export EDITOR=nvim || export EDITOR=vim

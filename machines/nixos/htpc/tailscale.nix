@@ -1,6 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, config, inputs, ... }:
 {
+  age.secrets.tailscaleAuthKey.file = "${inputs.secrets}/tailscaleAuthKey.age";
+
   services.tailscale.enable = true;
+  services.tailscale.authKeyFile = config.age.secrets.tailscaleAuthKey.path;
 
   # Kernel parameters for Tailscale
   boot.kernel.sysctl = {

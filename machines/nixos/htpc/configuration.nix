@@ -66,7 +66,7 @@ in
 
   environment.systemPackages = [ myKodi ];
 
-  users.users.hdjenkov.extraGroups = [ "input" ];
+  users.users.hdjenkov.initialHashedPassword = "";
 
   services.getty.autologinUser = "hdjenkov";
   services.greetd = {

@@ -8,9 +8,7 @@
 {
   # Lambda-specific home-manager imports
   home-manager.users.hdjenkov.imports = [
-#inputs.spicetify-nix.homeManagerModules.spicetify
     ../../../dots/ghostty
-#../../../dots/spicetify
   ];
 
   # Allow unfree packages for home-manager
@@ -40,7 +38,13 @@
     kubectl
     go
     claude-code
+    spotify
+    telegram-desktop
+    moonlight-qt
+    vscode
     age
+    localsend
+    prismlauncher
     inputs.agenix.packages.aarch64-darwin.default
     (python313.withPackages (
       ps: with ps; [
@@ -66,29 +70,20 @@
     ];
     casks = [
       "bitwarden"
-      "visual-studio-code"
       "vesktop"
       "tailscale-app"
       "iina"
-      "keka"
-      "localsend"
-      "rustdesk"
-      "signal"
       "jellyfin-media-player"
-      "prismlauncher"
-      "heroic"
-      "viber"
+      "keka"
+      "rustdesk"
       "linearmouse"
       "karabiner-elements"
-      "telegram"
       "appcleaner"
       "cyberduck"
-      "moonlight"
       "helium-browser"
       "hiddenbar"
       "claude"
       "termius"
-      "spotify"
     ];
   };
 

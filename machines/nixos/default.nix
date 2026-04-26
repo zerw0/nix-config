@@ -20,9 +20,7 @@ in
 
   flake.nixosConfigurations =
     let
-      nixpkgsMap = {
-        htpc = "-unstable";
-      };
+      nixpkgsMap = { };
       systemArchMap = {
 
       };

@@ -5,21 +5,20 @@ let
 
   mkDarwinConfig = name: inputs.nix-darwin.lib.darwinSystem {
     system = "aarch64-darwin";
-    specialArgs = {
-      inherit inputs;
-      username = "hdjenkov";
-    };
+    specialArgs = { inherit inputs; };
 
     modules = [
       inputs.home-manager.darwinModules.home-manager
       inputs.agenix.darwinModules.default
       (./. + "/${name}/configuration.nix")
       ../../users/hdjenkov
+      ../../users/hdjenkov/home.nix
+      ../../modules/common.nix
       {
         nixpkgs.config.allowUnfree = true;
-        home-manager.extraSpecialArgs = {
-          inherit inputs;
-        };
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = { inherit inputs; };
         home-manager.backupFileExtension = "bak";
       }
     ];

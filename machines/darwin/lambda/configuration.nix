@@ -1,6 +1,6 @@
 {
+  config,
   pkgs,
-  username,
   inputs,
   ...
 }:
@@ -11,23 +11,13 @@
     ../../../dots/ghostty
   ];
 
-  # Allow unfree packages for home-manager
-  home-manager.users.hdjenkov.nixpkgs.config.allowUnfree = true;
-
   # Packages available system-wide
   environment.systemPackages = with pkgs; [
-    eza
     yt-dlp
-    ffmpeg
     git-lfs
-    fd
     coreutils
-    bat
-    ripgrep
-    ncdu
     htop
     iperf3
-    wget
     docker
     docker-compose
     nodejs
@@ -45,7 +35,7 @@
     age
     localsend
     prismlauncher
-    inputs.agenix.packages.aarch64-darwin.default
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     (python313.withPackages (
       ps: with ps; [
         pip
@@ -70,31 +60,25 @@
     ];
     casks = [
       "bitwarden"
-      "vesktop"
       "tailscale-app"
       "iina"
-      "jellyfin-media-player"
       "keka"
       "rustdesk"
       "linearmouse"
       "karabiner-elements"
-      "appcleaner"
       "cyberduck"
       "helium-browser"
-      "hiddenbar"
       "claude"
       "termius"
+      "appcleaner"
     ];
   };
 
-  # Nix daemon / features
-  nix = {
-    settings.experimental-features = "nix-command flakes";
-    enable = false;
-  };
+  # Determinate Nix manages the daemon; nix-darwin should not
+  nix.enable = false;
 
   # agenix identity — macOS uses personal SSH key (no host keys on darwin)
-  age.identityPaths = [ "/Users/hdjenkov/.ssh/personal" ];
+  age.identityPaths = [ "${config.users.users.hdjenkov.home}/.ssh/personal" ];
   age.secrets.forgejoAccessToken = {
     file = "${inputs.secrets}/forgejoAccessToken.age";
     owner = "hdjenkov";
@@ -143,16 +127,8 @@
       };
     };
 
-    activationScripts.postActivation.text = ''
-      killall Finder || true
-    '';
-
-    activationScripts.hotCorners.text = ''
-      echo "Configuring hot corners..."
-      defaults write com.apple.dock wvous-tl-corner -int 2
-      defaults write com.apple.dock wvous-br-corner -int 14
-      killall Dock || true
-    '';
+    defaults.dock.wvous-tl-corner = 2;
+    defaults.dock.wvous-br-corner = 14;
   };
 
   system.primaryUser = "hdjenkov";

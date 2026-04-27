@@ -6,70 +6,36 @@
 let
   entries = builtins.attrNames (builtins.readDir ./.);
   configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
-  homeManagerCfg = userPackages: extraImports: {
+  homeManagerCfg = {
     home-manager.useGlobalPkgs = true;
-    home-manager.extraSpecialArgs = {
-      inherit (self) inputs;
-    };
-    home-manager.users.hdjenkov.imports = extraImports;
+    home-manager.useUserPackages = true;
+    home-manager.extraSpecialArgs = { inherit (self) inputs; };
     home-manager.backupFileExtension = "bak";
-    home-manager.useUserPackages = userPackages;
   };
 in
 {
-
-  flake.nixosConfigurations =
-    let
-      nixpkgsMap = { };
-      systemArchMap = {
-
-      };
-      myNixosSystem =
-        name: self.inputs."nixpkgs${lib.attrsets.attrByPath [ name ] "" nixpkgsMap}".lib.nixosSystem;
-    in
-    lib.listToAttrs (
-      builtins.map (
-        name:
-        lib.nameValuePair name (
-          (myNixosSystem name) {
-            system = lib.attrsets.attrByPath [ name ] "x86_64-linux" systemArchMap;
-            specialArgs = {
-              inherit (self) inputs;
-              self = {
-                nixosModules = self.nixosModules;
-              };
-            };
-
-            modules = [
-              self.inputs."home-manager${
-                lib.attrsets.attrByPath [ name ] "" nixpkgsMap
-              }".nixosModules.home-manager
-              self.inputs.agenix.nixosModules.default
-              (./. + "/${name}/configuration.nix")
-              ../../users/hdjenkov
-              (homeManagerCfg false [ ])
-              (
-                { pkgs, ... }:
-                {
-                  nixpkgs.config.allowUnfree = true;
-                  nix.settings.experimental-features = [
-                    "flakes"
-                    "nix-command"
-                  ];
-                  environment.systemPackages = with pkgs; [
-                    eza
-                    ffmpeg
-                    fd
-                    bat
-                    ripgrep
-                    ncdu
-                    wget
-                  ];
-                }
-              )
-            ];
-          }
-        )
-      ) configs
-    );
+  flake.nixosConfigurations = lib.listToAttrs (
+    builtins.map (
+      name:
+      lib.nameValuePair name (
+        self.inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inherit (self) inputs;
+            self = { inherit (self) nixosModules; };
+          };
+          modules = [
+            self.inputs.home-manager.nixosModules.home-manager
+            self.inputs.agenix.nixosModules.default
+            (./. + "/${name}/configuration.nix")
+            ../../users/hdjenkov
+            ../../users/hdjenkov/home.nix
+            homeManagerCfg
+            { nixpkgs.config.allowUnfree = true; }
+            ../../modules/common.nix
+          ];
+        }
+      )
+    ) configs
+  );
 }

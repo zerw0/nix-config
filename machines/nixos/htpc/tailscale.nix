@@ -18,16 +18,16 @@
     "net.ipv6.conf.all.forwarding" = 1;
   };
 
-  # Ethtool offload settings for Tailscale
+  # Ethtool offload settings for Tailscale — bound to the eno1 device unit so it
+  # only runs after the interface exists, not racily against network.target.
   systemd.services.ethtool-tailscale = {
-    enable = true;
     description = "Configure ethtool offloading for Tailscale";
-    after = [ "network-pre.target" ];
-    before = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
+    bindsTo = [ "sys-subsystem-net-devices-eno1.device" ];
+    after = [ "sys-subsystem-net-devices-eno1.device" ];
+    wantedBy = [ "sys-subsystem-net-devices-eno1.device" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/bin/sh -c '${pkgs.ethtool}/bin/ethtool -K eno1 rx-udp-gro-forwarding on rx-gro-list off || true'";
+      ExecStart = "-${pkgs.ethtool}/bin/ethtool -K eno1 rx-udp-gro-forwarding on rx-gro-list off";
       RemainAfterExit = true;
     };
   };

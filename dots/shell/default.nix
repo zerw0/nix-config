@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  lib,
   osConfig,
   ...
 }:
@@ -130,7 +129,8 @@
               export SSH_AUTH_SOCK=$HOME/.bitwarden-ssh-agent.sock
               alias lsblk="diskutil list"
               ulimit -n 2048
-              export FORGEJO_ACCESS_TOKEN=$(cat ${osConfig.age.secrets.forgejoAccessToken.path})
+              forgejo-token() { cat "${osConfig.age.secrets.forgejoAccessToken.path}"; }
+              export FORGEJO_TOKEN_FILE="${osConfig.age.secrets.forgejoAccessToken.path}"
             ''
           else
             ""

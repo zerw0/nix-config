@@ -93,9 +93,11 @@ in
 
   # Hardware acceleration (Intel)
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.packageOverrides = pkgs: {
-    intel-vaapi-driver = pkgs.intel-vaapi-driver.override { enableHybridCodec = true; };
-  };
+  nixpkgs.overlays = [
+    (final: prev: {
+      intel-vaapi-driver = prev.intel-vaapi-driver.override { enableHybridCodec = true; };
+    })
+  ];
 
   hardware.graphics = {
     enable = true;

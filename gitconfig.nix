@@ -1,21 +1,10 @@
-{
-  inputs,
-  lib,
-  config,
-  ...
-}:
+{ config, ... }:
 {
   programs.git = {
     enable = true;
-
-    settings = {
-      user = {
-        name = "Hristo Djenkov";
-        email = "me@zerw.xyz";
-      };
-      core = {
-        sshCommand = "ssh -o 'IdentitiesOnly=yes' -i ~/.ssh/personal";
-      };
-    };
+    settings.user.name = "Hristo Djenkov";
+    settings.user.email = "me@zerw.xyz";
+    settings.core.sshCommand =
+      "ssh -o IdentitiesOnly=yes -i ${config.home.homeDirectory}/.ssh/personal";
   };
 }

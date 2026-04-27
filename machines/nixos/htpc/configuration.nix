@@ -64,7 +64,10 @@ in
   services.pulseaudio.enable = false;
   services.pipewire.enable = false;
 
-  environment.systemPackages = [ myKodi ];
+  environment.systemPackages = [
+    myKodi
+    pkgs.ghostty.terminfo
+  ];
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   age.secrets.hashedUserPassword.file = "${inputs.secrets}/hashedUserPassword.age";

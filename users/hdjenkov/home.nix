@@ -1,7 +1,7 @@
-{ inputs, pkgs, ... }:
+{ pkgs, nixvimModule, ... }:
 {
   home-manager.users.hdjenkov.imports = [
-    inputs.nixvim.homeModules.nixvim
+    nixvimModule
     ../../dots/shell
     ../../dots/fastfetch
     ../../gitconfig.nix

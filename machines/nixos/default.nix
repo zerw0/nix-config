@@ -23,6 +23,7 @@ in
           specialArgs = {
             inherit (self) inputs;
             self = { inherit (self) nixosModules; };
+            nixvimModule = self.inputs.nixvim.homeModules.nixvim;
           };
           modules = [
             self.inputs.home-manager.nixosModules.home-manager

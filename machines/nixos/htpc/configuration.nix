@@ -5,7 +5,7 @@
   ...
 }:
 let
-  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon peripheral-joystick ]);
+  myKodi = pkgs.kodi-gbm.withPackages (p: [ p.jellycon p."peripheral-joystick" ]);
 in
 {
   imports = [

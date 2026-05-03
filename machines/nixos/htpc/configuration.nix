@@ -77,9 +77,6 @@ in
   security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
-  # Logind: don't suspend on idle (machine runs as Tailscale exit node)
-  services.logind.settings.Login.IdleAction = "ignore";
-
   # Log rotation
   services.journald.extraConfig = ''
     SystemMaxUse=500M

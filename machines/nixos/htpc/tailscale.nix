@@ -7,6 +7,7 @@
   # extraUpFlags only run when NeedsLogin/NeedsMachineAuth — login-server must be here
   services.tailscale.extraUpFlags = [
     "--login-server=https://hs.zerw.xyz"
+    "--reset"
   ];
   # extraSetFlags run via `tailscale set` unconditionally on every boot
   services.tailscale.extraSetFlags = [

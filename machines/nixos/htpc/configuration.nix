@@ -5,7 +5,7 @@
   ...
 }:
 let
-  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellyfin ]);
+  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon ]);
 in
 {
   imports = [

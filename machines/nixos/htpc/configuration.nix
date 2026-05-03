@@ -5,7 +5,7 @@
   ...
 }:
 let
-  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon ]);
+  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon peripheral-joystick ]);
 in
 {
   imports = [
@@ -69,6 +69,7 @@ in
   environment.systemPackages = [
     myKodi
     pkgs.ghostty.terminfo
+    pkgs.libcec
   ];
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
@@ -77,12 +78,10 @@ in
   security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
-  # Power management: suspend after 60min idle, wake via WoL
-  services.logind.settings.Login = {
-    IdleAction = "suspend";
-    IdleActionSec = "60min";
-  };
-  networking.interfaces.eno1.wakeOnLan.enable = true;
+  # CEC: allow video group access to /dev/cec0
+  services.udev.extraRules = ''
+    KERNEL=="cec[0-9]*", GROUP="video", MODE="0660"
+  '';
 
   # Log rotation
   services.journald.extraConfig = ''

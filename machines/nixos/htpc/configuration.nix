@@ -24,6 +24,8 @@ in
   # Networking
   networking.hostName = "htpc";
   networking.networkmanager.enable = true;
+  networking.networkmanager.dns = "systemd-resolved";
+  services.resolved.enable = true;
 
   # SSH
   services.openssh.enable = true;

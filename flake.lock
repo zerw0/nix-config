@@ -278,11 +278,11 @@
         "rev": "bd8308c8326ff8a315f200a88edb673bc6edc4be",
         "revCount": 3,
         "type": "git",
-        "url": "ssh://git@git.zerw.xyz/hdjenkov/nix-private.git"
+        "url": "ssh://git@git.zerw.xyz:222/hdjenkov/nix-private.git"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@git.zerw.xyz/hdjenkov/nix-private.git"
+        "url": "ssh://git@git.zerw.xyz:222/hdjenkov/nix-private.git"
       }
     },
     "systems": {

@@ -77,6 +77,19 @@ in
   security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
+  # Power management: suspend after 60min idle, wake via WoL
+  services.logind.settings.Login = {
+    IdleAction = "suspend";
+    IdleActionSec = "60min";
+  };
+  networking.interfaces.eno1.wakeOnLan.enable = true;
+
+  # Log rotation
+  services.journald.extraConfig = ''
+    SystemMaxUse=500M
+    MaxRetentionSec=1week
+  '';
+
   services.getty.autologinUser = "hdjenkov";
   services.greetd = {
     enable = true;

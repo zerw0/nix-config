@@ -13,7 +13,6 @@
 
   # Packages available system-wide
   environment.systemPackages = with pkgs; [
-    yt-dlp
     git-lfs
     coreutils
     htop
@@ -28,8 +27,8 @@
     kubectl
     go
     claude-code
-    spotify
     telegram-desktop
+    spotify
     moonlight-qt
     vscode
     age
@@ -57,6 +56,7 @@
     taps = [ ];
     brews = [
       "colima"
+      "yt-dlp"
     ];
     casks = [
       "bitwarden"

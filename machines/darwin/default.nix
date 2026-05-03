@@ -3,19 +3,19 @@ let
   # Explicitly list machine names to avoid builtins.toFile warning
   configs = [ "lambda" ];
 
-  mkDarwinConfig = name: inputs.nix-darwin-unstable.lib.darwinSystem {
+  mkDarwinConfig = name: inputs.nix-darwin.lib.darwinSystem {
     system = "aarch64-darwin";
-    specialArgs = { inherit inputs; nixvimModule = inputs.nixvim-unstable.homeModules.nixvim; };
+    specialArgs = { inherit inputs; nixvimModule = inputs.nixvim.homeModules.nixvim; };
 
     modules = [
-      inputs.home-manager-unstable.darwinModules.home-manager
+      inputs.home-manager.darwinModules.home-manager
       inputs.agenix.darwinModules.default
       (./. + "/${name}/configuration.nix")
       ../../users/hdjenkov
       ../../users/hdjenkov/home.nix
       ../../modules/common.nix
       {
-        nixpkgs.pkgs = import inputs.nixpkgs-unstable {
+        nixpkgs.pkgs = import inputs.nixpkgs {
           system = "aarch64-darwin";
           config.allowUnfree = true;
         };

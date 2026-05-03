@@ -77,6 +77,20 @@ in
   security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
+  # BTRFS scrub
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
+  };
+
+  # Nix GC
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.settings.auto-optimise-store = true;
+
   # Log rotation
   services.journald.extraConfig = ''
     SystemMaxUse=500M

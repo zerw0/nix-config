@@ -4,10 +4,7 @@
 
   services.tailscale.enable = true;
   services.tailscale.authKeyFile = config.age.secrets.tailscaleAuthKey.path;
-  # Tell the daemon which control server to use at startup so it can transition
-  # out of NoState on its own (required for custom headscale servers)
-  services.tailscale.extraDaemonFlags = [ "--login-server=https://hs.zerw.xyz" ];
-  services.tailscale.extraUpFlags = [ "--reset" ];
+  services.tailscale.extraUpFlags = [ "--login-server=https://hs.zerw.xyz" "--reset" ];
   # extraSetFlags run via `tailscale set` unconditionally on every boot
   services.tailscale.extraSetFlags = [
     "--accept-routes"

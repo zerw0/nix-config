@@ -4,8 +4,12 @@
 
   services.tailscale.enable = true;
   services.tailscale.authKeyFile = config.age.secrets.tailscaleAuthKey.path;
+  # extraUpFlags only run when NeedsLogin/NeedsMachineAuth — login-server must be here
   services.tailscale.extraUpFlags = [
     "--login-server=https://hs.zerw.xyz"
+  ];
+  # extraSetFlags run via `tailscale set` unconditionally on every boot
+  services.tailscale.extraSetFlags = [
     "--accept-dns=false"
     "--accept-routes"
     "--advertise-routes=192.168.0.0/24"

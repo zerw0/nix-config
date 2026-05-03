@@ -124,7 +124,7 @@
         ${
           if (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") then
             ''
-              path=("$HOME/.nix-profile/bin" "/run/wrappers/bin" "/etc/profiles/per-user/$USER/bin" "/nix/var/nix/profiles/default/bin" "/run/current-system/sw/bin" "/opt/homebrew/bin" "$HOME/.android-sdk-macosx" $path)
+              path=("$HOME/.nix-profile/bin" "/run/wrappers/bin" "/etc/profiles/per-user/$USER/bin" "/nix/var/nix/profiles/default/bin" "/run/current-system/sw/bin" "/opt/homebrew/bin" "$HOME/.android-sdk-macosx" "$HOME/.npm-global/bin" $path)
               export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
               export SSH_AUTH_SOCK=$HOME/.bitwarden-ssh-agent.sock
               alias lsblk="diskutil list"

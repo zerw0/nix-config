@@ -5,7 +5,7 @@
   ...
 }:
 let
-  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon joystick ]);
+  myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon ]);
 in
 {
   imports = [
@@ -69,7 +69,6 @@ in
   environment.systemPackages = [
     myKodi
     pkgs.ghostty.terminfo
-    pkgs.libcec
   ];
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
@@ -78,10 +77,8 @@ in
   security.sudo.wheelNeedsPassword = false;
   security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
-  # CEC: allow video group access to /dev/cec0
-  services.udev.extraRules = ''
-    KERNEL=="cec[0-9]*", GROUP="video", MODE="0660"
-  '';
+  # Logind: don't suspend on idle (machine runs as Tailscale exit node)
+  services.logind.settings.Login.IdleAction = "ignore";
 
   # Log rotation
   services.journald.extraConfig = ''

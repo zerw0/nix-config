@@ -10,7 +10,6 @@
   ];
   # extraSetFlags run via `tailscale set` unconditionally on every boot
   services.tailscale.extraSetFlags = [
-    "--accept-dns=false"
     "--accept-routes"
     "--advertise-routes=192.168.0.0/24"
     "--advertise-exit-node"

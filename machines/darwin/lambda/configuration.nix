@@ -23,17 +23,15 @@
     nil
     nixd
     ansible
-    minikube
-    kubectl
     go
     claude-code
     telegram-desktop
     spotify
-    moonlight-qt
     vscode
     age
     localsend
     prismlauncher
+    glab
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     (python313.withPackages (
       ps: with ps; [
@@ -70,7 +68,8 @@
       "helium-browser"
       "claude"
       "termius"
-      "appcleaner"
+      "puremac"
+      "element"
     ];
   };
 
@@ -99,7 +98,7 @@
 
       dock = {
         orientation = "bottom";
-        autohide = true;
+        autohide = false;
         autohide-delay = 0.0;
         autohide-time-modifier = 0.5;
         magnification = true;

@@ -32,6 +32,9 @@
     localsend
     prismlauncher
     glab
+    pwgen
+    just
+    awscli
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     (python313.withPackages (
       ps: with ps; [

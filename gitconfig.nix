@@ -6,5 +6,6 @@
     settings.user.email = "me@zerw.xyz";
     settings.core.sshCommand =
       "ssh -o IdentitiesOnly=yes -i ${config.home.homeDirectory}/.ssh/personal";
+    settings.credential.helper = "osxkeychain";
   };
 }

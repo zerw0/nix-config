@@ -37,7 +37,7 @@
     };
 
     secrets = {
-      url = "git+file:///Users/hdjenkov/git-tmp/nix-private.git?ref=main";
+      url = "git+https://git.zerw.xyz/hdjenkov/nix-private.git";
       flake = false;
     };
 

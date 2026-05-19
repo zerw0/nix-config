@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   virtualisation.oci-containers.containers = {
     docker-in-docker = {
@@ -40,6 +40,7 @@
       Type = "oneshot";
       RemainAfterExit = true;
     };
+    path = [ pkgs.podman ];
     script = ''
       podman network exists forgejo-net || podman network create forgejo-net
     '';

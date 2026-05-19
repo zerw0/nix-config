@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   virtualisation.oci-containers.containers.pangolin = {
     image = "docker.io/fosrl/pangolin:1.18.2";
@@ -18,6 +18,7 @@
       Type = "oneshot";
       RemainAfterExit = true;
     };
+    path = [ pkgs.podman ];
     script = ''
       podman network exists pangolin-net || podman network create pangolin-net
     '';

@@ -14,10 +14,10 @@
     settings = {
       server = {
         SSH_PORT = 222;
-        SSH_LISTEN_PORT = 22;
+        SSH_LISTEN_PORT = 222;
         DOMAIN = "git.zerw.xyz";
         ROOT_URL = "https://git.zerw.xyz/";
-        START_SSH_SERVER = false;
+        START_SSH_SERVER = true;
       };
       service.DISABLE_REGISTRATION = true;
       session.COOKIE_SECURE = true;

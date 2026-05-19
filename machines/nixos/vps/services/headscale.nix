@@ -15,5 +15,10 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 8080 ];
+  services.caddy.virtualHosts."hs.zerw.xyz".extraConfig = ''
+    handle /admin* {
+      reverse_proxy 127.0.0.1:3002
+    }
+    reverse_proxy 127.0.0.1:8080
+  '';
 }

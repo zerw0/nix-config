@@ -8,4 +8,6 @@
       root = "/var/www/site";
     };
   };
+
+  services.caddy.virtualHosts."zerw.xyz".extraConfig = "reverse_proxy 127.0.0.1:8081";
 }

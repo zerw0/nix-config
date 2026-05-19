@@ -12,4 +12,6 @@
     volumes = [ "/var/lib/pocket-id/data:/app/data" ];
     extraOptions = [ "--network=host" ];
   };
+
+  services.caddy.virtualHosts."id.zerw.xyz".extraConfig = "reverse_proxy 127.0.0.1:1411";
 }

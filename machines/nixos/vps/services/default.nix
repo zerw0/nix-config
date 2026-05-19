@@ -8,9 +8,8 @@
     ./headscale.nix
     ./headplane.nix
     ./pocket-id.nix
-    ./pangolin.nix
-    ./gerbil.nix
-    ./traefik.nix
+    ./caddy.nix
+    ./frps.nix
     ./website.nix
     ./epicgames-freegames.nix
     ./fmbot.nix

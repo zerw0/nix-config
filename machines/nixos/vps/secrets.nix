@@ -9,5 +9,11 @@
     fmbotEnv = {
       file = "${inputs.secrets}/fmbotEnv.age";
     };
+    frpsToken = {
+      file = "${inputs.secrets}/frpsToken.age";
+    };
+    cloudflareApiToken = {
+      file = "${inputs.secrets}/cloudflareApiToken.age";
+    };
   };
 }

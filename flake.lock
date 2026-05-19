@@ -301,11 +301,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1779203400,
-        "narHash": "sha256-Ob4+ZwkKlDZmVnMvFVR5Y5N+Kdi9EY1LNXqpNqr93tI=",
+        "lastModified": 1779212469,
+        "narHash": "sha256-asnftuGGvJgZh0RVH7ZWRROb7QcbPwN5X5MD5wM/z10=",
         "ref": "refs/heads/main",
-        "rev": "2382f2857197dea797abf6243a2d3a7caefa05bd",
-        "revCount": 8,
+        "rev": "409091f241de76a88a0df0e4ca4061aafe543a7d",
+        "revCount": 11,
         "type": "git",
         "url": "https://git.zerw.xyz/hdjenkov/nix-private.git"
       },

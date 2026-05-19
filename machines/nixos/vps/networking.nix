@@ -12,8 +12,7 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 80 443 ];
-    allowedUDPPorts = [ 51820 21820 ];
+    allowedTCPPorts = [ 80 443 7000 ];
     # Allow container networks to reach host services (forgejo:3000, pocket-id:1411, uptime-kuma:3001, headscale:8080)
     extraCommands = ''
       iptables -I nixos-fw 1 -s 10.89.0.0/16 -j nixos-fw-accept

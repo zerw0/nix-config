@@ -24,8 +24,7 @@
     };
   };
 
-  systemd.services.forgejo.serviceConfig.AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-  systemd.services.forgejo.serviceConfig.CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+  boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 222;
 
   networking.firewall.allowedTCPPorts = [ 222 ];
 }

@@ -350,18 +350,17 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1779199056,
-        "narHash": "sha256-vwCgkhcAsvsIHsjnM8V1lnNIJgGmTjGcmv77WdN2Tz4=",
-        "ref": "main",
-        "rev": "9022ae76460d44aeb40afa00d6da2fdca11ebe9e",
-        "revCount": 7,
+        "lastModified": 1779203400,
+        "narHash": "sha256-Ob4+ZwkKlDZmVnMvFVR5Y5N+Kdi9EY1LNXqpNqr93tI=",
+        "ref": "refs/heads/main",
+        "rev": "2382f2857197dea797abf6243a2d3a7caefa05bd",
+        "revCount": 8,
         "type": "git",
-        "url": "file:///Users/hdjenkov/git-tmp/nix-private.git"
+        "url": "https://git.zerw.xyz/hdjenkov/nix-private.git"
       },
       "original": {
-        "ref": "main",
         "type": "git",
-        "url": "file:///Users/hdjenkov/git-tmp/nix-private.git"
+        "url": "https://git.zerw.xyz/hdjenkov/nix-private.git"
       }
     },
     "systems": {

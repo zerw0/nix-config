@@ -15,8 +15,8 @@
     allowedTCPPorts = [ 80 443 222 ];
     allowedUDPPorts = [ 51820 21820 ];
     # Allow container networks to reach host services (forgejo:3000, pocket-id:1411, uptime-kuma:3001, headscale:8080)
-    extraInputRules = ''
-      ip saddr 10.89.0.0/16 accept
+    extraCommands = ''
+      iptables -I nixos-fw 1 -s 10.89.0.0/16 -j nixos-fw-accept
     '';
   };
 }

@@ -50,5 +50,12 @@
   virtualisation.podman.dockerSocket.enable = true;
   virtualisation.oci-containers.backend = "podman";
 
+  users.users.git = {
+    isSystemUser = true;
+    home = "/var/lib/forgejo";
+    shell = pkgs.bash;
+    group = "forgejo";
+  };
+
   environment.systemPackages = [ pkgs.ghostty.terminfo ];
 }

@@ -14,6 +14,7 @@
     settings = {
       server = {
         SSH_PORT = 222;
+        SSH_USER = "git";
         DOMAIN = "git.zerw.xyz";
         ROOT_URL = "https://git.zerw.xyz/";
         START_SSH_SERVER = false;

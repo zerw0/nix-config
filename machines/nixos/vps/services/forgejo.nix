@@ -24,6 +24,8 @@
     };
   };
 
-  # Forgejo SSH port — host SSH stays on 22 (openssh), forgejo git SSH on 222
+  systemd.services.forgejo.serviceConfig.AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+  systemd.services.forgejo.serviceConfig.CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+
   networking.firewall.allowedTCPPorts = [ 222 ];
 }

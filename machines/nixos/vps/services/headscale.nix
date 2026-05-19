@@ -7,7 +7,10 @@
 
     settings = {
       server_url = "https://hs.zerw.xyz";
-      dns.base_domain = "ts.zerw.xyz";
+      dns = {
+        base_domain = "ts.zerw.xyz";
+        nameservers.global = [ "1.1.1.1" "1.0.0.1" ];
+      };
       log.level = "info";
     };
   };

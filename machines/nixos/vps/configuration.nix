@@ -16,7 +16,6 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   services.openssh.enable = true;
-  services.openssh.ports = [ 22 222 ];
   services.openssh.settings.PasswordAuthentication = false;
 
   zramSwap = {
@@ -49,13 +48,6 @@
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerSocket.enable = true;
   virtualisation.oci-containers.backend = "podman";
-
-  users.users.git = {
-    isSystemUser = true;
-    home = "/var/lib/forgejo";
-    shell = pkgs.bash;
-    group = "forgejo";
-  };
 
   environment.systemPackages = [ pkgs.ghostty.terminfo ];
 }

@@ -13,21 +13,12 @@
 
     settings = {
       server = {
-        SSH_PORT = 222;
-        SSH_USER = "git";
+        DISABLE_SSH = true;
         DOMAIN = "git.zerw.xyz";
         ROOT_URL = "https://git.zerw.xyz/";
-        START_SSH_SERVER = false;
       };
       service.DISABLE_REGISTRATION = true;
       session.COOKIE_SECURE = true;
     };
   };
-
-  services.openssh.extraConfig = ''
-    Match User git
-      AuthorizedKeysFile /var/lib/forgejo/.ssh/authorized_keys
-  '';
-
-  networking.firewall.allowedTCPPorts = [ 222 ];
 }

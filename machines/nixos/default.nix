@@ -31,6 +31,7 @@ in
           modules = [
             self.inputs.home-manager.nixosModules.home-manager
             self.inputs.agenix.nixosModules.default
+            self.inputs.disko.nixosModules.disko
             (./. + "/${name}/configuration.nix")
             ../../users/hdjenkov
             ../../users/hdjenkov/home.nix

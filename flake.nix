@@ -31,6 +31,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     secrets = {
       url = "git+file:///Users/hdjenkov/git-tmp/nix-private.git?ref=main";
       flake = false;

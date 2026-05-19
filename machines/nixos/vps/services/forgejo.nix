@@ -23,5 +23,7 @@
     };
   };
 
+  services.openssh.authorizedKeysInHomedir = true;
+
   networking.firewall.allowedTCPPorts = [ 222 ];
 }

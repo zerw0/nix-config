@@ -4,16 +4,14 @@
     docker-in-docker = {
       image = "docker:dind";
       cmd = [ "dockerd" "-H" "tcp://0.0.0.0:2375" "--tls=false" ];
-      environment = { };
       extraOptions = [
         "--privileged"
         "--network=forgejo-net"
       ];
-      volumes = [ ];
     };
 
     forgejo-runner = {
-      image = "code.forgejo.org/forgejo/runner:9.0.3";
+      image = "code.forgejo.org/forgejo/runner:12.10.1";
       dependsOn = [ "docker-in-docker" ];
       cmd = [ "/bin/sh" "-c" "sleep 5; forgejo-runner daemon --config /config.yaml" ];
       environment = {

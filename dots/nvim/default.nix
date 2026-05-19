@@ -90,10 +90,6 @@
             # Treesitter
             treesitter = {
                 enable = true;
-                settings = {
-                    indent.enable = true;
-                    highlight.enable = true;
-                };
             };
 
             # File explorer
@@ -205,7 +201,19 @@
             { mode = "n"; key = "<leader>ca"; action = "<cmd>lua vim.lsp.buf.code_action()<CR>"; options.desc = "Code action"; }
         ];
 
+        extraConfigLuaPre = ''
+            -- nvim-treesitter 0.10 removed the configs module; shim it before nixvim requires it
+            package.preload['nvim-treesitter.configs'] = function()
+                return { setup = function(opts) require('nvim-treesitter').setup(opts) end }
+            end
+        '';
+
         extraConfigLua = ''
+            require("nvim-treesitter").setup({
+                highlight = { enable = true },
+                indent = { enable = true },
+            })
+
             -- Goyo settings
             vim.g.goyo_width = "80%"
             vim.g.goyo_height = "80%"

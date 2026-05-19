@@ -10,5 +10,6 @@
     ripgrep
     ncdu
     wget
+    htop
   ];
 }

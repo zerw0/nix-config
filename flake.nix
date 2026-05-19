@@ -17,12 +17,12 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.11";
+      url = "github:nix-community/nixvim/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -68,9 +68,11 @@
           ./machines/nixos/default.nix
           {
             flake.nixosConfigurations.installer = inputs.nixpkgs.lib.nixosSystem {
-              system = "x86_64-linux";
               specialArgs = { inherit inputs; };
-              modules = [ ./machines/installer/default.nix ];
+              modules = [
+                { nixpkgs.hostPlatform = "x86_64-linux"; }
+                ./machines/installer/default.nix
+              ];
             };
           }
         ];

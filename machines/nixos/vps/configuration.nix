@@ -15,8 +15,10 @@
   time.timeZone = "Europe/Sofia";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = false;
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+  };
 
   zramSwap = {
     enable = true;

@@ -12,7 +12,7 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 80 443 222 ];
+    allowedTCPPorts = [ 80 443 ];
     allowedUDPPorts = [ 51820 21820 ];
     # Allow container networks to reach host services (forgejo:3000, pocket-id:1411, uptime-kuma:3001, headscale:8080)
     extraCommands = ''

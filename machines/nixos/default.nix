@@ -22,13 +22,13 @@ in
       name:
       lib.nameValuePair name (
         self.inputs.nixpkgs.lib.nixosSystem {
-          system = systemForHost name;
           specialArgs = {
             inherit (self) inputs;
             self = { inherit (self) nixosModules; };
             nixvimModule = self.inputs.nixvim.homeModules.nixvim;
           };
           modules = [
+            { nixpkgs.hostPlatform = systemForHost name; }
             self.inputs.home-manager.nixosModules.home-manager
             self.inputs.agenix.nixosModules.default
             self.inputs.disko.nixosModules.disko

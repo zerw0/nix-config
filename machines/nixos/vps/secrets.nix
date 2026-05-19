@@ -6,8 +6,5 @@
     pocketIdEncryptionKey = {
       file = "${inputs.secrets}/pocketIdEncryptionKey.age";
     };
-    fmbotEnv = {
-      file = "${inputs.secrets}/fmbotEnv.age";
-    };
   };
 }

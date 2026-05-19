@@ -32,7 +32,6 @@ in
             self.inputs.home-manager.nixosModules.home-manager
             self.inputs.agenix.nixosModules.default
             self.inputs.disko.nixosModules.disko
-            self.inputs.fmatrix.nixosModules.default
             (./. + "/${name}/configuration.nix")
             ../../users/hdjenkov
             ../../users/hdjenkov/home.nix

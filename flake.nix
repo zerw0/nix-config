@@ -46,10 +46,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    fmatrix = {
-      url = "git+file:///Users/hdjenkov/git/fmatrix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =

@@ -32,7 +32,7 @@
     };
 
     secrets = {
-      url = "git+ssh://git@git.zerw.xyz:222/hdjenkov/nix-private.git";
+      url = "git+file:///Users/hdjenkov/git-tmp/nix-private.git?ref=main";
       flake = false;
     };
 

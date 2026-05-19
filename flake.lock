@@ -350,11 +350,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1779195198,
-        "narHash": "sha256-TiGR+bazs9P6aPDPJDH3t/i4XCWKD6wcVpuKpeTGM6U=",
+        "lastModified": 1779198808,
+        "narHash": "sha256-nwFmZ0i7ylVPdnQdKTMnbEb8pnwnn+ohfsO5bghujes=",
         "ref": "main",
-        "rev": "fee9ff8a3329a1adfb221bf3677b7ac0121e6950",
-        "revCount": 5,
+        "rev": "36cab4c1ca4b5293f4d450bdc83895e56ee6b53c",
+        "revCount": 6,
         "type": "git",
         "url": "file:///Users/hdjenkov/git-tmp/nix-private.git"
       },

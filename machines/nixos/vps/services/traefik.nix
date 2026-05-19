@@ -7,7 +7,7 @@
     volumes = [
       "/var/lib/pangolin/traefik:/etc/traefik:ro"
       "/var/lib/pangolin/letsencrypt:/letsencrypt"
-      "/var/log/traefik:/var/log/traefik"
+      "/var/lib/pangolin/logs:/var/log/traefik"
     ];
     # Share gerbil's network namespace so traefik binds on gerbil's ports
     extraOptions = [ "--network=container:gerbil" ];

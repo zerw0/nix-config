@@ -163,6 +163,26 @@
         "type": "github"
       }
     },
+    "fmatrix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1777311564,
+        "narHash": "sha256-WR+h5C3Mn7of5kfjOrBFqG4LKV8aZ5KbQ9Azki6xj1w=",
+        "ref": "refs/heads/main",
+        "rev": "a0953011cdfaa2d030ff1064a28e159a3c75591b",
+        "revCount": 50,
+        "type": "git",
+        "url": "file:///Users/hdjenkov/git/fmatrix"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///Users/hdjenkov/git/fmatrix"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -339,6 +359,7 @@
         "claude-code": "claude-code",
         "disko": "disko",
         "flake-parts": "flake-parts",
+        "fmatrix": "fmatrix",
         "home-manager": "home-manager_2",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
@@ -350,11 +371,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1779193929,
-        "narHash": "sha256-nKRBHpCWzU3f6SbKBeBIPcyLbFAorsOQxePr51pVM14=",
+        "lastModified": 1779195198,
+        "narHash": "sha256-TiGR+bazs9P6aPDPJDH3t/i4XCWKD6wcVpuKpeTGM6U=",
         "ref": "main",
-        "rev": "656c4756a480299ab38c571d02edb2b521a888ff",
-        "revCount": 4,
+        "rev": "fee9ff8a3329a1adfb221bf3677b7ac0121e6950",
+        "revCount": 5,
         "type": "git",
         "url": "file:///Users/hdjenkov/git-tmp/nix-private.git"
       },

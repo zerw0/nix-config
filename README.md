@@ -2,13 +2,34 @@
 
 Personal Nix configuration for macOS (nix-darwin) and NixOS machines.
 
+## Structure
+
+```
+modules/
+├── machines/
+│   ├── nixos/          # NixOS hosts (auto-discovered)
+│   │   ├── _common/    # shared NixOS boilerplate
+│   │   ├── htpc/
+│   │   ├── vps/
+│   │   └── installer/
+│   └── darwin/         # darwin hosts (auto-discovered)
+│       ├── _common/    # shared darwin boilerplate
+│       └── lambda/
+├── homelab/            # homelab.services.* option modules (vps services)
+├── misc/               # reusable cross-host modules (tailscale, …)
+├── users/hdjenkov/     # user account + home-manager entry
+├── dots/               # home-manager dotfile modules
+└── devshell.nix        # flake-parts perSystem: treefmt + dev shell
+justfile                # deploy/check/update shortcuts
+```
+
 ## Machines
 
 | Host | Type | Description |
 |------|------|-------------|
 | **lambda** | nix-darwin (aarch64) | MacBook Pro workstation |
 | **htpc** | NixOS (x86_64) | Home theater PC |
-| **vps** | NixOS (aarch64) | VPS — self-hosted services |
+| **vps** | NixOS (x86_64) | VPS — self-hosted services |
 
 ## Services
 
@@ -22,20 +43,42 @@ Personal Nix configuration for macOS (nix-darwin) and NixOS machines.
 
 | Service | Description |
 |---------|-------------|
-| [Forgejo](https://forgejo.org) | Self-hosted git |
+| [Caddy](https://caddyserver.com) | Reverse proxy with automatic TLS (Cloudflare DNS) |
+| [frp](https://github.com/fatedier/frp) | Tunnel server (frps) for home-hosted services |
+| [Forgejo](https://forgejo.org) | Self-hosted git — `<git-host>` |
 | [Forgejo Runner](https://forgejo.org) | CI runner (docker-in-docker) |
-| [Headscale](https://headscale.net) | Self-hosted Tailscale control server |
-| [Headplane](https://github.com/tale/headplane) | Headscale web UI |
-| [Pocket ID](https://github.com/pocket-id/pocket-id) | OIDC/SSO provider |
-| [Pangolin](https://github.com/fosrl/pangolin) + [Gerbil](https://github.com/fosrl/gerbil) | Tunneled reverse proxy stack |
-| [Uptime Kuma](https://github.com/louislam/uptime-kuma) | Uptime monitoring |
+| [Headscale](https://headscale.net) | Self-hosted Tailscale control server — `<headscale-host>` |
+| [Headplane](https://github.com/tale/headplane) | Headscale web UI — `<headscale-host>/admin` |
+| [Pocket ID](https://github.com/pocket-id/pocket-id) | OIDC/SSO provider — `<oidc-host>` |
+| [Uptime Kuma](https://github.com/louislam/uptime-kuma) | Uptime monitoring — `<status-host>` |
 | [FMBot](https://fmbot.xyz) | Last.fm Discord bot (via fmatrix) |
 | [Epic Games Free Games](https://github.com/claabs/epicgames-freegames-node) | Auto-claim free Epic Games |
-| Website | Static site |
+| Website | Static site — `<domain>` |
+
+Home-hosted services tunneled via frp (frpc runs on Unraid):
+
+| Service | Domain |
+|---------|--------|
+| [Immich](https://immich.app) | `<immich-host>` |
+| [Nextcloud](https://nextcloud.com) | `<nextcloud-host>` |
 
 ## Secrets
 
 Secrets are managed with [agenix](https://github.com/ryantm/agenix) and stored in a private repository. Each machine decrypts secrets using its SSH host key (NixOS) or personal SSH key (macOS).
+
+## Deploy
+
+Use `just --list` to see all available targets. Common workflows:
+
+```bash
+just update          # update flake inputs
+just check           # nix flake check --no-build
+just dry-run vps     # dry-build without switching
+just deploy-vps      # remote build + switch on vps
+just deploy-htpc     # local rebuild on htpc
+just deploy-lambda   # darwin-rebuild switch
+just build-iso       # build installer ISO
+```
 
 ## Installation
 
@@ -50,7 +93,7 @@ curl -fsSL https://install.determinate.systems/nix | sh -s -- install
 Clone the repo:
 
 ```bash
-git clone https://github.com/zerw0/nix-config.git ~/git/nix-config
+git clone https://<git-host>/hdjenkov/nix-config.git ~/git/nix-config
 ```
 
 Clone the private secrets repo:
@@ -94,7 +137,7 @@ Partition and format using [disko](https://github.com/nix-community/disko):
 ```bash
 nix --experimental-features "nix-command flakes" run github:nix-community/disko \
   -- -m destroy,format,mount \
-  /path/to/nix-config/machines/nixos/htpc/disk-config.nix
+  /path/to/nix-config/modules/machines/nixos/htpc/disk-config.nix
 ```
 
 Install git and clone the repo:
@@ -102,7 +145,7 @@ Install git and clone the repo:
 ```bash
 nix-env -f '<nixpkgs>' -iA git
 mkdir -p /mnt/home/hdjenkov/git
-git clone https://github.com/zerw0/nix-config.git /mnt/home/hdjenkov/git/nix-config
+git clone https://<git-host>/hdjenkov/nix-config.git /mnt/home/hdjenkov/git/nix-config
 ```
 
 Install:
@@ -130,7 +173,7 @@ git add -A && git commit -m "add htpc host key" && git push
 Pull and deploy:
 
 ```bash
-git clone https://github.com/zerw0/nix-config.git ~/git/nix-config
+git clone https://<git-host>/hdjenkov/nix-config.git ~/git/nix-config
 git clone git@<git-host>:hdjenkov/nix-private.git ~/git/nix-private  # SSH agent forwarded
 cd ~/git/nix-config && git pull
 sudo --preserve-env=SSH_AUTH_SOCK nixos-rebuild switch --flake ~/git/nix-config#htpc --override-input secrets ~/git/nix-private
@@ -165,7 +208,7 @@ Partition and format using [disko](https://github.com/nix-community/disko):
 ```bash
 nix --experimental-features "nix-command flakes" run github:nix-community/disko \
   -- -m destroy,format,mount \
-  /path/to/nix-config/machines/nixos/vps/disk-config.nix
+  /path/to/nix-config/modules/machines/nixos/vps/disk-config.nix
 ```
 
 Install git and clone the repo:
@@ -173,7 +216,7 @@ Install git and clone the repo:
 ```bash
 nix-env -f '<nixpkgs>' -iA git
 mkdir -p /mnt/home/hdjenkov/git
-git clone https://github.com/zerw0/nix-config.git /mnt/home/hdjenkov/git/nix-config
+git clone https://<git-host>/hdjenkov/nix-config.git /mnt/home/hdjenkov/git/nix-config
 ```
 
 Install:
@@ -198,15 +241,6 @@ agenix -r
 git add -A && git commit -m "add vps host key" && git push
 ```
 
-Pull and deploy:
-
-```bash
-git clone https://github.com/zerw0/nix-config.git ~/git/nix-config
-git clone git@<git-host>:hdjenkov/nix-private.git ~/git/nix-private
-cd ~/git/nix-config && git pull
-sudo nixos-rebuild switch --flake ~/git/nix-config#vps --override-input secrets ~/git/nix-private
-```
-
 ## Updating
 
 **lambda:**
@@ -214,6 +248,12 @@ sudo nixos-rebuild switch --flake ~/git/nix-config#vps --override-input secrets 
 ```bash
 cd ~/git/nix-config && git pull
 sudo darwin-rebuild switch --flake ~/git/nix-config#lambda --override-input secrets ~/git/nix-private
+```
+
+Or with `just`:
+
+```bash
+just deploy-lambda
 ```
 
 **htpc** (SSH in with `-A`, then):
@@ -225,9 +265,18 @@ sudo nixos-rebuild switch --flake ~/git/nix-config#htpc
 
 > After the first successful deploy, htpc preserves `SSH_AUTH_SOCK` through sudo automatically, so it can fetch the secrets repo directly without `--override-input`.
 
-**vps:**
+**vps** (built and deployed remotely from workstation):
 
 ```bash
 cd ~/git/nix-config && git pull
-sudo nixos-rebuild switch --flake ~/git/nix-config#vps --override-input secrets ~/git/nix-private
+just deploy-vps
+```
+
+Or manually:
+
+```bash
+nixos-rebuild switch --flake .#vps \
+  --target-host hdjenkov@<vps-host> \
+  --build-host hdjenkov@<vps-host> \
+  --sudo --ask-sudo-password
 ```

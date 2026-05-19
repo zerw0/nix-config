@@ -21,6 +21,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Separate HM input for darwin — release-25.11 is version-matched to nixpkgs-darwin,
+    # avoiding a mismatch where HM master's modules/services-modular references
+    # lib/services/lib.nix which doesn't exist in the older nixpkgs-darwin pin.
+    home-manager-darwin = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,6 +59,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -64,17 +77,9 @@
           "aarch64-linux"
         ];
         imports = [
-          ./machines/darwin/default.nix
-          ./machines/nixos/default.nix
-          {
-            flake.nixosConfigurations.installer = inputs.nixpkgs.lib.nixosSystem {
-              specialArgs = { inherit inputs; };
-              modules = [
-                { nixpkgs.hostPlatform = "x86_64-linux"; }
-                ./machines/installer/default.nix
-              ];
-            };
-          }
+          ./modules/machines/darwin/default.nix
+          ./modules/machines/nixos/default.nix
+          ./modules/devshell.nix
         ];
       }
     );

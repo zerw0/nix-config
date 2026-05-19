@@ -24,7 +24,10 @@
     };
   };
 
-  services.openssh.authorizedKeysInHomedir = true;
+  services.openssh.extraConfig = ''
+    Match User git
+      AuthorizedKeysFile /var/lib/forgejo/.ssh/authorized_keys
+  '';
 
   networking.firewall.allowedTCPPorts = [ 222 ];
 }

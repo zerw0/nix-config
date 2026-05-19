@@ -4,7 +4,9 @@ let
   configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
 
   # Per-host architecture overrides; default is x86_64-linux.
-  systemArchMap = { };
+  systemArchMap = {
+    vps = "aarch64-linux";
+  };
 
   # Per-host nixpkgs suffix overrides (e.g. "-unstable") — reserved for future use.
   nixpkgsMap = { };

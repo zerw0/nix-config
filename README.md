@@ -29,7 +29,7 @@ justfile                # deploy/check/update shortcuts
 |------|------|-------------|
 | **lambda** | nix-darwin (aarch64) | MacBook Pro workstation |
 | **htpc** | NixOS (x86_64) | Home theater PC |
-| **vps** | NixOS (x86_64) | VPS — self-hosted services |
+| **vps** | NixOS (aarch64) | VPS — self-hosted services |
 
 ## Services
 

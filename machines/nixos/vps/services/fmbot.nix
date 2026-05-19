@@ -1,4 +1,11 @@
-{ ... }:
+{ inputs, config, ... }:
 {
-  # fmatrix disabled until forgejo is restored and the flake input can point back to git.zerw.xyz
+  imports = [ inputs.fmatrix.nixosModules.default ];
+
+  services.fmatrix = {
+    enable = true;
+    matrix.homeserver = "https://chat.notthebe.ee";
+    matrix.userId = "@fmbot:notthebe.ee";
+    secretsFile = config.age.secrets.fmbotEnv.path;
+  };
 }

@@ -163,6 +163,26 @@
         "type": "github"
       }
     },
+    "fmatrix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1779205187,
+        "narHash": "sha256-N4/D/Ed6ZQeBs60k/lPxl2iihUfU8TiOyQXa6c4xlIE=",
+        "ref": "refs/heads/main",
+        "rev": "f6fa6997ec6d5640f941756e2e4ad6b5ae100714",
+        "revCount": 51,
+        "type": "git",
+        "url": "https://git.zerw.xyz/hdjenkov/fmatrix.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.zerw.xyz/hdjenkov/fmatrix.git"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -339,6 +359,7 @@
         "claude-code": "claude-code",
         "disko": "disko",
         "flake-parts": "flake-parts",
+        "fmatrix": "fmatrix",
         "home-manager": "home-manager_2",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",

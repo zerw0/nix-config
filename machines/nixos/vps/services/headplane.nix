@@ -7,6 +7,7 @@
       "/etc/headscale:/etc/headscale:ro"
       "/var/run/podman/podman.sock:/var/run/docker.sock:ro"
     ];
+    environment.PORT = "3002";
     extraOptions = [ "--network=host" ];
   };
 }

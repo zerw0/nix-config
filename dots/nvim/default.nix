@@ -12,6 +12,7 @@
         vimAlias = true;
         defaultEditor = true;
         colorscheme = "gruvbox";
+        version.enableNixpkgsReleaseCheck = false;
 
         opts = {
             compatible = false;

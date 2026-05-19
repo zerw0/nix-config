@@ -15,7 +15,7 @@ let
       ../../users/hdjenkov/home.nix
       ../../modules/common.nix
       {
-        nixpkgs.pkgs = import inputs.nixpkgs {
+        nixpkgs.pkgs = import inputs.nixpkgs-darwin {
           system = "aarch64-darwin";
           config.allowUnfree = true;
         };

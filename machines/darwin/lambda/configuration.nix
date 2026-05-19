@@ -24,7 +24,7 @@
     nixd
     ansible
     go
-    claude-code
+    inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default
     telegram-desktop
     spotify
     vscode

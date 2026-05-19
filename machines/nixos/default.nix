@@ -6,6 +6,9 @@
 let
   entries = builtins.attrNames (builtins.readDir ./.);
   configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
+  systemForHost = name:
+    let systemFile = ./. + "/${name}/system.nix";
+    in if builtins.pathExists systemFile then (import systemFile).system else "x86_64-linux";
   homeManagerCfg = {
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
@@ -19,7 +22,7 @@ in
       name:
       lib.nameValuePair name (
         self.inputs.nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          system = systemForHost name;
           specialArgs = {
             inherit (self) inputs;
             self = { inherit (self) nixosModules; };

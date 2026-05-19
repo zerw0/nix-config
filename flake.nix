@@ -2,7 +2,9 @@
   description = "Example nix-darwin system flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/3edc4a30ed3903fdf6f90c837f961fa6b49582d1";
+
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/d351d0653aeb7877273920cd3e823994e7579b0b";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -11,7 +13,7 @@
 
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     home-manager = {
@@ -33,6 +35,11 @@
       url = "git+ssh://git@git.zerw.xyz:222/hdjenkov/nix-private.git";
       flake = false;
     };
+
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -43,6 +50,7 @@
         systems = [
           "aarch64-darwin"
           "x86_64-linux"
+          "aarch64-linux"
         ];
         imports = [
           ./machines/darwin/default.nix

@@ -16,6 +16,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   services.openssh.enable = true;
+  services.openssh.ports = [ 22 222 ];
   services.openssh.settings.PasswordAuthentication = false;
 
   zramSwap = {

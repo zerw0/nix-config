@@ -31,7 +31,7 @@
 
   jovian.steam = {
     enable = true;
-    autoStart = false;
+    autoStart = true;
     user = "hdjenkov";
     desktopSession = "plasma";
     environment.STEAM_EXTRA_COMPAT_TOOLS_PATHS =

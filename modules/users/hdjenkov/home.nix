@@ -1,4 +1,5 @@
-{ pkgs, nixvimModule, inputs, ... }:
+{ pkgs, nixvimModule, inputs, config, ... }:
+with pkgs;
 {
   home-manager.users.hdjenkov.imports = [
     nixvimModule
@@ -12,14 +13,24 @@
   home-manager.users.hdjenkov.programs.zsh.enable = true;
 
   home-manager.users.hdjenkov.home.packages = [
-    pkgs.nerd-fonts.caskaydia-cove
-  ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-    pkgs.telegram-desktop
-    pkgs.spotify
-    pkgs.vscode
-    pkgs.localsend
-    pkgs.prismlauncher
-    inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default
+    nerd-fonts.caskaydia-cove
+    inputs.claude-code.packages.${stdenv.hostPlatform.system}.default
+  ] ++ lib.optionals stdenv.isDarwin [
+    telegram-desktop
+    spotify
+    vscode
+    localsend
+    prismlauncher
+  ] ++ lib.optionals (stdenv.isLinux && lib.hasSuffix "steamdeck" config.networking.hostName) [
+    telegram-desktop
+    spotify
+    vscode
+    localsend
+    age
+    just
+    bitwarden
+    rustdesk
+    element-desktop
   ];
 
   home-manager.users.hdjenkov.home.file = { };

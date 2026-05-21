@@ -28,7 +28,7 @@ with pkgs;
     localsend
     age
     just
-    bitwarden
+    bitwarden-desktop
     rustdesk
     element-desktop
   ];

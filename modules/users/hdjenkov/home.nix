@@ -29,7 +29,6 @@ with pkgs;
     age
     just
     bitwarden-desktop
-    rustdesk
     element-desktop
   ];
 

@@ -368,11 +368,11 @@
     "secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1779391997,
-        "narHash": "sha256-kbrGo1qknpSukcRjT9OpP7aMHy62YLtocMXjFlWY/X4=",
+        "lastModified": 1779392607,
+        "narHash": "sha256-GOyz1VBWhpgDD4fdM1B7LaexUbzjGYOSVDs8ui+waok=",
         "ref": "refs/heads/main",
-        "rev": "f0ca54b03d9cc062ac9160dd628b025d86a2580b",
-        "revCount": 12,
+        "rev": "2fc3d4f76f0294a993c7fa6158d00f6e5157369d",
+        "revCount": 13,
         "type": "git",
         "url": "https://git.zerw.xyz/hdjenkov/nix-private.git"
       },

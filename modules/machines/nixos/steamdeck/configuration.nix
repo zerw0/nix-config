@@ -31,7 +31,7 @@
 
   jovian.steam = {
     enable = true;
-    autoStart = true;
+    autoStart = false;
     user = "hdjenkov";
     desktopSession = "plasma";
     environment.STEAM_EXTRA_COMPAT_TOOLS_PATHS =
@@ -72,7 +72,7 @@
 
   hardware.cpu.amd.updateMicrocode = config.hardware.enableRedistributableFirmware;
   hardware.bluetooth.enable = true;
-  hardware.sensor.iio-sensor-proxy.enable = true;
+  hardware.sensor.iio.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 

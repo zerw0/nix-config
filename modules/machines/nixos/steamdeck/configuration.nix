@@ -27,8 +27,6 @@
     protontricks.enable = true;
     remotePlay.openFirewall = true;
     extraCompatPackages = [ pkgs.proton-ge-bin ];
-    extraPackages = with pkgs; [ hidapi ];
-    extest.enable = true;
   };
 
   jovian.steam = {
@@ -38,7 +36,6 @@
     desktopSession = "plasma";
     environment.STEAM_EXTRA_COMPAT_TOOLS_PATHS =
       lib.makeSearchPathOutput "steamcompattool" "" config.programs.steam.extraCompatPackages;
-    environment.SYSTEM_PATH = "/run/current-system/sw/bin";
   };
 
   jovian.decky-loader = {

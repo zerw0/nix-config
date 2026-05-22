@@ -132,6 +132,12 @@
               forgejo-token() { cat "${osConfig.age.secrets.forgejoAccessToken.path}"; }
               export FORGEJO_TOKEN_FILE="${osConfig.age.secrets.forgejoAccessToken.path}"
             ''
+          else if (osConfig.networking.hostName == "steamdeck") then
+            ''
+              # Bitwarden runs as a flatpak here; its SSH agent socket lives in
+              # the flatpak's sandbox home, which is still on the host fs.
+              export SSH_AUTH_SOCK=$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
+            ''
           else
             ""
         }

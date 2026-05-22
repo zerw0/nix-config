@@ -16,6 +16,7 @@ in
       default = "https://hs.zerw.xyz";
     };
 
+    acceptRoutes = lib.mkEnableOption "accept routes from subnet routers";
     subnetRouter = lib.mkEnableOption "subnet router";
     exitNode = lib.mkEnableOption "exit node advertisement";
 
@@ -32,10 +33,10 @@ in
       enable = true;
       authKeyFile = cfg.authKeyFile;
       extraUpFlags = [ "--login-server=${cfg.loginServer}" "--reset" ];
-      extraSetFlags = lib.optionals cfg.subnetRouter [
-        "--accept-routes"
-        "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}"
-      ] ++ lib.optional cfg.exitNode "--advertise-exit-node";
+      extraSetFlags = lib.optional (cfg.acceptRoutes || cfg.subnetRouter) "--accept-routes"
+        ++ lib.optionals cfg.subnetRouter [
+          "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}"
+        ] ++ lib.optional cfg.exitNode "--advertise-exit-node";
     };
 
     boot.kernel.sysctl = lib.mkIf (cfg.subnetRouter || cfg.exitNode) {

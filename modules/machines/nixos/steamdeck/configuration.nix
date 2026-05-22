@@ -81,7 +81,6 @@
     "com.bitwarden.desktop"
     "org.libreoffice.LibreOffice"
     "org.localsend.localsend_app"
-    "app.zen_browser.zen"
     "org.filezillaproject.Filezilla"
     "org.kde.haruna"
     "fr.handbrake.ghb"

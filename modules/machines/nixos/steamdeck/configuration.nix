@@ -123,6 +123,7 @@
     pulse.enable = true;
   };
 
+  hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = config.hardware.enableRedistributableFirmware;
   hardware.bluetooth.enable = true;
   hardware.sensor.iio.enable = true;

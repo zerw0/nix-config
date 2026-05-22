@@ -29,6 +29,7 @@ let
       self.inputs.home-manager-darwin.darwinModules.home-manager
       self.inputs.agenix.darwinModules.default
       ./_common
+      ../../misc/tailscale
       (./. + "/${name}/configuration.nix")
       ../../users/hdjenkov
       ../../users/hdjenkov/home.nix

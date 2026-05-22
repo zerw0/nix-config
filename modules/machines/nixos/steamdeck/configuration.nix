@@ -27,10 +27,23 @@
     protontricks.enable = true;
     remotePlay.openFirewall = true;
     extraCompatPackages = [ pkgs.proton-ge-bin ];
-    extraPackages = [ pkgs.hidapi ];
   };
 
   hardware.steam-hardware.enable = true;
+
+  # The gamescope session embeds a direct reference to pkgs.steam, which is
+  # built without programs.steam.extraPackages. Steam's controller firmware
+  # updater needs libhidapi; without it the OOBE firmware check fails and
+  # blocks first-run setup. Inject hidapi at the package level so the session
+  # steam picks it up too. (steamdeck_stable client lacks Valve's vendored fix.)
+  nixpkgs.overlays = [
+    (final: prev: {
+      steam = prev.steam.override (old: {
+        extraPkgs = pkgs: (old.extraPkgs or (_: [ ]) ) pkgs ++ [ pkgs.hidapi ];
+        extraLibraries = pkgs: (old.extraLibraries or (_: [ ]) ) pkgs ++ [ pkgs.hidapi ];
+      });
+    })
+  ];
 
   jovian.steam = {
     enable = true;

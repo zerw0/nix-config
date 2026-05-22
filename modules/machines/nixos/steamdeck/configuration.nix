@@ -126,5 +126,11 @@
   age.secrets.hashedUserPassword.file = "${inputs.secrets}/hashedUserPassword.age";
   users.users.hdjenkov.hashedPasswordFile = config.age.secrets.hashedUserPassword.path;
 
+  services.syncthing = {
+    enable = true;
+    user = "hdjenkov";
+    dataDir = "/home/hdjenkov";
+  };
+
   environment.systemPackages = with pkgs; [ prismlauncher ghostty.terminfo steamdeck-firmware ];
 }

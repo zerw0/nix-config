@@ -22,7 +22,7 @@ with pkgs;
     localsend
     prismlauncher
   ] ++ lib.optionals (stdenv.isLinux && lib.hasSuffix "steamdeck" config.networking.hostName) [
-    vscodium
+    vscode
     heroic
     git-lfs
     iperf3

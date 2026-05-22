@@ -48,6 +48,10 @@ in
           client_id = cfg.oidc.clientId;
           client_secret_path = cfg.oidc.clientSecretFile;
           scope = [ "openid" "profile" "email" ];
+          pkce = {
+            enabled = true;
+            method = "S256";
+          };
         };
       };
     };

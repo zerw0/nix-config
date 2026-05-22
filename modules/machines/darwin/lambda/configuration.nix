@@ -40,7 +40,6 @@
     ];
     casks = [
       "bitwarden"
-      "tailscale-app"
       "iina"
       "keka"
       "rustdesk"
@@ -54,6 +53,9 @@
       "element"
     ];
   };
+
+  services.tailscale.enable = true;
+  services.netbird.enable = true;
 
   # Determinate Nix manages the daemon; nix-darwin should not
   nix.enable = false;

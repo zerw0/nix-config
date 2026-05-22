@@ -2,6 +2,7 @@
 {
   imports = [
     inputs.jovian.nixosModules.default
+    inputs.nix-flatpak.nixosModules.nix-flatpak
     ./disk-config.nix
     ./boot.nix
     ./tailscale.nix
@@ -67,9 +68,32 @@
 
   services.desktopManager.plasma6.enable = true;
 
-  # Flatpak backend for KDE Discover. Flathub remote must be added once:
-  #   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  # Flatpak backend for KDE Discover, with declarative management via nix-flatpak.
   services.flatpak.enable = true;
+  services.flatpak.remotes = [{
+    name = "flathub";
+    location = "https://flathub.org/repo/flathub.flatpakrepo";
+  }];
+  services.flatpak.packages = [
+    "org.telegram.desktop"
+    "im.riot.Riot"
+    "com.spotify.Client"
+    "com.bitwarden.desktop"
+    "org.libreoffice.LibreOffice"
+    "org.localsend.localsend_app"
+    "app.zen_browser.zen"
+    "org.filezillaproject.Filezilla"
+    "org.kde.haruna"
+    "fr.handbrake.ghb"
+    "org.qbittorrent.qBittorrent"
+    "com.github.iwalton3.jellyfin-media-player"
+    "eu.betterbird.Betterbird"
+    "dev.vencord.Vesktop"
+    "in.cinny.Cinny"
+    "com.rustdesk.RustDesk"
+    "com.anydesk.Anydesk"
+    "com.github.Eloston.UngoogledChromium"
+  ];
   # PackageKit backend for Discover. Limited on NixOS (declarative system), but
   # lets Discover surface offline/firmware updates and the flatpak backend.
   services.packagekit.enable = true;

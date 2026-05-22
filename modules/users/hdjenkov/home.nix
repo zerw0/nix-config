@@ -22,14 +22,10 @@ with pkgs;
     localsend
     prismlauncher
   ] ++ lib.optionals (stdenv.isLinux && lib.hasSuffix "steamdeck" config.networking.hostName) [
-    telegram-desktop
-    spotify
-    vscode
-    localsend
+    vscodium
     age
     just
-    bitwarden-desktop
-    element-desktop
+    heroic
   ];
 
   home-manager.users.hdjenkov.home.file = { };

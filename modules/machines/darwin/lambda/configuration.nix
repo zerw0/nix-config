@@ -54,9 +54,10 @@
     ];
   };
 
+  # --login-server is a `tailscale up` flag, NOT a tailscaled daemon flag;
+  # passing it to the daemon makes it exit 2. Set the login server at login
+  # time instead: sudo tailscale up --login-server=https://hs.zerw.xyz
   services.tailscale.enable = true;
-  launchd.daemons.tailscaled.command = lib.mkForce
-    "${lib.getExe' pkgs.tailscale "tailscaled"} --login-server=https://hs.zerw.xyz";
 
   services.netbird.enable = true;
 

@@ -27,7 +27,18 @@
   homelab.services.postgresql.enable = true;
   homelab.services.forgejo.enable = true;
   homelab.services.forgejo-runner.enable = true;
-  homelab.services.headscale.enable = true;
+  age.secrets.headscaleOidcSecret = {
+    file = "${inputs.secrets}/headscaleOidcSecret.age";
+    owner = "headscale";
+  };
+  homelab.services.headscale = {
+    enable = true;
+    oidc = {
+      enable = true;
+      clientId = "e3c2f28f-3b84-4eca-9ddd-743b60a1111b";
+      clientSecretFile = config.age.secrets.headscaleOidcSecret.path;
+    };
+  };
   homelab.services.headplane.enable = true;
   homelab.services.pocket-id = {
     enable = true;

@@ -27,7 +27,10 @@
     protontricks.enable = true;
     remotePlay.openFirewall = true;
     extraCompatPackages = [ pkgs.proton-ge-bin ];
+    extraPackages = [ pkgs.hidapi ];
   };
+
+  hardware.steam-hardware.enable = true;
 
   jovian.steam = {
     enable = true;

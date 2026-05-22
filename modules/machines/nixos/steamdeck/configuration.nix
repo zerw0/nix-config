@@ -11,6 +11,7 @@
   system.stateVersion = "25.11";
 
   home-manager.users.hdjenkov.imports = [ ../../../dots/ghostty ];
+  home-manager.users.hdjenkov.programs.ghostty.settings.font-size = 11;
 
   networking.hostName = "steamdeck";
   networking.networkmanager.enable = true;
@@ -105,11 +106,9 @@
     wayland.compositor = "kwin";
   };
 
-  # gnome-keyring provides org.freedesktop.secrets for Element and other
-  # Electron/flatpak apps (more reliable than KWallet's implementation);
-  # unlocked at login via PAM.
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.sddm.enableGnomeKeyring = true;
+  # KWallet provides the org.freedesktop.secrets service for app keyrings;
+  # unlock it at login via PAM.
+  security.pam.services.sddm.enableKwallet = true;
 
   programs.xwayland.enable = true;
 

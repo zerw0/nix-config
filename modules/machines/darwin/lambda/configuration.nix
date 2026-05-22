@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 {
   imports = [ ./system.nix ];
 
@@ -54,7 +54,10 @@
     ];
   };
 
-  modules.tailscale.enable = true;
+  services.tailscale.enable = true;
+  launchd.daemons.tailscaled.command = lib.mkForce
+    "${lib.getExe' pkgs.tailscale "tailscaled"} --login-server=https://hs.zerw.xyz";
+
   services.netbird.enable = true;
 
   # Determinate Nix manages the daemon; nix-darwin should not

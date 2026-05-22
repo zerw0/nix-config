@@ -130,6 +130,7 @@
     enable = true;
     user = "hdjenkov";
     dataDir = "/home/hdjenkov";
+    openDefaultPorts = true;
   };
 
   environment.systemPackages = with pkgs; [ prismlauncher ghostty.terminfo steamdeck-firmware ];

@@ -133,5 +133,7 @@
     openDefaultPorts = true;
   };
 
+  services.netbird.enable = true;
+
   environment.systemPackages = with pkgs; [ prismlauncher ghostty.terminfo steamdeck-firmware ];
 }

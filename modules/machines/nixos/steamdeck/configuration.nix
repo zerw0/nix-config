@@ -10,6 +10,8 @@
 
   system.stateVersion = "25.11";
 
+  home-manager.users.hdjenkov.imports = [ ../../../dots/ghostty ];
+
   networking.hostName = "steamdeck";
   networking.networkmanager.enable = true;
   networking.networkmanager.dns = "systemd-resolved";
@@ -134,6 +136,9 @@
   };
 
   services.netbird.enable = true;
+
+  virtualisation.docker.enable = true;
+  users.users.hdjenkov.extraGroups = [ "docker" ];
 
   environment.systemPackages = with pkgs; [ prismlauncher ghostty.terminfo steamdeck-firmware ];
 }

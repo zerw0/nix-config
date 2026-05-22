@@ -23,9 +23,27 @@ with pkgs;
     prismlauncher
   ] ++ lib.optionals (stdenv.isLinux && lib.hasSuffix "steamdeck" config.networking.hostName) [
     vscodium
+    heroic
+    git-lfs
+    iperf3
+    nodejs
+    go
+    nil
+    nixd
+    ansible
+    glab
+    awscli
+    pwgen
     age
     just
-    heroic
+    inputs.agenix.packages.${stdenv.hostPlatform.system}.default
+    (python313.withPackages (ps: with ps; [
+      pip
+      requests
+      setuptools
+      pyyaml
+      pyopenssl
+    ]))
   ];
 
   home-manager.users.hdjenkov.home.file = { };

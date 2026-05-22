@@ -105,9 +105,11 @@
     wayland.compositor = "kwin";
   };
 
-  # KWallet provides the org.freedesktop.secrets service that Element and other
-  # Electron/flatpak apps use for their keyring; unlock it at login via PAM.
-  security.pam.services.sddm.enableKwallet = true;
+  # gnome-keyring provides org.freedesktop.secrets for Element and other
+  # Electron/flatpak apps (more reliable than KWallet's implementation);
+  # unlocked at login via PAM.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
 
   programs.xwayland.enable = true;
 

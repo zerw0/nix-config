@@ -67,6 +67,13 @@
 
   services.desktopManager.plasma6.enable = true;
 
+  # Flatpak backend for KDE Discover. Flathub remote must be added once:
+  #   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  services.flatpak.enable = true;
+  # PackageKit backend for Discover. Limited on NixOS (declarative system), but
+  # lets Discover surface offline/firmware updates and the flatpak backend.
+  services.packagekit.enable = true;
+
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;

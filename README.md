@@ -45,22 +45,22 @@ justfile                # deploy/check/update shortcuts
 |---------|-------------|
 | [Caddy](https://caddyserver.com) | Reverse proxy with automatic TLS (Cloudflare DNS) |
 | [frp](https://github.com/fatedier/frp) | Tunnel server (frps) for home-hosted services |
-| [Forgejo](https://forgejo.org) | Self-hosted git — `<git-host>` |
+| [Forgejo](https://forgejo.org) | Self-hosted git |
 | [Forgejo Runner](https://forgejo.org) | CI runner (docker-in-docker) |
-| [Headscale](https://headscale.net) | Self-hosted Tailscale control server — `<headscale-host>` |
-| [Headplane](https://github.com/tale/headplane) | Headscale web UI — `<headscale-host>/admin` |
-| [Pocket ID](https://github.com/pocket-id/pocket-id) | OIDC/SSO provider — `<oidc-host>` |
-| [Uptime Kuma](https://github.com/louislam/uptime-kuma) | Uptime monitoring — `<status-host>` |
+| [Headscale](https://headscale.net) | Self-hosted Tailscale control server |
+| [Headplane](https://github.com/tale/headplane) | Headscale web UI |
+| [Pocket ID](https://github.com/pocket-id/pocket-id) | OIDC/SSO provider |
+| [Uptime Kuma](https://github.com/louislam/uptime-kuma) | Uptime monitoring |
 | [FMBot](https://fmbot.xyz) | Last.fm Discord bot (via fmatrix) |
 | [Epic Games Free Games](https://github.com/claabs/epicgames-freegames-node) | Auto-claim free Epic Games |
-| Website | Static site — `<domain>` |
+| Website | Static site |
 
 Home-hosted services tunneled via frp (frpc runs on Unraid):
 
-| Service | Domain |
-|---------|--------|
-| [Immich](https://immich.app) | `<immich-host>` |
-| [Nextcloud](https://nextcloud.com) | `<nextcloud-host>` |
+| Service | Description |
+|---------|-------------|
+| [Immich](https://immich.app) | Photo library |
+| [Nextcloud](https://nextcloud.com) | File storage |
 
 ## Secrets
 

@@ -12,16 +12,18 @@ in
     };
 
     tunneledHosts = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule {
-        options = {
-          port = lib.mkOption { type = lib.types.port; };
-          extraConfig = lib.mkOption {
-            type = lib.types.lines;
-            default = "";
-            description = "Extra Caddy reverse_proxy block content for this host.";
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            port = lib.mkOption { type = lib.types.port; };
+            extraConfig = lib.mkOption {
+              type = lib.types.lines;
+              default = "";
+              description = "Extra Caddy reverse_proxy block content for this host.";
+            };
           };
-        };
-      });
+        }
+      );
       default = { };
       description = "Attrset of domain → {port, extraConfig} for tunneled services.";
     };
@@ -36,21 +38,27 @@ in
         proxyBindAddr = "127.0.0.1";
         auth.method = "token";
         auth.token = "{{ .Envs.FRP_TOKEN }}";
-        allowPorts = [{ start = 7001; end = 7100; }];
+        allowPorts = [
+          {
+            start = 7001;
+            end = 7100;
+          }
+        ];
       };
     };
 
     systemd.services.frp-server.serviceConfig.EnvironmentFile = cfg.tokenFile;
 
-    services.caddy.virtualHosts = lib.mapAttrs (domain: hostCfg: {
+    services.caddy.virtualHosts = lib.mapAttrs (_domain: hostCfg: {
       extraConfig =
-        if hostCfg.extraConfig != ""
-        then ''
-          reverse_proxy 127.0.0.1:${toString hostCfg.port} {
-            ${hostCfg.extraConfig}
-          }
-        ''
-        else "reverse_proxy 127.0.0.1:${toString hostCfg.port}";
+        if hostCfg.extraConfig != "" then
+          ''
+            reverse_proxy 127.0.0.1:${toString hostCfg.port} {
+              ${hostCfg.extraConfig}
+            }
+          ''
+        else
+          "reverse_proxy 127.0.0.1:${toString hostCfg.port}";
     }) cfg.tunneledHosts;
   };
 }

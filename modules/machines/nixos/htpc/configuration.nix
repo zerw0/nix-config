@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 let
   myKodi = pkgs.kodi-gbm.withPackages (p: with p; [ jellycon ]);
 in
@@ -28,8 +33,14 @@ in
   };
 
   networking.firewall = {
-    allowedTCPPorts = [ 8080 5000 ];
-    allowedUDPPorts = [ 8080 5353 ];
+    allowedTCPPorts = [
+      8080
+      5000
+    ];
+    allowedUDPPorts = [
+      8080
+      5353
+    ];
   };
 
   services.pulseaudio.enable = false;
@@ -56,7 +67,7 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    (final: prev: {
+    (_final: prev: {
       intel-vaapi-driver = prev.intel-vaapi-driver.override { enableHybridCodec = true; };
     })
   ];
@@ -75,5 +86,8 @@ in
   age.secrets.hashedUserPassword.file = "${inputs.secrets}/hashedUserPassword.age";
   users.users.hdjenkov.hashedPasswordFile = config.age.secrets.hashedUserPassword.path;
 
-  environment.systemPackages = [ myKodi pkgs.ghostty.terminfo ];
+  environment.systemPackages = [
+    myKodi
+    pkgs.ghostty.terminfo
+  ];
 }

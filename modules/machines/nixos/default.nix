@@ -8,29 +8,30 @@ let
     vps = "aarch64-linux";
   };
 
-  # Per-host nixpkgs suffix overrides (e.g. "-unstable") — reserved for future use.
-  nixpkgsMap = { };
-
-  systemForHost = name:
-    let systemFile = ./. + "/${name}/system.nix";
-    in if systemArchMap ? ${name}
-       then systemArchMap.${name}
-       else if builtins.pathExists systemFile
-       then (import systemFile).system
-       else "x86_64-linux";
-
-  nixpkgsSuffix = name: nixpkgsMap.${name} or "";
+  systemForHost =
+    name:
+    let
+      systemFile = ./. + "/${name}/system.nix";
+    in
+    if systemArchMap ? ${name} then
+      systemArchMap.${name}
+    else if builtins.pathExists systemFile then
+      (import systemFile).system
+    else
+      "x86_64-linux";
 
   homeManagerCfg = {
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
-    home-manager.extraSpecialArgs = { inputs = self.inputs; };
+    home-manager.extraSpecialArgs = {
+      inputs = self.inputs;
+    };
     home-manager.backupFileExtension = "bak";
   };
 
-  mkNixosSystem = name:
-    let suffix = nixpkgsSuffix name;
-    in (self.inputs."nixpkgs${suffix}").lib.nixosSystem {
+  mkNixosSystem =
+    name:
+    self.inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
         inputs = self.inputs;
         nixvimModule = self.inputs.nixvim.homeModules.nixvim;
@@ -38,7 +39,7 @@ let
       modules = [
         { nixpkgs.hostPlatform = systemForHost name; }
         { nixpkgs.config.allowUnfree = true; }
-        (self.inputs."home-manager${suffix}").nixosModules.home-manager
+        self.inputs.home-manager.nixosModules.home-manager
         self.inputs.agenix.nixosModules.default
         self.inputs.disko.nixosModules.disko
         ./_common

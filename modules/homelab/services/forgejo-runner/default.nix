@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   cfg = config.homelab.services.forgejo-runner;
 in
@@ -11,7 +16,12 @@ in
     virtualisation.oci-containers.containers = {
       docker-in-docker = {
         image = "docker:dind";
-        cmd = [ "dockerd" "-H" "tcp://0.0.0.0:2375" "--tls=false" ];
+        cmd = [
+          "dockerd"
+          "-H"
+          "tcp://0.0.0.0:2375"
+          "--tls=false"
+        ];
         extraOptions = [
           "--privileged"
           "--network=forgejo-net"
@@ -21,7 +31,11 @@ in
       forgejo-runner = {
         image = "code.forgejo.org/forgejo/runner:12.10.1";
         dependsOn = [ "docker-in-docker" ];
-        cmd = [ "/bin/sh" "-c" "sleep 5; forgejo-runner daemon --config /config.yaml" ];
+        cmd = [
+          "/bin/sh"
+          "-c"
+          "sleep 5; forgejo-runner daemon --config /config.yaml"
+        ];
         environment.DOCKER_HOST = "tcp://docker-in-docker:2375";
         user = "1000:1000";
         extraOptions = [
@@ -37,7 +51,10 @@ in
 
     systemd.services.init-forgejo-net = {
       description = "Create podman network for forgejo runner";
-      before = [ "podman-docker-in-docker.service" "podman-forgejo-runner.service" ];
+      before = [
+        "podman-docker-in-docker.service"
+        "podman-forgejo-runner.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";

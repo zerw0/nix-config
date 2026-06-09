@@ -1,5 +1,5 @@
 {
-  description = "Example nix-darwin system flake";
+  description = "hdjenkov's nix-darwin + NixOS config";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -74,7 +74,7 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, nix-darwin, ... }:
+    inputs@{ ... }:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } (
       { ... }:
       {

@@ -10,16 +10,6 @@
       default = "zerw.xyz";
     };
 
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "hdjenkov";
-    };
-
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "users";
-    };
-
     timeZone = lib.mkOption {
       type = lib.types.str;
       default = "Europe/Sofia";

@@ -1,4 +1,9 @@
-{ pkgs, inputs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [
     "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
@@ -6,6 +11,8 @@
   ];
 
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+
+  services.btrfs.autoScrub.enable = lib.mkForce false;
 
   services.openssh.settings = {
     LoginGraceTime = 0;

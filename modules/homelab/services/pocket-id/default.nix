@@ -29,7 +29,6 @@ in
       extraOptions = [ "--network=host" ];
     };
 
-    services.caddy.virtualHosts.${cfg.url}.extraConfig =
-      "reverse_proxy 127.0.0.1:1411";
+    services.caddy.virtualHosts.${cfg.url}.extraConfig = "reverse_proxy 127.0.0.1:1411";
   };
 }

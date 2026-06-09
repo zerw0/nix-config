@@ -11,6 +11,7 @@ modules/
 │   │   ├── _common/    # shared NixOS boilerplate
 │   │   ├── htpc/
 │   │   ├── vps/
+│   │   ├── steamdeck/
 │   │   └── installer/
 │   └── darwin/         # darwin hosts (auto-discovered)
 │       ├── _common/    # shared darwin boilerplate
@@ -30,6 +31,7 @@ justfile                # deploy/check/update shortcuts
 | **lambda** | nix-darwin (aarch64) | MacBook Pro workstation |
 | **htpc** | NixOS (x86_64) | Home theater PC |
 | **vps** | NixOS (aarch64) | VPS — self-hosted services |
+| **steamdeck** | NixOS (x86_64, Jovian) | Steam Deck — gaming + KDE Plasma |
 
 ## Services
 

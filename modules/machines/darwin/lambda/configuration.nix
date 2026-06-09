@@ -1,38 +1,43 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [ ./system.nix ];
 
   home-manager.users.hdjenkov.imports = [ ../../../dots/ghostty ];
 
+  home-manager.users.hdjenkov.dots.dev-tools.enable = true;
+  home-manager.users.hdjenkov.dots.cloud-tools.enable = true;
+
+  home-manager.users.hdjenkov.home.packages = with pkgs; [
+    vscode
+    localsend
+    prismlauncher
+  ];
+
+  environment.etc."pam.d/sudo_local".text = ''
+    auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so
+    auth       sufficient     pam_tid.so
+  '';
+
   environment.systemPackages = with pkgs; [
-    git-lfs
+    pam-reattach
     coreutils
-    iperf3
     docker
     docker-compose
-    nodejs
-    nil
-    nixd
-    ansible
-    go
-    age
-    glab
-    pwgen
-    just
-    awscli
-    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
-    (python313.withPackages (ps: with ps; [
-      pip
-      requests
-      setuptools
-      pyyaml
-      pyopenssl
-    ]))
   ];
 
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";
+    onActivation.upgrade = true;
+    onActivation.extraFlags = [ "--force" ];
+    global.autoUpdate = false;
+    global.brewfile = true;
+    caskArgs.no_quarantine = true;
     taps = [ ];
     brews = [
       "colima"
@@ -40,6 +45,7 @@
     ];
     casks = [
       "bitwarden"
+      "tailscale-app"
       "iina"
       "keka"
       "rustdesk"
@@ -49,15 +55,13 @@
       "helium-browser"
       "claude"
       "termius"
-      "puremac"
       "element"
+      "spotify"
+      "telegram-desktop"
+      "mullvadvpn"
+      "raycast"
     ];
   };
-
-  # --login-server is a `tailscale up` flag, NOT a tailscaled daemon flag;
-  # passing it to the daemon makes it exit 2. Set the login server at login
-  # time instead: sudo tailscale up --login-server=https://hs.zerw.xyz
-  services.tailscale.enable = true;
 
   services.netbird.enable = true;
 

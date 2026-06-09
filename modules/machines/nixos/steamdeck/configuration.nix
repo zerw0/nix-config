@@ -1,4 +1,10 @@
-{ config, lib, pkgs, inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [
     inputs.jovian.nixosModules.default
@@ -12,6 +18,13 @@
 
   home-manager.users.hdjenkov.imports = [ ../../../dots/ghostty ];
   home-manager.users.hdjenkov.programs.ghostty.settings.font-size = 11;
+
+  home-manager.users.hdjenkov.dots.dev-tools.enable = true;
+
+  home-manager.users.hdjenkov.home.packages = with pkgs; [
+    vscode
+    heroic
+  ];
 
   networking.hostName = "steamdeck";
   networking.networkmanager.enable = true;
@@ -41,10 +54,10 @@
   # blocks first-run setup. Inject hidapi at the package level so the session
   # steam picks it up too. (steamdeck_stable client lacks Valve's vendored fix.)
   nixpkgs.overlays = [
-    (final: prev: {
+    (_final: prev: {
       steam = prev.steam.override (old: {
-        extraPkgs = pkgs: (old.extraPkgs or (_: [ ]) ) pkgs ++ [ pkgs.hidapi ];
-        extraLibraries = pkgs: (old.extraLibraries or (_: [ ]) ) pkgs ++ [ pkgs.hidapi ];
+        extraPkgs = pkgs: (old.extraPkgs or (_: [ ])) pkgs ++ [ pkgs.hidapi ];
+        extraLibraries = pkgs: (old.extraLibraries or (_: [ ])) pkgs ++ [ pkgs.hidapi ];
       });
     })
   ];
@@ -55,7 +68,8 @@
     user = "hdjenkov";
     desktopSession = "plasma";
     environment.STEAM_EXTRA_COMPAT_TOOLS_PATHS =
-      lib.makeSearchPathOutput "steamcompattool" "" config.programs.steam.extraCompatPackages;
+      lib.makeSearchPathOutput "steamcompattool" ""
+        config.programs.steam.extraCompatPackages;
   };
 
   jovian.decky-loader = {
@@ -63,8 +77,16 @@
     user = "hdjenkov";
     stateDir = "/home/hdjenkov/.local/share/decky";
     extraPackages = with pkgs; [
-      gawk curl unzip util-linux gnugrep readline procps pciutils
-      flatpak libpulseaudio
+      gawk
+      curl
+      unzip
+      util-linux
+      gnugrep
+      readline
+      procps
+      pciutils
+      flatpak
+      libpulseaudio
     ];
     extraPythonPackages = p: [ p.click ];
   };
@@ -73,10 +95,12 @@
 
   # Flatpak backend for KDE Discover, with declarative management via nix-flatpak.
   services.flatpak.enable = true;
-  services.flatpak.remotes = [{
-    name = "flathub";
-    location = "https://flathub.org/repo/flathub.flatpakrepo";
-  }];
+  services.flatpak.remotes = [
+    {
+      name = "flathub";
+      location = "https://flathub.org/repo/flathub.flatpakrepo";
+    }
+  ];
   services.flatpak.packages = [
     "org.telegram.desktop"
     "im.riot.Riot"
@@ -146,5 +170,9 @@
   virtualisation.docker.enable = true;
   users.users.hdjenkov.extraGroups = [ "docker" ];
 
-  environment.systemPackages = with pkgs; [ prismlauncher ghostty.terminfo steamdeck-firmware ];
+  environment.systemPackages = with pkgs; [
+    prismlauncher
+    ghostty.terminfo
+    steamdeck-firmware
+  ];
 }

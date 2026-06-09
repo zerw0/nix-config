@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   osConfig,
   ...
 }:
@@ -8,22 +7,26 @@
   home.packages = with pkgs; [ grc ];
 
   programs = {
+    bat = {
+      enable = true;
+      config.theme = "gruvbox-dark";
+    };
     fzf = {
       enable = true;
       enableZshIntegration = true;
       colors = {
-        fg = "#cad3f5";
-        bg = "#24273a";
-        hl = "#a6da95";
-        "fg+" = "#cad3f5";
-        "bg+" = "#363a4f";
-        "hl+" = "#a6da95";
-        pointer = "#ed8796";
-        info = "#6e738d";
-        spinner = "#6e738d";
-        header = "#6e738d";
-        prompt = "#8aadf4";
-        marker = "#eed49f";
+        fg = "#ebdbb2";
+        bg = "#282828";
+        hl = "#fabd2f";
+        "fg+" = "#ebdbb2";
+        "bg+" = "#3c3836";
+        "hl+" = "#fabd2f";
+        pointer = "#fb4934";
+        info = "#928374";
+        spinner = "#928374";
+        header = "#928374";
+        prompt = "#83a598";
+        marker = "#d3869b";
       };
     };
     starship = {
@@ -37,36 +40,32 @@
           disabled = true;
         };
 
-        palette = "catppuccin_macchiato";
+        palette = "gruvbox_dark";
 
         palettes = {
-          catppuccin_macchiato = {
-            rosewater = "#f4dbd6";
-            flamingo = "#f0c6c6";
-            pink = "#f5bde6";
-            mauve = "#c6a0f6";
-            red = "#ed8796";
-            maroon = "#ee99a0";
-            peach = "#f5a97f";
-            yellow = "#eed49f";
-            green = "#a6da95";
-            teal = "#8bd5ca";
-            sky = "#91d7e3";
-            sapphire = "#7dc4e4";
-            blue = "#8aadf4";
-            lavender = "#b7bdf8";
-            text = "#cad3f5";
-            subtext1 = "#b8c0e0";
-            subtext0 = "#a5adcb";
-            overlay2 = "#939ab7";
-            overlay1 = "#8087a2";
-            overlay0 = "#6e738d";
-            surface2 = "#5b6078";
-            surface1 = "#494d64";
-            surface0 = "#363a4f";
-            base = "#24273a";
-            mantle = "#1e2030";
-            crust = "#181926";
+          gruvbox_dark = {
+            bg = "#282828";
+            bg1 = "#3c3836";
+            bg2 = "#504945";
+            bg3 = "#665c54";
+            bg4 = "#7c6f64";
+            fg = "#ebdbb2";
+            fg1 = "#ddc7a1";
+            red = "#fb4934";
+            red_dim = "#cc241d";
+            green = "#b8bb26";
+            green_dim = "#98971a";
+            yellow = "#fabd2f";
+            yellow_dim = "#d79921";
+            blue = "#83a598";
+            blue_dim = "#458588";
+            purple = "#d3869b";
+            purple_dim = "#b16286";
+            aqua = "#8ec07c";
+            aqua_dim = "#689d6a";
+            orange = "#fe8019";
+            orange_dim = "#d65d0e";
+            gray = "#928374";
           };
         };
       };
@@ -120,6 +119,14 @@
         # Highlight the selected suggestion
         zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
         zstyle ':completion:*' menu yes=long select
+
+        # SSH completion: only Host aliases from ~/.ssh/config + ~/.ssh/config.d/*
+        # Skip known_hosts and /etc/hosts noise.
+        zstyle ':completion:*:(ssh|scp|sftp|rsync):*' hosts off
+        zstyle ':completion:*:(ssh|scp|sftp|rsync):*' users off
+        zstyle ':completion:*:(ssh|scp|sftp|rsync):argument-1:hosts' \
+          hosts ''${(uf)"''$(awk '/^Host [^*?#]/ {for(i=2;i<=NF;i++) print ''$i}' \
+            ~/.ssh/config ~/.ssh/config.d/*(N) 2>/dev/null)"}
 
         ${
           if (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") then

@@ -1,6 +1,11 @@
-{ pkgs, ... }:
+{ config, ... }:
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  imports = [ ../../_common-packages.nix ];
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nix.settings.auto-optimise-store = true;
   nix.gc = {
     automatic = true;
@@ -8,7 +13,7 @@
     options = "--delete-older-than 14d";
   };
 
-  time.timeZone = "Europe/Sofia";
+  time.timeZone = config.homelab.timeZone;
   i18n.defaultLocale = "en_US.UTF-8";
 
   services.openssh = {
@@ -36,15 +41,4 @@
   security.sudo.extraConfig = "Defaults env_keep+=SSH_AUTH_SOCK";
 
   programs.zsh.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    eza
-    ffmpeg
-    fd
-    bat
-    ripgrep
-    ncdu
-    wget
-    htop
-  ];
 }

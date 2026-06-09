@@ -27,23 +27,43 @@
               subvolumes = {
                 "/root" = {
                   mountpoint = "/";
-                  mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=root"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/home" = {
                   mountpoint = "/home";
-                  mountOptions = [ "subvol=home" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=home"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/nix" = {
                   mountpoint = "/nix";
-                  mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=nix"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/log" = {
                   mountpoint = "/var/log";
-                  mountOptions = [ "subvol=log" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=log"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
                 "/lib" = {
                   mountpoint = "/var/lib";
-                  mountOptions = [ "subvol=lib" "compress=zstd" "noatime" ];
+                  mountOptions = [
+                    "subvol=lib"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                 };
               };
             };

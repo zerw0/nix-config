@@ -40,14 +40,21 @@ in
         server_url = "https://${cfg.url}";
         dns = {
           base_domain = cfg.baseDomain;
-          nameservers.global = [ "1.1.1.1" "1.0.0.1" ];
+          nameservers.global = [
+            "1.1.1.1"
+            "1.0.0.1"
+          ];
         };
         log.level = "info";
         oidc = lib.mkIf cfg.oidc.enable {
           issuer = cfg.oidc.issuer;
           client_id = cfg.oidc.clientId;
           client_secret_path = cfg.oidc.clientSecretFile;
-          scope = [ "openid" "profile" "email" ];
+          scope = [
+            "openid"
+            "profile"
+            "email"
+          ];
           pkce = {
             enabled = true;
             method = "S256";

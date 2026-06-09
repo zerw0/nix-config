@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   cfg = config.homelab.services.caddy;
 in
@@ -20,7 +25,6 @@ in
       '';
     };
 
-    systemd.services.caddy.serviceConfig.EnvironmentFile =
-      config.homelab.cloudflare.dnsCredentialsFile;
+    systemd.services.caddy.serviceConfig.EnvironmentFile = config.homelab.cloudflare.dnsCredentialsFile;
   };
 }

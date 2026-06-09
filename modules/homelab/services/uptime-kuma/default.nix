@@ -20,7 +20,6 @@ in
       };
     };
 
-    services.caddy.virtualHosts.${cfg.url}.extraConfig =
-      "reverse_proxy 127.0.0.1:3001";
+    services.caddy.virtualHosts.${cfg.url}.extraConfig = "reverse_proxy 127.0.0.1:3001";
   };
 }

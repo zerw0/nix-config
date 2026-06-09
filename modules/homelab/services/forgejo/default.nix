@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   cfg = config.homelab.services.forgejo;
 in
@@ -32,7 +37,6 @@ in
       };
     };
 
-    services.caddy.virtualHosts.${cfg.url}.extraConfig =
-      "reverse_proxy 127.0.0.1:3000";
+    services.caddy.virtualHosts.${cfg.url}.extraConfig = "reverse_proxy 127.0.0.1:3000";
   };
 }

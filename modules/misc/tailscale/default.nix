@@ -1,4 +1,9 @@
-{ lib, config, inputs, ... }:
+{
+  lib,
+  config,
+  inputs,
+  ...
+}:
 let
   cfg = config.modules.tailscale;
 in
@@ -32,11 +37,16 @@ in
     services.tailscale = {
       enable = true;
       authKeyFile = cfg.authKeyFile;
-      extraUpFlags = [ "--login-server=${cfg.loginServer}" "--reset" ];
-      extraSetFlags = lib.optional (cfg.acceptRoutes || cfg.subnetRouter) "--accept-routes"
+      extraUpFlags = [
+        "--login-server=${cfg.loginServer}"
+        "--reset"
+      ];
+      extraSetFlags =
+        lib.optional (cfg.acceptRoutes || cfg.subnetRouter) "--accept-routes"
         ++ lib.optionals cfg.subnetRouter [
           "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}"
-        ] ++ lib.optional cfg.exitNode "--advertise-exit-node";
+        ]
+        ++ lib.optional cfg.exitNode "--advertise-exit-node";
     };
 
     boot.kernel.sysctl = lib.mkIf (cfg.subnetRouter || cfg.exitNode) {

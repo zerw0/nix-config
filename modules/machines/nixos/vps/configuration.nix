@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   imports = [
     ./hardware.nix
@@ -49,7 +54,9 @@
     enable = true;
     tokenFile = config.age.secrets.frpsToken.path;
     tunneledHosts = {
-      "immich.chopapi.xyz" = { port = 7001; };
+      "immich.chopapi.xyz" = {
+        port = 7001;
+      };
       "nc.chopapi.xyz" = {
         port = 7002;
         extraConfig = ''

@@ -4,7 +4,12 @@
   # jovian.devices.steamdeck.enable = true — do not override it here.
   boot = {
     kernelModules = [ "kvm-amd" ];
-    initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" "sdhci_pci" ];
+    initrd.availableKernelModules = [
+      "nvme"
+      "xhci_pci"
+      "usbhid"
+      "sdhci_pci"
+    ];
     loader = {
       timeout = 0;
       efi.canTouchEfiVariables = true;

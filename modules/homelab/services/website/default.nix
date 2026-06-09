@@ -15,12 +15,16 @@ in
     services.nginx = {
       enable = true;
       virtualHosts.${cfg.url} = {
-        listen = [{ addr = "0.0.0.0"; port = 8081; }];
+        listen = [
+          {
+            addr = "0.0.0.0";
+            port = 8081;
+          }
+        ];
         root = "/var/www/site";
       };
     };
 
-    services.caddy.virtualHosts.${cfg.url}.extraConfig =
-      "reverse_proxy 127.0.0.1:8081";
+    services.caddy.virtualHosts.${cfg.url}.extraConfig = "reverse_proxy 127.0.0.1:8081";
   };
 }

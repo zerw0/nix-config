@@ -1,0 +1,56 @@
+name: check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  treefmt:
+    runs-on: docker
+    container:
+      image: nixos/nix:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable flakes
+        run: |
+          mkdir -p /etc/nix
+          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+          echo "accept-flake-config = true" >> /etc/nix/nix.conf
+
+      - name: Format check (treefmt)
+        run: |
+          nix --extra-experimental-features 'nix-command flakes' fmt
+          if ! git diff --exit-code; then
+            echo "::error::treefmt produced changes. Run 'nix fmt' locally and commit."
+            exit 1
+          fi
+
+  flake-show:
+    runs-on: docker
+    container:
+      image: nixos/nix:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable flakes
+        run: |
+          mkdir -p /etc/nix
+          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+          echo "accept-flake-config = true" >> /etc/nix/nix.conf
+
+      # Private flake inputs (secrets, fmatrix) live on the same forgejo as this
+      # repo. The runner job token can read them via the HTTP_AUTHORIZATION
+      # header. Without this the eval fails at fetch-time on the secrets input.
+      - name: Configure git auth for private flake inputs
+        env:
+          FORGEJO_TOKEN: ${{ secrets.FORGEJO_REPO_RO_TOKEN }}
+        run: |
+          if [ -n "$FORGEJO_TOKEN" ]; then
+            git config --global "http.https://git.zerw.xyz/.extraheader" \
+              "Authorization: token $FORGEJO_TOKEN"
+          fi
+
+      - name: Flake metadata
+        run: nix --extra-experimental-features 'nix-command flakes' flake show --no-write-lock-file 2>&1 | head -200

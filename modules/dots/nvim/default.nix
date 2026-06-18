@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   ...
 }:
 {
@@ -10,6 +11,11 @@
 
   programs.nixvim = {
     enable = true;
+    # Pin nixvim's nixpkgs to the flake's main nixpkgs input. This silences the
+    # nixpkgs.source `follows` mismatch warning while keeping a recent enough
+    # nixpkgs for nixvim/main (the darwin pkgs from nixpkgs-darwin is too old and
+    # lacks neovimUtils.makeVimPackageInfo).
+    nixpkgs.source = inputs.nixpkgs;
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;

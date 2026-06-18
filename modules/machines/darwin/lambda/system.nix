@@ -28,6 +28,11 @@
       NSWindowResizeTime = 1.0e-3;
       PMPrintingExpandedStateForPrint = true;
       PMPrintingExpandedStateForPrint2 = true;
+      "com.apple.sound.beep.feedback" = 0;
+      NSWindowShouldDragOnGesture = true;
+      AppleMeasurementUnits = "Centimeters";
+      AppleMetricUnits = 1;
+      AppleTemperatureUnit = "Celsius";
     };
 
     dock = {
@@ -40,6 +45,7 @@
       largesize = 64;
       mru-spaces = false;
       show-recents = false;
+      minimize-to-application = true;
       expose-animation-duration = 0.1;
       launchanim = false;
       wvous-tl-corner = 2;
@@ -48,7 +54,6 @@
 
     trackpad = {
       Clicking = true;
-      TrackpadThreeFingerDrag = true;
       TrackpadRightClick = true;
     };
 
@@ -68,11 +73,18 @@
       ShowPathbar = true;
       ShowStatusBar = true;
       QuitMenuItem = true;
+      FXPreferredViewStyle = "Nlsv";
+      _FXShowPosixPathInTitle = true;
     };
 
     loginwindow = {
       GuestEnabled = false;
       DisableConsoleAccess = true;
+    };
+
+    screensaver = {
+      askForPassword = true;
+      askForPasswordDelay = 0;
     };
 
     menuExtraClock.Show24Hour = true;
@@ -86,8 +98,8 @@
     spaces.spans-displays = false;
 
     WindowManager = {
-      EnableStandardClickToShowDesktop = false;
-      StandardHideDesktopIcons = true;
+      EnableStandardClickToShowDesktop = true;
+      StandardHideDesktopIcons = false;
     };
 
     # Long-tail prefs that don't have typed options.

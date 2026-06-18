@@ -34,6 +34,7 @@
     enable = true;
     onActivation.cleanup = "zap";
     onActivation.upgrade = true;
+    onActivation.autoUpdate = true;
     onActivation.extraFlags = [ "--force" ];
     global.autoUpdate = false;
     global.brewfile = true;
@@ -54,12 +55,12 @@
       "cyberduck"
       "helium-browser"
       "claude"
-      "termius"
       "element"
       "spotify"
       "telegram-desktop"
-      "mullvadvpn"
+      "viber"
       "raycast"
+      "hiddenbar"
     ];
   };
 

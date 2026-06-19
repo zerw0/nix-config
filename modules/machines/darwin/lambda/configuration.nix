@@ -61,6 +61,7 @@
       "viber"
       "raycast"
       "hiddenbar"
+      "puremac"
     ];
   };
 

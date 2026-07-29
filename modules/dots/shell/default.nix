@@ -1,10 +1,20 @@
 {
+  lib,
   pkgs,
   osConfig,
   ...
 }:
 {
-  home.packages = with pkgs; [ grc ];
+  home.packages = with pkgs; [
+    grc
+    zsh-completions
+  ];
+
+  home.sessionPath = lib.optionals pkgs.stdenv.isDarwin [
+    "/opt/homebrew/bin"
+    "$HOME/.android-sdk-macosx"
+    "$HOME/.npm-global/bin"
+  ];
 
   programs = {
     bat = {
@@ -73,17 +83,24 @@
 
     zsh = {
       enable = true;
-      enableCompletion = false;
-      zplug = {
-        enable = true;
-        plugins = [
-          { name = "zsh-users/zsh-autosuggestions"; }
-          { name = "zsh-users/zsh-syntax-highlighting"; }
-          { name = "zsh-users/zsh-completions"; }
-          { name = "zsh-users/zsh-history-substring-search"; }
-          { name = "unixorn/warhol.plugin.zsh"; }
-        ];
-      };
+      enableCompletion = true;
+      plugins = [
+        {
+          name = "zsh-autosuggestions";
+          src = "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions";
+          file = "zsh-autosuggestions.zsh";
+        }
+        {
+          name = "zsh-history-substring-search";
+          src = "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search";
+          file = "zsh-history-substring-search.zsh";
+        }
+        {
+          name = "zsh-syntax-highlighting";
+          src = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting";
+          file = "zsh-syntax-highlighting.zsh";
+        }
+      ];
       shellAliases = {
         ".." = "cd ..";
         "..." = "cd ../..";
@@ -131,7 +148,6 @@
         ${
           if (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") then
             ''
-              path=("$HOME/.nix-profile/bin" "/run/wrappers/bin" "/etc/profiles/per-user/$USER/bin" "/nix/var/nix/profiles/default/bin" "/run/current-system/sw/bin" "/opt/homebrew/bin" "$HOME/.android-sdk-macosx" "$HOME/.npm-global/bin" $path)
               export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
               export SSH_AUTH_SOCK=$HOME/.bitwarden-ssh-agent.sock
               alias lsblk="diskutil list"
@@ -139,21 +155,10 @@
               forgejo-token() { cat "${osConfig.age.secrets.forgejoAccessToken.path}"; }
               export FORGEJO_TOKEN_FILE="${osConfig.age.secrets.forgejoAccessToken.path}"
             ''
-          else if (osConfig.networking.hostName == "steamdeck") then
-            ''
-              # Bitwarden runs as a flatpak here; its SSH agent socket lives in
-              # the flatpak's sandbox home, which is still on the host fs.
-              export SSH_AUTH_SOCK=$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
-            ''
           else
             ""
         }
 
-          export EDITOR=nvim || export EDITOR=vim
-          export LANG=en_US.UTF-8
-          export LC_CTYPE=en_US.UTF-8
-
-          source $ZPLUG_HOME/repos/unixorn/warhol.plugin.zsh/warhol.plugin.zsh
       '';
     };
   };

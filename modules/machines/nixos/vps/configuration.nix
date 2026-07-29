@@ -72,6 +72,7 @@
   };
   homelab.services.website.enable = true;
   homelab.services.epicgames-freegames.enable = true;
+  homelab.services.motd.enable = true;
   homelab.services.fmbot = {
     enable = true;
     secretsFile = config.age.secrets.fmbotEnv.path;

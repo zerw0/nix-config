@@ -13,5 +13,6 @@
     ./website
     ./epicgames-freegames
     ./fmbot
+    ./motd
   ];
 }

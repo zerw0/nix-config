@@ -8,7 +8,20 @@ let
   cfg = config.homelab.services.fmbot;
 in
 {
-  imports = [ inputs.fmatrix.nixosModules.default ];
+  imports = [
+    (
+      {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+      import "${inputs.fmatrix}/module.nix" {
+        inherit config lib;
+        fmatrix = pkgs.callPackage "${inputs.fmatrix}/package.nix" { };
+      }
+    )
+  ];
 
   options.homelab.services.fmbot = {
     enable = lib.mkEnableOption "FMBot (Last.fm Discord bot)";

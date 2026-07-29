@@ -1,26 +1,16 @@
 {
   pkgs,
-  inputs,
+  nixvimNixpkgs,
   ...
 }:
 {
-  home.packages = with pkgs; [
-    ripgrep
-    fd
-  ];
-
   programs.nixvim = {
     enable = true;
-    # Pin nixvim's nixpkgs to the flake's main nixpkgs input. This silences the
-    # nixpkgs.source `follows` mismatch warning while keeping a recent enough
-    # nixpkgs for nixvim/main (the darwin pkgs from nixpkgs-darwin is too old and
-    # lacks neovimUtils.makeVimPackageInfo).
-    nixpkgs.source = inputs.nixpkgs;
+    nixpkgs.source = nixvimNixpkgs;
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
     colorscheme = "gruvbox";
-    version.enableNixpkgsReleaseCheck = false;
 
     opts = {
       compatible = false;
@@ -102,6 +92,33 @@
       # Treesitter
       treesitter = {
         enable = true;
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          bash
+          c
+          css
+          dockerfile
+          git_config
+          git_rebase
+          gitattributes
+          gitcommit
+          gitignore
+          go
+          html
+          javascript
+          json
+          lua
+          markdown
+          markdown_inline
+          nix
+          python
+          regex
+          toml
+          tsx
+          typescript
+          vim
+          vimdoc
+          yaml
+        ];
       };
 
       # File explorer
@@ -291,19 +308,7 @@
       }
     ];
 
-    extraConfigLuaPre = ''
-      -- nvim-treesitter 0.10 removed the configs module; shim it before nixvim requires it
-      package.preload['nvim-treesitter.configs'] = function()
-          return { setup = function(opts) require('nvim-treesitter').setup(opts) end }
-      end
-    '';
-
     extraConfigLua = ''
-      require("nvim-treesitter").setup({
-          highlight = { enable = true },
-          indent = { enable = true },
-      })
-
       -- Goyo settings
       vim.g.goyo_width = "80%"
       vim.g.goyo_height = "80%"

@@ -13,6 +13,7 @@
       opentofu
       openbao
       lefthook
+      lazyssh
     ];
   };
 }

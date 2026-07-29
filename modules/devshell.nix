@@ -17,8 +17,8 @@
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
           just
+          jq
           nh
-          nixos-rebuild
           inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
       };

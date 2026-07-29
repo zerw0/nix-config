@@ -13,37 +13,36 @@
   home-manager.users.hdjenkov.dots.cloud-tools.enable = true;
 
   home-manager.users.hdjenkov.home.packages = with pkgs; [
+    eza
+    ffmpeg
+    fd
+    ripgrep
+    ncdu
+    wget
+    htop
+    yt-dlp
     vscode
     localsend
     prismlauncher
   ];
 
-  environment.etc."pam.d/sudo_local".text = ''
-    auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so
-    auth       sufficient     pam_tid.so
-  '';
-
   environment.systemPackages = with pkgs; [
-    pam-reattach
     coreutils
-    docker
+    docker_29
     docker-compose
   ];
 
   homebrew = {
     enable = true;
-    onActivation.cleanup = "zap";
-    onActivation.upgrade = true;
-    onActivation.autoUpdate = true;
-    onActivation.extraFlags = [ "--force" ];
+    # Keep Homebrew declarative without coupling system switches to upgrades.
+    # Normal uninstall cleanup removes undeclared packages while preserving
+    # application preferences and support files (unlike "zap").
+    onActivation.cleanup = "uninstall";
+    onActivation.upgrade = false;
+    onActivation.autoUpdate = false;
     global.autoUpdate = false;
     global.brewfile = true;
-    caskArgs.no_quarantine = true;
-    taps = [ ];
-    brews = [
-      "colima"
-      "yt-dlp"
-    ];
+    brews = [ "colima" ];
     casks = [
       "bitwarden"
       "tailscale-app"
@@ -60,8 +59,19 @@
       "telegram-desktop"
       "viber"
       "raycast"
-      "hiddenbar"
       "puremac"
+      "anydesk"
+      "heroic"
+      "steam"
+      "utm"
+      "nheko"
+      "pgadmin4"
+      "orcaslicer"
+      "codex"
+      {
+        name = "sikarugir-app/sikarugir/sikarugir";
+        trusted = true;
+      }
     ];
   };
 
@@ -79,5 +89,4 @@
 
   system.primaryUser = "hdjenkov";
   system.stateVersion = 6;
-  system.configurationRevision = null;
 }

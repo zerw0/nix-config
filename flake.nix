@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/d351d0653aeb7877273920cd3e823994e7579b0b";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -12,7 +12,7 @@
     };
 
     nix-darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
@@ -21,17 +21,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Separate HM input for darwin — release-25.11 is version-matched to nixpkgs-darwin,
-    # avoiding a mismatch where HM master's modules/services-modular references
-    # lib/services/lib.nix which doesn't exist in the older nixpkgs-darwin pin.
+    # Keep Home Manager version-matched to the stable Darwin nixpkgs input.
     home-manager-darwin = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     nixvim = {
-      url = "github:nix-community/nixvim/main";
+      # The Git transport avoids transient missing-blob failures in GitHub's
+      # lazy source accessor while still tracking the branch.
+      url = "git+https://github.com/nix-community/nixvim.git?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixvim-darwin = {
+      url = "git+https://github.com/nix-community/nixvim.git?ref=nixos-26.05";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     agenix = {
@@ -63,14 +68,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    jovian = {
-      url = "github:Jovian-Experiments/Jovian-NixOS";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-flatpak.url = "github:gmodena/nix-flatpak";
-
   };
 
   outputs =

@@ -6,33 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  treefmt:
+  check:
     runs-on: docker
     container:
-      image: nixos/nix:latest
+      image: nixos/nix:2.33.1
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Enable flakes
-        run: |
-          mkdir -p /etc/nix
-          echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
-          echo "accept-flake-config = true" >> /etc/nix/nix.conf
-
-      - name: Format check (treefmt)
-        run: |
-          nix --extra-experimental-features 'nix-command flakes' fmt
-          if ! git diff --exit-code; then
-            echo "::error::treefmt produced changes. Run 'nix fmt' locally and commit."
-            exit 1
-          fi
-
-  flake-show:
-    runs-on: docker
-    container:
-      image: nixos/nix:latest
-    steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Enable flakes
         run: |
@@ -52,5 +31,13 @@ jobs:
               "Authorization: token $FORGEJO_TOKEN"
           fi
 
-      - name: Flake metadata
-        run: nix --extra-experimental-features 'nix-command flakes' flake show --no-write-lock-file 2>&1 | head -200
+      - name: Format check (treefmt)
+        run: |
+          nix --extra-experimental-features 'nix-command flakes' fmt
+          if ! git diff --exit-code; then
+            echo "::error::treefmt produced changes. Run 'nix fmt' locally and commit."
+            exit 1
+          fi
+
+      - name: Evaluate all configurations
+        run: nix --extra-experimental-features 'nix-command flakes' flake check --no-build --all-systems --no-write-lock-file

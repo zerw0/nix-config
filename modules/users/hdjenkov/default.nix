@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-  nix.settings.trusted-users = [ "hdjenkov" ];
+  nix.settings.trusted-users = lib.mkIf (!pkgs.stdenv.isDarwin) [ "hdjenkov" ];
 
   users.users.hdjenkov = lib.mkMerge [
     {

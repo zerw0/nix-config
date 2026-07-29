@@ -14,5 +14,9 @@ in
       volumes = [ "/var/lib/epicgames-freegames:/usr/app/config" ];
       extraOptions = [ "--network=host" ];
     };
+
+    services.caddy.virtualHosts."epic.zerw.xyz".extraConfig = ''
+      reverse_proxy localhost:3010
+    '';
   };
 }

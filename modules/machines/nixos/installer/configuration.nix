@@ -13,6 +13,7 @@
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
 
   services.btrfs.autoScrub.enable = lib.mkForce false;
+  boot.zfs.forceImportRoot = false;
 
   services.openssh.settings = {
     LoginGraceTime = 0;

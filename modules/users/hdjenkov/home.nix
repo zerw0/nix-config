@@ -1,7 +1,7 @@
 {
   pkgs,
+  lib,
   nixvimModule,
-  inputs,
   ...
 }:
 {
@@ -23,9 +23,8 @@
     nix-direnv.enable = true;
   };
 
-  home-manager.users.hdjenkov.home.packages = [
+  home-manager.users.hdjenkov.home.packages = lib.optionals pkgs.stdenv.isLinux [
     pkgs.nerd-fonts.caskaydia-cove
-    inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   home-manager.users.hdjenkov.home.sessionVariables = {

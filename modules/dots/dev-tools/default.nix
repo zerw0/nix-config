@@ -28,15 +28,13 @@
       bottom
       nh
       nix-output-monitor
+      inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default
       inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
       (python313.withPackages (
         ps: with ps; [
-          pip
-          setuptools
           requests
           pyyaml
           pyopenssl
-          ansible-core
           ansible
           python-dateutil
           hcloud

@@ -54,7 +54,7 @@ in
         user = "hdjenkov";
       };
       default_session = {
-        command = "${pkgs.greetd.greetd}/bin/agreety --cmd sway";
+        command = "${pkgs.greetd}/bin/agreety --cmd sway";
       };
     };
   };
@@ -87,6 +87,7 @@ in
   users.users.hdjenkov.hashedPasswordFile = config.age.secrets.hashedUserPassword.path;
 
   environment.systemPackages = [
+    pkgs.ffmpeg
     myKodi
     pkgs.ghostty.terminfo
   ];

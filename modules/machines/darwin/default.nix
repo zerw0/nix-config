@@ -8,8 +8,8 @@ let
     home-manager.useUserPackages = true;
     home-manager.extraSpecialArgs = {
       inputs = self.inputs;
+      nixvimNixpkgs = self.inputs.nixpkgs-darwin;
     };
-    home-manager.backupFileExtension = "bak";
   };
 
   mkDarwinSystem =
@@ -18,7 +18,7 @@ let
       system = "aarch64-darwin";
       specialArgs = {
         inputs = self.inputs;
-        nixvimModule = self.inputs.nixvim.homeModules.nixvim;
+        nixvimModule = self.inputs.nixvim-darwin.homeModules.nixvim;
       };
       modules = [
         {
@@ -26,10 +26,9 @@ let
             system = "aarch64-darwin";
             config.allowUnfree = true;
           };
+          system.configurationRevision = self.rev or self.dirtyRev or null;
         }
-        # home-manager-darwin is release-25.11, version-matched to nixpkgs-darwin.
-        # Using home-manager master here breaks because its modules/services-modular
-        # references lib/services/lib.nix which doesn't exist in the darwin nixpkgs pin.
+        # Keep Home Manager on the release matching the stable Darwin nixpkgs input.
         self.inputs.home-manager-darwin.darwinModules.home-manager
         self.inputs.agenix.darwinModules.default
         ./_common

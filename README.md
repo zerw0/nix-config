@@ -7,13 +7,12 @@ Personal Nix configuration for macOS (nix-darwin) and NixOS machines.
 ```
 modules/
 ├── machines/
-│   ├── nixos/          # NixOS hosts (auto-discovered)
+│   ├── nixos/          # Explicit NixOS host definitions
 │   │   ├── _common/    # shared NixOS boilerplate
 │   │   ├── htpc/
 │   │   ├── vps/
-│   │   ├── steamdeck/
 │   │   └── installer/
-│   └── darwin/         # darwin hosts (auto-discovered)
+│   └── darwin/         # nix-darwin host definitions
 │       ├── _common/    # shared darwin boilerplate
 │       └── lambda/
 ├── homelab/            # homelab.services.* option modules (vps services)
@@ -31,7 +30,6 @@ justfile                # deploy/check/update shortcuts
 | **lambda** | nix-darwin (aarch64) | MacBook Pro workstation |
 | **htpc** | NixOS (x86_64) | Home theater PC |
 | **vps** | NixOS (aarch64) | VPS — self-hosted services |
-| **steamdeck** | NixOS (x86_64, Jovian) | Steam Deck — gaming + KDE Plasma |
 
 ## Services
 
@@ -73,13 +71,17 @@ Secrets are managed with [agenix](https://github.com/ryantm/agenix) and stored i
 Use `just --list` to see all available targets. Common workflows:
 
 ```bash
-just update          # update flake inputs
-just check           # nix flake check --no-build
-just dry-run vps     # dry-build without switching
-just deploy-vps      # remote build + switch on vps
-just deploy-htpc     # local rebuild on htpc
-just deploy-lambda   # darwin-rebuild switch
-just build-iso       # build installer ISO
+just update                 # preview input updates without changing flake.lock
+just update-one nix-darwin  # update one input, then validate lambda
+just update-apply           # update everything, format, evaluate and build lambda
+just preflight-lambda       # evaluate all systems and build lambda
+just diff-lambda            # compare the next lambda closure with the live one
+just deploy-lambda          # preflight, show the nh diff and activate
+just generations-lambda     # list generations available for rollback
+just rollback-lambda        # activate the previous generation
+just deploy-vps             # remote build + switch on vps
+just deploy-htpc            # remote build + switch on htpc
+just build-iso              # build installer ISO
 ```
 
 ## Installation
@@ -245,6 +247,25 @@ git add -A && git commit -m "add vps host key" && git push
 
 ## Updating
 
+### Package ownership
+
+- nix-darwin owns macOS settings, services, fonts, and system integration.
+- Home Manager owns user CLI tools and their configuration.
+- Homebrew owns native macOS applications and Colima.
+- Project-specific language toolchains belong in project dev shells.
+
+Darwin activation installs missing Homebrew declarations and uninstalls
+undeclared packages. It uses Homebrew's normal uninstall mode, not `zap`, so
+application preferences and support data are preserved. Activation does not
+update or upgrade installed packages; run `just brew-maintenance` explicitly
+when you want to do that. Run `just brew-cleanup-preview` to see what activation
+would remove before deploying.
+
+Sikarugir is declared with per-cask trust because it comes from a third-party
+tap. The rest of that tap is not trusted.
+
+### System updates
+
 **lambda:**
 
 ```bash
@@ -255,8 +276,13 @@ sudo darwin-rebuild switch --flake ~/git/nix-config#lambda --override-input secr
 Or with `just`:
 
 ```bash
+just preflight-lambda
+just diff-lambda
 just deploy-lambda
 ```
+
+If the new generation causes a regression, `just rollback-lambda` activates the
+previous generation. `just generations-lambda` shows the retained history.
 
 **htpc** (SSH in with `-A`, then):
 

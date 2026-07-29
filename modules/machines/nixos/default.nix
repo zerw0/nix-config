@@ -1,43 +1,28 @@
 { lib, self, ... }:
 let
-  entries = builtins.attrNames (builtins.readDir ./.);
-  configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
-
-  # Per-host architecture overrides; default is x86_64-linux.
-  systemArchMap = {
+  hosts = {
+    htpc = "x86_64-linux";
     vps = "aarch64-linux";
   };
-
-  systemForHost =
-    name:
-    let
-      systemFile = ./. + "/${name}/system.nix";
-    in
-    if systemArchMap ? ${name} then
-      systemArchMap.${name}
-    else if builtins.pathExists systemFile then
-      (import systemFile).system
-    else
-      "x86_64-linux";
 
   homeManagerCfg = {
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
     home-manager.extraSpecialArgs = {
       inputs = self.inputs;
+      nixvimNixpkgs = self.inputs.nixpkgs;
     };
-    home-manager.backupFileExtension = "bak";
   };
 
   mkNixosSystem =
-    name:
+    name: system:
     self.inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
         inputs = self.inputs;
         nixvimModule = self.inputs.nixvim.homeModules.nixvim;
       };
       modules = [
-        { nixpkgs.hostPlatform = systemForHost name; }
+        { nixpkgs.hostPlatform = system; }
         { nixpkgs.config.allowUnfree = true; }
         self.inputs.home-manager.nixosModules.home-manager
         self.inputs.agenix.nixosModules.default
@@ -53,7 +38,13 @@ let
     };
 in
 {
-  flake.nixosConfigurations = lib.listToAttrs (
-    builtins.map (name: lib.nameValuePair name (mkNixosSystem name)) configs
-  );
+  flake.nixosConfigurations = lib.mapAttrs mkNixosSystem hosts // {
+    installer = self.inputs.nixpkgs.lib.nixosSystem {
+      specialArgs.inputs = self.inputs;
+      modules = [
+        { nixpkgs.hostPlatform = "x86_64-linux"; }
+        ./installer/configuration.nix
+      ];
+    };
+  };
 }

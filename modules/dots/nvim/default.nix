@@ -6,6 +6,10 @@
 {
   programs.nixvim = {
     enable = true;
+    # Avoid evaluating and installing Nixvim's generated option-reference
+    # manpages. Their upstream options.json derivation triggers Nix source-
+    # context warnings and the documentation is available online instead.
+    enableMan = false;
     nixpkgs.source = nixvimNixpkgs;
     viAlias = true;
     vimAlias = true;

@@ -60,22 +60,19 @@
       "viber"
       "raycast"
       "puremac"
-      "anydesk"
       "heroic"
       "steam"
-      "utm"
       "nheko"
-      "pgadmin4"
       "orcaslicer"
       "codex"
+      "vesktop"
+      "blender"
       {
         name = "sikarugir-app/sikarugir/sikarugir";
         trusted = true;
       }
     ];
   };
-
-  services.netbird.enable = true;
 
   # Determinate Nix manages the daemon; nix-darwin should not
   nix.enable = false;

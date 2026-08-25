@@ -3,6 +3,7 @@ let
   hosts = {
     htpc = "x86_64-linux";
     vps = "aarch64-linux";
+    hass = "x86_64-linux";
   };
 
   homeManagerCfg = {

@@ -14,5 +14,8 @@
     ./epicgames-freegames
     ./fmbot
     ./motd
+    ./printing
+    ./scanning
+    ./home-assistant
   ];
 }

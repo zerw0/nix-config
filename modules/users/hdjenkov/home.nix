@@ -17,6 +17,9 @@
   ];
 
   home-manager.users.hdjenkov.home.stateVersion = "25.11";
+  # The generated option-reference manpage is large, rarely useful locally,
+  # and currently triggers Nix source-context warnings during every host eval.
+  home-manager.users.hdjenkov.manual.manpages.enable = false;
   home-manager.users.hdjenkov.programs.zsh.enable = true;
   home-manager.users.hdjenkov.programs.direnv = {
     enable = true;

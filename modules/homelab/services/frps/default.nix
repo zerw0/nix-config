@@ -16,6 +16,11 @@ in
         lib.types.submodule {
           options = {
             port = lib.mkOption { type = lib.types.port; };
+            caddyExtra = lib.mkOption {
+              type = lib.types.lines;
+              default = "";
+              description = "Vhost-level Caddy directives, outside the reverse_proxy block.";
+            };
             extraConfig = lib.mkOption {
               type = lib.types.lines;
               default = "";
@@ -51,14 +56,17 @@ in
 
     services.caddy.virtualHosts = lib.mapAttrs (_domain: hostCfg: {
       extraConfig =
-        if hostCfg.extraConfig != "" then
-          ''
-            reverse_proxy 127.0.0.1:${toString hostCfg.port} {
-              ${hostCfg.extraConfig}
-            }
-          ''
-        else
-          "reverse_proxy 127.0.0.1:${toString hostCfg.port}";
+        hostCfg.caddyExtra
+        + (
+          if hostCfg.extraConfig != "" then
+            ''
+              reverse_proxy 127.0.0.1:${toString hostCfg.port} {
+                ${hostCfg.extraConfig}
+              }
+            ''
+          else
+            "reverse_proxy 127.0.0.1:${toString hostCfg.port}"
+        );
     }) cfg.tunneledHosts;
   };
 }

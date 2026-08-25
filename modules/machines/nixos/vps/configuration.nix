@@ -59,6 +59,10 @@
       };
       "nc.chopapi.xyz" = {
         port = 7002;
+        caddyExtra = ''
+          redir /.well-known/caldav  https://nc.chopapi.xyz/remote.php/dav/ 301
+          redir /.well-known/carddav https://nc.chopapi.xyz/remote.php/dav/ 301
+        '';
         extraConfig = ''
           header_up X-Forwarded-For {remote_host}
           header_up X-Forwarded-Proto {scheme}

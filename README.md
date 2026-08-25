@@ -10,12 +10,13 @@ modules/
 │   ├── nixos/          # Explicit NixOS host definitions
 │   │   ├── _common/    # shared NixOS boilerplate
 │   │   ├── htpc/
+│   │   ├── hass/
 │   │   ├── vps/
 │   │   └── installer/
 │   └── darwin/         # nix-darwin host definitions
 │       ├── _common/    # shared darwin boilerplate
 │       └── lambda/
-├── homelab/            # homelab.services.* option modules (vps services)
+├── homelab/            # homelab.services.* option modules (vps + hass services)
 ├── misc/               # reusable cross-host modules (tailscale, …)
 ├── users/hdjenkov/     # user account + home-manager entry
 ├── dots/               # home-manager dotfile modules
@@ -29,6 +30,7 @@ justfile                # deploy/check/update shortcuts
 |------|------|-------------|
 | **lambda** | nix-darwin (aarch64) | MacBook Pro workstation |
 | **htpc** | NixOS (x86_64) | Home theater PC |
+| **hass** | NixOS (x86_64) | Home automation + print/scan server (LAN only) |
 | **vps** | NixOS (aarch64) | VPS — self-hosted services |
 
 ## Services
@@ -38,6 +40,14 @@ justfile                # deploy/check/update shortcuts
 | Service | Description |
 |---------|-------------|
 | [Kodi](https://kodi.tv) | Media center with Jellycon addon |
+
+### hass
+
+| Service | Description |
+|---------|-------------|
+| [Home Assistant](https://www.home-assistant.io) | Home automation, container (pinned tag, host network) |
+| [CUPS](https://www.cups.org) | LAN print server for the Brother DCP-1510E (brlaser), AirPrint via Avahi |
+| [scanservjs](https://github.com/sbs20/scanservjs) | Browser scanning UI, driven by the host's SANE/brscan4 over saned |
 
 ### vps
 
@@ -81,6 +91,7 @@ just generations-lambda     # list generations available for rollback
 just rollback-lambda        # activate the previous generation
 just deploy-vps             # remote build + switch on vps
 just deploy-htpc            # remote build + switch on htpc
+just deploy-hass            # remote build + switch on hass
 just build-iso              # build installer ISO
 ```
 
@@ -182,6 +193,91 @@ git clone git@<git-host>:hdjenkov/nix-private.git ~/git/nix-private  # SSH agent
 cd ~/git/nix-config && git pull
 sudo --preserve-env=SSH_AUTH_SOCK nixos-rebuild switch --flake ~/git/nix-config#htpc --override-input secrets ~/git/nix-private
 ```
+
+---
+
+### NixOS (hass)
+
+Boot the official NixOS minimal ISO and work at the console (user `nixos`, no
+password). On Wi-Fi, connect first with `nmtui`, or:
+
+```bash
+sudo systemctl start wpa_supplicant
+wpa_cli
+> add_network
+> set_network 0 ssid "SSID"
+> set_network 0 psk "PASSWORD"
+> enable_network 0
+> quit
+```
+
+Install git and clone the repo:
+
+```bash
+nix-env -f '<nixpkgs>' -iA git
+git clone https://<git-host>/hdjenkov/nix-config.git /tmp/nix-config
+```
+
+Partition and format using [disko](https://github.com/nix-community/disko):
+
+```bash
+lsblk    # confirm the target disk
+nix --experimental-features "nix-command flakes" run github:nix-community/disko \
+  -- -m destroy,format,mount \
+  /tmp/nix-config/modules/machines/nixos/hass/disk-config.nix
+```
+
+Install. No `--no-root-passwd` here — set a root password, it is the only way
+back in if the box boots without network:
+
+```bash
+sudo nixos-install --root /mnt --flake /tmp/nix-config#hass -j 2 --cores 2
+```
+
+> `nixos-install` builds with `--store /mnt`, so the closure lands on the NVMe,
+> not the ISO's RAM overlay. It also rejects `--override-input`.
+
+On Wi-Fi, copy the connection profile over before rebooting, or the installed
+system comes up with no network:
+
+```bash
+sudo cp /etc/NetworkManager/system-connections/*.nmconnection \
+        /mnt/etc/NetworkManager/system-connections/
+sudo chmod 600 /mnt/etc/NetworkManager/system-connections/*.nmconnection
+```
+
+Reboot, then SSH in and add the host key to the secrets repo:
+
+```bash
+ssh hdjenkov@hass.local
+cat /etc/ssh/ssh_host_ed25519_key.pub
+```
+
+Add the host key to `secrets.nix` in the private repo, re-encrypt, and push:
+
+```bash
+cd ~/git/nix-private
+agenix -r
+git add -A && git commit -m "add hass host key" && git push
+```
+
+Then `just deploy-hass` from the workstation.
+
+> `hashedUserPassword` decrypts with the SSH host key, which does not exist
+> until first boot, so console login for `hdjenkov` only works after this
+> deploy. SSH key auth and passwordless sudo work immediately.
+
+Manual steps outside Nix, once:
+
+- **Printer** — `http://hass:631` → Administration → Add Printer, pick the
+  brlaser PPD. Writes `/etc/cups/printers.conf`. `lpinfo -v` gives the device
+  URI if you later want `hardware.printers.ensurePrinters`.
+- **Scanner** — check `scanimage -L`. If brscan4 misses the device, register it
+  with `brsaneconfig4 -a`. The scanservjs UI at `http://hass:8080` only sees
+  what the host sees, since it goes through saned rather than USB.
+- **Home Assistant** — onboard at `http://hass:8123`.
+- **Wi-Fi** — the copied profile is mutable state; move the PSK into an agenix
+  secret and `networking.networkmanager.ensureProfiles` to make it declarative.
 
 ---
 

@@ -32,7 +32,10 @@
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
+      80 # Caddy, redirects to 443
+      443 # Caddy
       631 # CUPS: IPP + web interface
+      1883 # Mosquitto, for Frigate on Unraid
       8080 # scanservjs web UI
       8123 # Home Assistant
     ];
@@ -58,12 +61,40 @@
 
   age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   age.secrets.hashedUserPassword.file = "${inputs.secrets}/hashedUserPassword.age";
+  age.secrets.mosquittoHassPassword.file = "${inputs.secrets}/mosquittoHassPassword.age";
+  age.secrets.mosquittoFrigatePassword.file = "${inputs.secrets}/mosquittoFrigatePassword.age";
+  age.secrets.cloudflareApiToken.file = "${inputs.secrets}/cloudflareApiToken.age";
   users.users.hdjenkov.hashedPasswordFile = config.age.secrets.hashedUserPassword.path;
 
   homelab.enable = true;
+  homelab.cloudflare.dnsCredentialsFile = config.age.secrets.cloudflareApiToken.path;
+
+  # LAN-only names with real certs: Caddy issues via the Cloudflare DNS-01
+  # challenge, so nothing here is reachable from the internet. Resolution comes
+  # from a DNS override on the router, not from public records.
+  homelab.services.caddy.enable = true;
+
   homelab.services.printing.enable = true;
-  homelab.services.scanning.enable = true;
-  homelab.services.home-assistant.enable = true;
+  homelab.services.scanning = {
+    enable = true;
+    url = "scan.chopapi.xyz";
+  };
+  homelab.services.home-assistant = {
+    enable = true;
+    url = "hass.chopapi.xyz";
+  };
+  homelab.services.glances.enable = true;
+
+  homelab.services.kiosk = {
+    enable = true;
+    url = "http://127.0.0.2:8123/server-stats/servers?kiosk";
+  };
+
+  homelab.services.mosquitto = {
+    enable = true;
+    hassPasswordFile = config.age.secrets.mosquittoHassPassword.path;
+    frigatePasswordFile = config.age.secrets.mosquittoFrigatePassword.path;
+  };
 
   environment.systemPackages = [ pkgs.ghostty.terminfo ];
 }

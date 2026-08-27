@@ -16,6 +16,9 @@
     ./motd
     ./printing
     ./scanning
+    ./glances
+    ./kiosk
     ./home-assistant
+    ./mosquitto
   ];
 }

@@ -26,6 +26,11 @@ in
       default = 8123;
       description = "Informational — fixed by HA under host networking.";
     };
+
+    url = lib.mkOption {
+      type = lib.types.str;
+      default = "ha.${config.homelab.baseDomain}";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -39,6 +44,19 @@ in
       # multicast, which does not cross podman's bridge.
       extraOptions = [ "--network=host" ];
     };
+
+    # Caddy terminates TLS via the Cloudflare DNS-01 challenge, so this needs
+    # no inbound port from the internet.
+    #
+    # X-Forwarded-For is stripped rather than forwarded: HA 400s on the header
+    # unless http.use_x_forwarded_for is set in configuration.yaml, and on this
+    # host that setting parses correctly but is not honoured at runtime. On a
+    # LAN-only vhost the only cost is that HA logs every client as 127.0.0.1.
+    services.caddy.virtualHosts.${cfg.url}.extraConfig = ''
+      reverse_proxy 127.0.0.1:${toString cfg.port} {
+        header_up -X-Forwarded-For
+      }
+    '';
 
     # Mosquitto and zigbee2mqtt drop in as sibling modules; z2m additionally
     # needs its coordinator passed through with --device=/dev/serial/by-id/*.

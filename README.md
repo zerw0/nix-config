@@ -48,6 +48,8 @@ justfile                # deploy/check/update shortcuts
 | [Home Assistant](https://www.home-assistant.io) | Home automation, container (pinned tag, host network) |
 | [CUPS](https://www.cups.org) | LAN print server for the Brother DCP-1510E (brlaser), AirPrint via Avahi |
 | [scanservjs](https://github.com/sbs20/scanservjs) | Browser scanning UI, driven by the host's SANE/brscan4 over saned |
+| [Glances](https://github.com/nicolargo/glances) | Host metrics over a loopback-only REST API, scraped by Home Assistant |
+| [cage](https://github.com/cage-kiosk/cage) | Wayland kiosk on the attached monitor: Chromium full-screen on the HA dashboard |
 
 ### vps
 
@@ -222,10 +224,16 @@ Partition and format using [disko](https://github.com/nix-community/disko):
 
 ```bash
 lsblk    # confirm the target disk
-nix --experimental-features "nix-command flakes" run github:nix-community/disko \
-  -- -m destroy,format,mount \
-  /tmp/nix-config/modules/machines/nixos/hass/disk-config.nix
+nix-shell -p disko --run \
+  "disko -m destroy,format,mount /tmp/nix-config/modules/machines/nixos/hass/disk-config.nix"
 ```
+
+> `disk-config.nix` targets `/dev/nvme0n1` and wipes it unconditionally.
+
+> Use `nix-shell` here, not `nix run github:nix-community/disko`. The ISO store
+> is a ~2GB tmpfs and the flake pulls its own nixpkgs (330MB unpacked) into it,
+> which runs out of space on 4GB; `nix-shell` uses the channel already on the
+> ISO. `mount -o remount,size=3G /nix/.rw-store` buys headroom if still tight.
 
 Install. No `--no-root-passwd` here — set a root password, it is the only way
 back in if the box boots without network:
@@ -276,6 +284,65 @@ Manual steps outside Nix, once:
   with `brsaneconfig4 -a`. The scanservjs UI at `http://hass:8080` only sees
   what the host sees, since it goes through saned rather than USB.
 - **Home Assistant** — onboard at `http://hass:8123`.
+- **Kiosk login** — the panel skips the login screen entirely, so no keyboard
+  is ever plugged into it. Add to `/var/lib/home-assistant/configuration.yaml`
+  and restart the container:
+
+  ```yaml
+  homeassistant:
+    auth_providers:
+      # trusted_networks MUST come first. The frontend starts the flow for the
+      # first provider in this list and offers the rest behind "log in with
+      # other providers", so with homeassistant first the panel shows a
+      # password form even though the bypass works.
+      - type: trusted_networks
+        trusted_networks:
+          - 127.0.0.2/32
+        allow_bypass_login: true
+        # allow_bypass_login only skips the prompt when the address maps to
+        # exactly one user; pinning the id keeps that true if another HA
+        # account is ever added. Ids come from .storage/auth.
+        trusted_users:
+          127.0.0.2: <user_id>
+      # Listing trusted_networks replaces the default provider list, so
+      # homeassistant must be named explicitly or password login disappears
+      # everywhere — phone included.
+      - type: homeassistant
+  ```
+
+  Verify the provider is offered, and only to the kiosk:
+
+  ```bash
+  curl -s http://127.0.0.2:8123/auth/providers   # includes trusted_networks
+  curl -s http://127.0.0.1:8123/auth/providers   # homeassistant only
+  ```
+
+  The kiosk browses `http://127.0.0.2:8123`. `kiosk-source-address.service`
+  adds `127.0.0.2/32` to `lo`, which makes it the preferred source for that
+  destination — without the `/32` the only match is the kernel's
+  `local 127.0.0.0/8`, whose preferred source is `127.0.0.1`, and the kiosk
+  would be indistinguishable from Caddy. Caddy proxies to `127.0.0.1`, so LAN
+  clients arriving through the vhost stay untrusted and still get a login
+  screen.
+
+  Confirm with a real socket, not `ip route get` — the latter answers with the
+  `local 127.0.0.0/8` route's `prefsrc` (`127.0.0.1`) and will look like a
+  failure even when everything is correct:
+
+  ```bash
+  bash -c 'exec 3<>/dev/tcp/127.0.0.2/8123; ss -tn "dst 127.0.0.2"'
+  ```
+
+  The `Local Address` column is what HA sees. It must read `127.0.0.2`.
+
+  Do not swap `127.0.0.2` for `127.0.0.1` here. Caddy strips `X-Forwarded-For`
+  (see `modules/homelab/services/home-assistant/default.nix`), so HA sees every
+  proxied client as `127.0.0.1`; trusting it would auto-log-in the whole
+  network.
+- **Glances integration** — Settings → Devices & Services → Add Integration →
+  Glances, once per host: `127.0.0.1` (this box), the Unraid box and the
+  OpenWRT router, all on port 61208. Then build the dashboard from the
+  resulting sensors.
 - **Wi-Fi** — the copied profile is mutable state; move the PSK into an agenix
   secret and `networking.networkmanager.ensureProfiles` to make it declarative.
 

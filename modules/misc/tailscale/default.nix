@@ -22,6 +22,17 @@ in
     };
 
     acceptRoutes = lib.mkEnableOption "accept routes from subnet routers";
+
+    acceptDns = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Accept the nameservers headscale pushes. Set false on hosts that must
+        keep resolving independently of the tailnet - notably the VPS, whose
+        ACME renewals would otherwise depend on the home router being up.
+      '';
+    };
+
     subnetRouter = lib.mkEnableOption "subnet router";
     exitNode = lib.mkEnableOption "exit node advertisement";
 
@@ -41,12 +52,14 @@ in
         "--login-server=${cfg.loginServer}"
         "--reset"
       ];
-      extraSetFlags =
-        lib.optional (cfg.acceptRoutes || cfg.subnetRouter) "--accept-routes"
-        ++ lib.optionals cfg.subnetRouter [
-          "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}"
-        ]
-        ++ lib.optional cfg.exitNode "--advertise-exit-node";
+      extraSetFlags = [
+        "--accept-dns=${lib.boolToString cfg.acceptDns}"
+      ]
+      ++ lib.optional (cfg.acceptRoutes || cfg.subnetRouter) "--accept-routes"
+      ++ lib.optionals cfg.subnetRouter [
+        "--advertise-routes=${lib.concatStringsSep "," cfg.advertiseRoutes}"
+      ]
+      ++ lib.optional cfg.exitNode "--advertise-exit-node";
     };
 
     boot.kernel.sysctl = lib.mkIf (cfg.subnetRouter || cfg.exitNode) {

@@ -38,10 +38,72 @@
   };
   homelab.services.headscale = {
     enable = true;
+    # Tailnet clients resolve via the OpenWrt resolver, reached over the
+    # 10.0.1.0/24 subnet route. group:family is allowed router:53 in the policy.
+    nameservers = [
+      "10.0.1.1"
+      "1.1.1.1"
+    ];
     oidc = {
       enable = true;
       clientId = "e3c2f28f-3b84-4eca-9ddd-743b60a1111b";
       clientSecretFile = config.age.secrets.headscaleOidcSecret.path;
+    };
+    # Default-deny. Family reach only the two reverse proxies; the Unraid GUI
+    # (10.0.1.10:82/8443), SSH, Samba, OpenWRT and htpc's 192.168.0.0/24 are
+    # all blocked without being named. Usernames need the trailing "@".
+    policy = {
+      tagOwners."tag:private" = [ "group:admin" ];
+      groups = {
+        "group:admin" = [ "hdjenkov@" ];
+        "group:family" = [
+          "georgieva@"
+          "acid@"
+          "lstoilov@"
+          "m1rt0c1r9@"
+          "petrovv@"
+        ];
+      };
+      hosts = {
+        zenit = "10.0.1.10/32";
+        hass = "10.0.1.202/32";
+        router = "10.0.1.1/32";
+      };
+      acls = [
+        {
+          action = "accept";
+          src = [ "group:admin" ];
+          dst = [ "*:*" ];
+        }
+        {
+          action = "accept";
+          src = [ "group:family" ];
+          dst = [ "zenit:443" ];
+        }
+        {
+          action = "accept";
+          src = [ "group:family" ];
+          dst = [ "hass:443,8123" ];
+        }
+        # DNS only, and required: headscale hands out 10.0.1.1 first, so
+        # without this family devices lose resolution entirely.
+        # Port 53 alone - the OpenWRT admin UI on 80/443 stays denied.
+        {
+          action = "accept";
+          src = [ "group:family" ];
+          dst = [ "router:53" ];
+        }
+        {
+          action = "accept";
+          src = [ "group:family" ];
+          dst = [ "autogroup:internet:*" ];
+        }
+        {
+          action = "accept";
+          src = [ "group:family" ];
+          dst = [ "autogroup:self:*" ];
+        }
+      ];
     };
   };
   homelab.services.headplane.enable = true;

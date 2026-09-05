@@ -2,9 +2,16 @@
   description = "hdjenkov's nix-darwin + NixOS config";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Every host tracks the current NixOS release. nix-darwin, Home Manager and
+    # nixvim are pinned to the matching branch, so there is one nixpkgs and one
+    # set of module semantics across lambda, htpc, hass and vps.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixos-26.05";
+    # Used by modules/dots/vscode only. VS Code extensions are not backported to
+    # the release branch, so the stable pins run many versions behind the
+    # marketplace; the editor is taken from here too, since an extension built
+    # against a newer VS Code can refuse to load on an older one.
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -13,30 +20,19 @@
 
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
-
-    home-manager = {
-      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Keep Home Manager version-matched to the stable Darwin nixpkgs input.
-    home-manager-darwin = {
+    home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixvim = {
       # The Git transport avoids transient missing-blob failures in GitHub's
       # lazy source accessor while still tracking the branch.
-      url = "git+https://github.com/nix-community/nixvim.git?ref=main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixvim-darwin = {
       url = "git+https://github.com/nix-community/nixvim.git?ref=nixos-26.05";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     agenix = {

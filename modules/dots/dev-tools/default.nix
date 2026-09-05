@@ -6,11 +6,13 @@
   ...
 }:
 {
-  options.dots.dev-tools.enable = lib.mkEnableOption "developer CLI toolchain (nix, node, go, python, ansible, glab, awscli, agenix)";
+  options.dots.dev-tools.enable = lib.mkEnableOption "developer CLI toolchain (nix, node, pnpm, go, python, ansible, glab, awscli, agenix)";
 
   config = lib.mkIf config.dots.dev-tools.enable {
     home.packages = with pkgs; [
       nodejs
+      pnpm
+      ansible
       go
       golangci-lint
       nil

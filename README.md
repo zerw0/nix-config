@@ -24,6 +24,16 @@ modules/
 justfile                # deploy/check/update shortcuts
 ```
 
+## Inputs
+
+Every host tracks the current NixOS release, `nixos-26.05`. `nix-darwin`,
+Home Manager and nixvim are pinned to the matching branch, so lambda, htpc,
+hass and vps share one nixpkgs and one set of module semantics — there is no
+separate stable/unstable split to keep in sync.
+
+`nixpkgs-unstable` is the one exception, consumed only by
+`modules/dots/vscode`. See "App configuration that is not a store symlink".
+
 ## Machines
 
 | Host | Type | Description |
@@ -416,6 +426,58 @@ git add -A && git commit -m "add vps host key" && git push
 - Home Manager owns user CLI tools and their configuration.
 - Homebrew owns native macOS applications and Colima.
 - Project-specific language toolchains belong in project dev shells.
+
+### App configuration that is not a store symlink
+
+Three GUI apps rewrite their own config files, so Home Manager cannot symlink
+them read-only out of the store — the app either errors or silently reverts to
+defaults. They are handled as writable copies instead:
+
+| App | Repo source | Activation behaviour | Import back |
+|---|---|---|---|
+| Karabiner-Elements | `modules/dots/karabiner/karabiner.json` | overwritten on every activation | `just karabiner-import` |
+| VS Code | `modules/dots/vscode/settings.json` | seeded only when absent | `just vscode-import` |
+
+Karabiner is overwritten because its rules only change when you deliberately
+edit them — the repo is the source of truth. VS Code's `settings.json` is only
+seeded, because extensions write to it continuously (model pickers, tool
+approvals, view state) and an overwrite on every deploy would throw that away.
+
+VS Code extensions *are* declarative, in `modules/dots/vscode/default.nix`.
+`mutableExtensionsDir = true` keeps `~/.vscode/extensions` writable, so pinned
+extensions are symlinked in and anything not packaged in nixpkgs is installed
+from the marketplace and survives activation. Currently marketplace-only:
+
+- `opentofu.vscode-opentofu`
+
+Both VS Code and its extensions come from the `nixpkgs-unstable` input.
+Extensions are not backported to the release branch, so the pins there run many
+versions behind the marketplace. The two have to move together: an extension
+built against VS Code 1.133 can declare an engine range that 26.05's 1.119
+refuses to load. This is the only module in the repo that leaves the release
+branch.
+
+The Nix copies are read-only, so VS Code cannot update them in place — a version
+bump means a `just update-one nixpkgs-unstable`. After a deploy, run `just vscode-dedupe`
+to drop marketplace copies of extensions Nix now pins; VS Code keeps the higher
+version of the two and a stale marketplace copy would silently win.
+`just vscode-unmanaged` lists every version-suffixed (marketplace-installed)
+extension, which is the set to review for promotion into the module.
+
+### Raycast
+
+Raycast is not declaratively configurable. Extensions, quicklinks, snippets,
+aliases and per-command hotkeys live in an opaque store under
+`~/Library/Application Support/com.raycast.macos`. Only the global hotkey and
+the hyper-key icon are `defaults` keys, and those are set in
+`modules/machines/darwin/lambda/system.nix`.
+
+Everything else comes back through **Raycast Settings → Cloud Sync**, which
+must be enabled before wiping. The extensions currently installed, for a manual
+rebuild if sync is unavailable:
+
+Spotify Player, Color Picker, GitLab, GIF Search, Coffee, Brew,
+Visual Studio Code, Tailscale, Kill Process
 
 Darwin activation installs missing Homebrew declarations and uninstalls
 undeclared packages. It uses Homebrew's normal uninstall mode, not `zap`, so

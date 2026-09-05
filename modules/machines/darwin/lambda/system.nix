@@ -135,6 +135,32 @@
         IconType = 5;
         ShowCategory = 0;
       };
+      # AppleEnabledInputSources is written as a whole array, so this is the
+      # complete set of input sources — the CharacterPaletteIM (Emoji & Symbols)
+      # and PressAndHold entries macOS adds by default are deliberately absent.
+      # The input-source daemon reads this at login; it takes a logout to apply.
+      "com.apple.HIToolbox" = {
+        AppleEnabledInputSources = [
+          {
+            InputSourceKind = "Keyboard Layout";
+            "KeyboardLayout ID" = 0;
+            "KeyboardLayout Name" = "U.S.";
+          }
+          {
+            InputSourceKind = "Keyboard Layout";
+            "KeyboardLayout ID" = 19529;
+            "KeyboardLayout Name" = "Bulgarian - Phonetic";
+          }
+        ];
+      };
+      # Raycast keeps extensions, quicklinks, snippets and aliases in an opaque
+      # store under ~/Library/Application Support/com.raycast.macos, which is
+      # restored through Raycast Cloud Sync, not Nix. Only these two prefs live
+      # in defaults. "Command-49" is Cmd+Space.
+      "com.raycast.macos" = {
+        raycastGlobalHotkey = "Command-49";
+        useHyperKeyIcon = 0;
+      };
     };
   };
 }

@@ -8,7 +8,7 @@ let
     home-manager.useUserPackages = true;
     home-manager.extraSpecialArgs = {
       inputs = self.inputs;
-      nixvimNixpkgs = self.inputs.nixpkgs-darwin;
+      nixvimNixpkgs = self.inputs.nixpkgs;
     };
   };
 
@@ -18,18 +18,17 @@ let
       system = "aarch64-darwin";
       specialArgs = {
         inputs = self.inputs;
-        nixvimModule = self.inputs.nixvim-darwin.homeModules.nixvim;
+        nixvimModule = self.inputs.nixvim.homeModules.nixvim;
       };
       modules = [
         {
-          nixpkgs.pkgs = import self.inputs.nixpkgs-darwin {
+          nixpkgs.pkgs = import self.inputs.nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true;
           };
           system.configurationRevision = self.rev or self.dirtyRev or null;
         }
-        # Keep Home Manager on the release matching the stable Darwin nixpkgs input.
-        self.inputs.home-manager-darwin.darwinModules.home-manager
+        self.inputs.home-manager.darwinModules.home-manager
         self.inputs.agenix.darwinModules.default
         ./_common
         (./. + "/${name}/configuration.nix")

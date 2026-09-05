@@ -7,7 +7,11 @@
 {
   imports = [ ./system.nix ];
 
-  home-manager.users.hdjenkov.imports = [ ../../../dots/ghostty ];
+  home-manager.users.hdjenkov.imports = [
+    ../../../dots/ghostty
+    ../../../dots/karabiner
+    ../../../dots/vscode
+  ];
 
   home-manager.users.hdjenkov.dots.dev-tools.enable = true;
   home-manager.users.hdjenkov.dots.cloud-tools.enable = true;
@@ -21,9 +25,7 @@
     wget
     htop
     yt-dlp
-    vscode
     localsend
-    prismlauncher
   ];
 
   environment.systemPackages = with pkgs; [
@@ -51,26 +53,17 @@
       "rustdesk"
       "linearmouse"
       "karabiner-elements"
-      "cyberduck"
       "helium-browser"
-      "claude"
       "element"
       "spotify"
       "telegram-desktop"
-      "viber"
       "raycast"
-      "puremac"
-      "heroic"
-      "steam"
+      "qbittorrent"
+      "betterdisplay"
       "nheko"
       "orcaslicer"
-      "codex"
       "vesktop"
-      "blender"
-      {
-        name = "sikarugir-app/sikarugir/sikarugir";
-        trusted = true;
-      }
+      "vorssaint"
     ];
   };
 

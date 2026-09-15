@@ -2,15 +2,13 @@
   description = "hdjenkov's nix-darwin + NixOS config";
 
   inputs = {
-    # Every host tracks the current NixOS release. nix-darwin, Home Manager and
-    # nixvim are pinned to the matching branch, so there is one nixpkgs and one
-    # set of module semantics across lambda, htpc, hass and vps.
+    # Two tracks. The NixOS hosts (vps, htpc, hass) stay on the current release
+    # branch; lambda runs unstable. Every flake that carries module semantics
+    # (nix-darwin, Home Manager, nixvim) is pinned to the branch matching the
+    # nixpkgs it is used with — mixing a master-branch module set with a release
+    # nixpkgs breaks as soon as the modules reference a path that only exists in
+    # unstable (this is how `${pkgs.path}/lib/services/lib.nix` broke before).
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-
-    # Used by modules/dots/vscode only. VS Code extensions are not backported to
-    # the release branch, so the stable pins run many versions behind the
-    # marketplace; the editor is taken from here too, since an extension built
-    # against a newer VS Code can refuse to load on an older one.
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     flake-parts = {
@@ -18,9 +16,11 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    # Darwin track: lambda is the only darwin host, so nix-darwin follows
+    # unstable outright rather than carrying a second release-pinned copy.
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     home-manager = {
@@ -28,11 +28,21 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     nixvim = {
       # The Git transport avoids transient missing-blob failures in GitHub's
       # lazy source accessor while still tracking the branch.
       url = "git+https://github.com/nix-community/nixvim.git?ref=nixos-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixvim-unstable = {
+      url = "git+https://github.com/nix-community/nixvim.git?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     agenix = {
@@ -50,9 +60,11 @@
       flake = false;
     };
 
+    # Only lambda enables dots.dev-tools, so this is a lambda-only package —
+    # follow unstable so it matches the system it is installed into.
     claude-code = {
       url = "github:sadjow/claude-code-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     fmatrix = {

@@ -2,27 +2,15 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 let
-  # Extensions are not backported to the nixpkgs release branch, so the pins
-  # there run many versions behind the marketplace (claude-code 2.1.223 vs
-  # 2.1.257, Pylance 2026.2.1 vs 2026.3.1). Take both VS Code and its extensions
-  # from unstable instead — they have to move together, since an extension built
-  # against 1.133 can declare an engine range that VS Code 1.119 refuses to
-  # load. This is the only module in the repo that leaves the release branch.
-  unstable = import inputs.nixpkgs-unstable {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    config.allowUnfree = true;
-  };
-
   settingsPath = "${config.home.homeDirectory}/Library/Application Support/Code/User/settings.json";
 in
 {
   programs.vscode = {
     enable = true;
-    package = unstable.vscode;
+    package = pkgs.vscode;
 
     # VS Code and its extensions install extensions into this directory at
     # runtime, so it stays writable: Home Manager symlinks the pinned ones in
@@ -32,7 +20,7 @@ in
     mutableExtensionsDir = true;
 
     profiles.default.extensions =
-      (with unstable.vscode-extensions; [
+      (with pkgs.vscode-extensions; [
         anthropic.claude-code
         bbenoist.nix
         esbenp.prettier-vscode
@@ -54,7 +42,7 @@ in
         ritwickdey.liveserver
         vscodevim.vim
       ])
-      ++ [ unstable.vscode-extensions."4ops".terraform ];
+      ++ [ pkgs.vscode-extensions."4ops".terraform ];
   };
 
   # settings.json is not managed declaratively: extensions write to it

@@ -1,4 +1,7 @@
 { lib, self, ... }:
+# The NixOS hosts stay on the nixos-26.05 release branch (nixpkgs plus the
+# matching Home Manager and nixvim). lambda is the unstable host — see
+# modules/machines/darwin/default.nix.
 let
   hosts = {
     htpc = "x86_64-linux";

@@ -1,4 +1,7 @@
 { lib, self, ... }:
+# lambda tracks unstable: nixpkgs-unstable plus the master branches of
+# nix-darwin, Home Manager and nixvim. The NixOS hosts stay on the release
+# branch (see modules/machines/nixos/default.nix).
 let
   entries = builtins.attrNames (builtins.readDir ./.);
   configs = builtins.filter (dir: builtins.pathExists (./. + "/${dir}/configuration.nix")) entries;
@@ -8,7 +11,7 @@ let
     home-manager.useUserPackages = true;
     home-manager.extraSpecialArgs = {
       inputs = self.inputs;
-      nixvimNixpkgs = self.inputs.nixpkgs;
+      nixvimNixpkgs = self.inputs.nixpkgs-unstable;
     };
   };
 
@@ -18,17 +21,17 @@ let
       system = "aarch64-darwin";
       specialArgs = {
         inputs = self.inputs;
-        nixvimModule = self.inputs.nixvim.homeModules.nixvim;
+        nixvimModule = self.inputs.nixvim-unstable.homeModules.nixvim;
       };
       modules = [
         {
-          nixpkgs.pkgs = import self.inputs.nixpkgs {
+          nixpkgs.pkgs = import self.inputs.nixpkgs-unstable {
             system = "aarch64-darwin";
             config.allowUnfree = true;
           };
           system.configurationRevision = self.rev or self.dirtyRev or null;
         }
-        self.inputs.home-manager.darwinModules.home-manager
+        self.inputs.home-manager-unstable.darwinModules.home-manager
         self.inputs.agenix.darwinModules.default
         ./_common
         (./. + "/${name}/configuration.nix")

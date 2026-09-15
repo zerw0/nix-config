@@ -7,10 +7,16 @@
 let
   cfg = config.homelab.services.glances;
 
+  # These suites start a real server and talk to it over loopback with short
+  # timeouts, so they fail on a slow or loaded machine rather than on anything
+  # actually broken — test_xmlrpc times out on hass (4 cores, 3 GB) while the
+  # other 578 tests pass. The override also means this build is never in the
+  # binary cache, so every host that enables glances compiles it.
   glances = pkgs.glances.overrideAttrs (old: {
     disabledTestPaths = (old.disabledTestPaths or [ ]) ++ [
       "tests/test_restful.py"
       "tests/test_browser_restful.py"
+      "tests/test_xmlrpc.py"
     ];
   });
 in

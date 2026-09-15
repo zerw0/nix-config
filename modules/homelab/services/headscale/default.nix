@@ -1,6 +1,22 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 let
   cfg = config.homelab.services.headscale;
+
+  # headscale migrates its SQLite schema on upgrade and the migration is
+  # one-way: 0.28.0 (the version in nixos-26.05) validates the schema, finds
+  # the `database_versions` table that 0.29.x added, and refuses to start.
+  # The database on vps is already migrated, so the package has to stay on the
+  # newer branch even though the rest of the host is on the release branch.
+  # Revisit once the release branch catches up to 0.29.
+  unstable = import inputs.nixpkgs-unstable {
+    inherit (pkgs.stdenv.hostPlatform) system;
+  };
 in
 {
   options.homelab.services.headscale = {
@@ -58,6 +74,7 @@ in
   config = lib.mkIf cfg.enable {
     services.headscale = {
       enable = true;
+      package = unstable.headscale;
       address = "0.0.0.0";
       port = 8080;
       settings = {

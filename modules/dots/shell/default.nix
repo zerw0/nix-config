@@ -16,6 +16,14 @@
     "$HOME/.npm-global/bin"
   ];
 
+  # Home Manager owns ~/.zprofile, which is where Homebrew's installer puts its
+  # shellenv line. sessionPath above already covers PATH; this keeps the rest of
+  # what shellenv exports (HOMEBREW_PREFIX, HOMEBREW_CELLAR, MANPATH, INFOPATH)
+  # instead of losing it when HM takes the file over.
+  programs.zsh.profileExtra = lib.optionalString pkgs.stdenv.isDarwin ''
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  '';
+
   programs = {
     bat = {
       enable = true;

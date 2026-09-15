@@ -9,6 +9,9 @@ let
   homeManagerCfg = {
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
+    # Home Manager refuses to clobber a file it does not already own, which
+    # aborts activation partway through. Back the file up and carry on instead.
+    home-manager.backupFileExtension = "hm-bak";
     home-manager.extraSpecialArgs = {
       inputs = self.inputs;
       nixvimNixpkgs = self.inputs.nixpkgs-unstable;
@@ -31,6 +34,7 @@ let
           };
           system.configurationRevision = self.rev or self.dirtyRev or null;
         }
+        self.inputs.determinate.darwinModules.default
         self.inputs.home-manager-unstable.darwinModules.home-manager
         self.inputs.agenix.darwinModules.default
         ./_common

@@ -60,6 +60,17 @@
       flake = false;
     };
 
+    # lambda's Nix is installed and managed by Determinate, so nix-darwin's own
+    # `nix.*` options are off there. This module is the supported way back in:
+    # it forces `nix.enable = false`, owns /etc/nix/nix.custom.conf via
+    # `determinateNix.customSettings`, and ships the Linux-builder VM support
+    # that nix-darwin's `nix.linux-builder` refuses to provide without
+    # `nix.enable`. Darwin-only, so it follows the unstable track.
+    determinate = {
+      url = "github:DeterminateSystems/determinate";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     # Only lambda enables dots.dev-tools, so this is a lambda-only package —
     # follow unstable so it matches the system it is installed into.
     claude-code = {

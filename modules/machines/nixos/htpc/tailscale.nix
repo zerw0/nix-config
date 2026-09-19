@@ -6,8 +6,6 @@
     subnetRouter = true;
     exitNode = true;
   };
-
-  # Ethtool offload settings for Tailscale — specific to the eno1 NIC on htpc.
   systemd.services.ethtool-tailscale = {
     description = "Configure ethtool offloading for Tailscale";
     bindsTo = [ "sys-subsystem-net-devices-eno1.device" ];

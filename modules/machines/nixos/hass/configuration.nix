@@ -12,10 +12,6 @@
   ];
 
   system.stateVersion = "26.11";
-
-  # Publishing so CUPS queues are discoverable as AirPrint targets, resolving
-  # so Home Assistant can find devices. allowInterfaces is left unset to cover
-  # both the wired and the wireless interface.
   services.avahi = {
     enable = true;
     nssmdns4 = true;
@@ -24,7 +20,6 @@
       enable = true;
       addresses = true;
       workstation = true;
-      # Required for CUPS to advertise its shared queues over DNS-SD.
       userServices = true;
     };
   };
@@ -32,27 +27,23 @@
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
-      80 # Caddy, redirects to 443
-      443 # Caddy
-      631 # CUPS: IPP + web interface
-      1883 # Mosquitto, for Frigate on Unraid
-      8080 # scanservjs web UI
-      8123 # Home Assistant
+      80
+      443
+      631
+      1883
+      8080
+      8123
     ];
     allowedUDPPorts = [
-      631 # CUPS browsing
-      1900 # SSDP, for Home Assistant device discovery
-      5353 # mDNS
+      631
+      1900
+      5353
     ];
   };
 
   virtualisation.podman.enable = true;
   virtualisation.podman.dockerSocket.enable = true;
   virtualisation.oci-containers.backend = "podman";
-
-  # --all is deliberate: bumping a pinned tag leaves the old image tagged
-  # rather than dangling, so a default prune would never reclaim it. Images
-  # backing a running container are not touched.
   virtualisation.podman.autoPrune = {
     enable = true;
     dates = "weekly";
@@ -68,10 +59,6 @@
 
   homelab.enable = true;
   homelab.cloudflare.dnsCredentialsFile = config.age.secrets.cloudflareApiToken.path;
-
-  # LAN-only names with real certs: Caddy issues via the Cloudflare DNS-01
-  # challenge, so nothing here is reachable from the internet. Resolution comes
-  # from a DNS override on the router, not from public records.
   homelab.services.caddy.enable = true;
 
   homelab.services.printing.enable = true;

@@ -18,8 +18,6 @@
       efi.canTouchEfiVariables = true;
       systemd-boot = {
         enable = true;
-        # 512M ESP: bound the retained generations so old kernels and initrds
-        # cannot fill /boot.
         configurationLimit = 10;
       };
     };

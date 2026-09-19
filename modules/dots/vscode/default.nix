@@ -11,12 +11,6 @@ in
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
-
-    # VS Code and its extensions install extensions into this directory at
-    # runtime, so it stays writable: Home Manager symlinks the pinned ones in
-    # and leaves everything else alone. Extensions not packaged in nixpkgs
-    # (currently only opentofu.vscode-opentofu) are installed from the
-    # marketplace and survive activation.
     mutableExtensionsDir = true;
 
     profiles.default.extensions =
@@ -44,11 +38,6 @@ in
       ])
       ++ [ pkgs.vscode-extensions."4ops".terraform ];
   };
-
-  # settings.json is not managed declaratively: extensions write to it
-  # continuously (model pickers, tool approvals, view state), and a store
-  # symlink makes every one of those writes fail. Seed it on a fresh machine
-  # only, then leave it mutable. `just vscode-import` pulls it back here.
   home.activation.vscodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -e "${settingsPath}" ]; then
       run mkdir -p "$(dirname "${settingsPath}")"

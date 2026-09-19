@@ -11,17 +11,13 @@ jobs:
     container:
       image: nixos/nix:2.33.1
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Enable flakes
         run: |
           mkdir -p /etc/nix
           echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
           echo "accept-flake-config = true" >> /etc/nix/nix.conf
-
-      # Private flake inputs (secrets, fmatrix) live on the same forgejo as this
-      # repo. The runner job token can read them via the HTTP_AUTHORIZATION
-      # header. Without this the eval fails at fetch-time on the secrets input.
       - name: Configure git auth for private flake inputs
         env:
           FORGEJO_TOKEN: ${{ secrets.FORGEJO_REPO_RO_TOKEN }}

@@ -39,8 +39,6 @@
       setw -g window-status-current-format " #I:#W#F "
       set-window-option -g window-status-style fg=#a89984
       set-option -g renumber-windows on
-
-      # remap prefix from C-b to C-s
       unbind C-b
       set -g prefix C-s
       bind-key C-s send-prefix

@@ -5,8 +5,6 @@
     packages = [ pkgs.terminus_font ];
     keyMap = "us";
   };
-
-  # TTY
   fonts.packages = [ pkgs.meslo-lgs-nf ];
   services.kmscon = {
     enable = true;

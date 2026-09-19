@@ -65,8 +65,6 @@
                     "noatime"
                   ];
                 };
-                # Home Assistant's /config. Its own subvolume so it snapshots
-                # independently of root.
                 "/hass" = {
                   mountpoint = "/var/lib/home-assistant";
                   mountOptions = [
@@ -75,9 +73,6 @@
                     "noatime"
                   ];
                 };
-                # Podman's overlay store. nodatacow avoids the fragmentation
-                # btrfs suffers from with stacked image layers; it also
-                # disables compression here.
                 "/containers" = {
                   mountpoint = "/var/lib/containers";
                   mountOptions = [

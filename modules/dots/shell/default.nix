@@ -10,17 +10,12 @@
     zsh-completions
   ];
 
-  home.sessionPath = lib.optionals pkgs.stdenv.isDarwin [
+  home.sessionPath = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
     "/opt/homebrew/bin"
     "$HOME/.android-sdk-macosx"
     "$HOME/.npm-global/bin"
   ];
-
-  # Home Manager owns ~/.zprofile, which is where Homebrew's installer puts its
-  # shellenv line. sessionPath above already covers PATH; this keeps the rest of
-  # what shellenv exports (HOMEBREW_PREFIX, HOMEBREW_CELLAR, MANPATH, INFOPATH)
-  # instead of losing it when HM takes the file over.
-  programs.zsh.profileExtra = lib.optionalString pkgs.stdenv.isDarwin ''
+  programs.zsh.profileExtra = lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
     eval "$(/opt/homebrew/bin/brew shellenv)"
   '';
 
@@ -92,23 +87,9 @@
     zsh = {
       enable = true;
       enableCompletion = true;
-      plugins = [
-        {
-          name = "zsh-autosuggestions";
-          src = "${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions";
-          file = "zsh-autosuggestions.zsh";
-        }
-        {
-          name = "zsh-history-substring-search";
-          src = "${pkgs.zsh-history-substring-search}/share/zsh-history-substring-search";
-          file = "zsh-history-substring-search.zsh";
-        }
-        {
-          name = "zsh-syntax-highlighting";
-          src = "${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting";
-          file = "zsh-syntax-highlighting.zsh";
-        }
-      ];
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+      historySubstringSearch.enable = true;
       shellAliases = {
         ".." = "cd ..";
         "..." = "cd ../..";
@@ -126,8 +107,7 @@
         mv = "mv -i";
         rm = "rm -i";
         df = "df -h";
-        free = "free -m";
-        ipp = "curl ipinfo.io/ip";
+        ipp = "curl -fsS https://ipinfo.io/ip";
         sudo = "sudo ";
         yt = "yt-dlp --add-metadata -i";
         playlist = "yt-dlp -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' ";
@@ -135,37 +115,30 @@
         ytv = "yt -f bestvideo";
         yta = "yt -x -f bestaudio/best";
         ytmp3 = "yt-dlp -x --audio-format mp3 --audio-quality 0 --embed-thumbnail --add-metadata ";
+      }
+      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+        free = "free -m";
+      }
+      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+        lsblk = "diskutil list";
       };
 
       initContent = ''
-        # Make Ctrl+W remove one path segment instead of the whole path
         WORDCHARS=''${WORDCHARS/\/}
-
-        # Highlight the selected suggestion
         zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
         zstyle ':completion:*' menu yes=long select
-
-        # SSH completion: only Host aliases from ~/.ssh/config + ~/.ssh/config.d/*
-        # Skip known_hosts and /etc/hosts noise.
         zstyle ':completion:*:(ssh|scp|sftp|rsync):*' hosts off
         zstyle ':completion:*:(ssh|scp|sftp|rsync):*' users off
         zstyle ':completion:*:(ssh|scp|sftp|rsync):argument-1:hosts' \
           hosts ''${(uf)"''$(awk '/^Host [^*?#]/ {for(i=2;i<=NF;i++) print ''$i}' \
             ~/.ssh/config ~/.ssh/config.d/*(N) 2>/dev/null)"}
 
-        ${
-          if (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") then
-            ''
-              export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
-              export SSH_AUTH_SOCK=$HOME/.bitwarden-ssh-agent.sock
-              alias lsblk="diskutil list"
-              ulimit -n 2048
-              forgejo-token() { cat "${osConfig.age.secrets.forgejoAccessToken.path}"; }
-              export FORGEJO_TOKEN_FILE="${osConfig.age.secrets.forgejoAccessToken.path}"
-            ''
-          else
-            ""
-        }
+        ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+          export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
+          ulimit -n 2048
+          forgejo-token() { cat "${osConfig.age.secrets.forgejoAccessToken.path}"; }
+          export FORGEJO_TOKEN_FILE="${osConfig.age.secrets.forgejoAccessToken.path}"
+        ''}
 
       '';
     };

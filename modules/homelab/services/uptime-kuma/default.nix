@@ -19,9 +19,6 @@ in
         HOST = "0.0.0.0";
       };
     };
-
-    # Allow the DynamicUser service to reach the podman socket
-    # (root:podman 0660) for the local Docker-type monitors.
     systemd.services.uptime-kuma.serviceConfig.SupplementaryGroups = [ "podman" ];
 
     services.caddy.virtualHosts.${cfg.url}.extraConfig = "reverse_proxy 127.0.0.1:3001";

@@ -41,11 +41,8 @@
               size = "100%";
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ]; # Override existing partition
-                # Subvolumes must set a mountpoint in order to be mounted,
-                # unless their parent is mounted
+                extraArgs = [ "-f" ];
                 subvolumes = {
-                  # Subvolume name is different from mountpoint
                   "/root" = {
                     mountpoint = "/";
                     mountOptions = [
@@ -54,7 +51,6 @@
                       "noatime"
                     ];
                   };
-                  # Subvolume name is the same as the mountpoint
                   "/home" = {
                     mountOptions = [
                       "subvol=home"
@@ -63,7 +59,6 @@
                     ];
                     mountpoint = "/home";
                   };
-                  # Parent is not mounted so the mountpoint must be set
                   "/nix" = {
                     mountOptions = [
                       "subvol=nix"

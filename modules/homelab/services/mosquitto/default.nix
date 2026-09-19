@@ -28,9 +28,6 @@ in
       enable = true;
       listeners = [
         {
-          # address unset: Home Assistant connects over loopback, Frigate on
-          # Unraid over the LAN. passwordFile is handed over via systemd
-          # credentials, so the agenix paths need no ownership fixups.
           port = cfg.port;
           users = {
             hass = {

@@ -6,9 +6,6 @@
 {
   programs.nixvim = {
     enable = true;
-    # Avoid evaluating and installing Nixvim's generated option-reference
-    # manpages. Their upstream options.json derivation triggers Nix source-
-    # context warnings and the documentation is available online instead.
     enableMan = false;
     nixpkgs.source = nixvimNixpkgs;
     viAlias = true;
@@ -35,7 +32,6 @@
         "menuone"
         "noselect"
       ];
-      # Performance opts
       swapfile = false;
       backup = false;
       undofile = true;
@@ -53,7 +49,6 @@
     };
 
     plugins = {
-      # LSP
       lsp = {
         enable = true;
         servers = {
@@ -65,8 +60,6 @@
           nixd.enable = true;
         };
       };
-
-      # Completion
       cmp = {
         enable = true;
         autoEnableSources = true;
@@ -92,8 +85,6 @@
       cmp-buffer.enable = true;
       cmp-path.enable = true;
       luasnip.enable = true;
-
-      # Treesitter
       treesitter = {
         enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
@@ -124,8 +115,6 @@
           yaml
         ];
       };
-
-      # File explorer
       neo-tree = {
         enable = true;
         settings = {
@@ -133,8 +122,6 @@
           window.width = 30;
         };
       };
-
-      # Fuzzy finder
       telescope = {
         enable = true;
         keymaps = {
@@ -145,8 +132,6 @@
         };
         extensions.fzf-native.enable = true;
       };
-
-      # Git
       fugitive.enable = true;
       gitsigns = {
         enable = true;
@@ -160,23 +145,16 @@
           };
         };
       };
-
-      # UI
       lualine = {
         enable = true;
         settings.options.theme = "gruvbox";
       };
       web-devicons.enable = true;
-      # which-key.enable = true;  # Disabled due to builtins.toFile warning
       indent-blankline.enable = true;
       nvim-autopairs.enable = true;
-
-      # Editing
       comment.enable = true;
       vim-surround.enable = true;
       emmet.enable = true;
-
-      # Other
       startify.enable = true;
 
     };
@@ -211,15 +189,12 @@
     ];
 
     keymaps = [
-      # Goyo
       {
         mode = "n";
         key = ";g";
         action = ":Goyo<CR>";
         options.desc = "Toggle Goyo";
       }
-
-      # Disable q/Q
       {
         mode = "n";
         key = "q";
@@ -230,24 +205,18 @@
         key = "Q";
         action = "<Nop>";
       }
-
-      # Close lists
       {
         mode = "n";
         key = "<leader>c";
         action = ":lcl<CR>:pc<CR>:cclose<CR>";
         options.desc = "Close lists";
       }
-
-      # Neo-tree
       {
         mode = "n";
         key = "<leader>e";
         action = ":Neotree toggle<CR>";
         options.desc = "Toggle file tree";
       }
-
-      # Git (gitsigns replaces gitgutter)
       {
         mode = "n";
         key = "]h";
@@ -278,8 +247,6 @@
         action = ":Gitsigns preview_hunk<CR>";
         options.desc = "Preview hunk";
       }
-
-      # LSP
       {
         mode = "n";
         key = "gd";
@@ -313,11 +280,9 @@
     ];
 
     extraConfigLua = ''
-      -- Goyo settings
       vim.g.goyo_width = "80%"
       vim.g.goyo_height = "80%"
 
-      -- Startify settings
       vim.g.startify_files_number = 18
       vim.g.startify_session_persistence = 1
       vim.g.startify_lists = {
@@ -332,7 +297,6 @@
           "   ",
       }
 
-      -- Status line colors
       vim.cmd([[
           hi StatusLine ctermbg=none cterm=bold
           hi StatusLineNC ctermfg=white

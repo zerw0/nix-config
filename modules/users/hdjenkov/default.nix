@@ -1,17 +1,17 @@
 { pkgs, lib, ... }:
 {
-  nix.settings.trusted-users = lib.mkIf (!pkgs.stdenv.isDarwin) [ "hdjenkov" ];
+  nix.settings.trusted-users = lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) [ "hdjenkov" ];
 
   users.users.hdjenkov = lib.mkMerge [
     {
       shell = pkgs.zsh;
       openssh.authorizedKeys.keys = import ./keys.nix;
     }
-    (lib.mkIf pkgs.stdenv.isDarwin {
+    (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
       name = "hdjenkov";
       home = "/Users/hdjenkov";
     })
-    (lib.mkIf (!pkgs.stdenv.isDarwin) {
+    (lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
       isNormalUser = true;
       group = "hdjenkov";
       extraGroups = [
@@ -23,7 +23,7 @@
     })
   ];
 
-  users.groups = lib.mkIf (!pkgs.stdenv.isDarwin) {
+  users.groups = lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
     hdjenkov = { };
   };
 

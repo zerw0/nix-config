@@ -48,7 +48,6 @@
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-  "claudeCode.preferredLocation": "panel",
   "editor.unicodeHighlight.ambiguousCharacters": false,
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

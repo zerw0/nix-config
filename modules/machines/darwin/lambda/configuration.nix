@@ -11,7 +11,7 @@
     imports = [
       ../../../dots/ghostty
       ../../../dots/karabiner
-      ../../../dots/vscode
+      ../../../dots/vscodium
     ];
 
     dots.dev-tools.enable = true;

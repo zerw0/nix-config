@@ -98,6 +98,7 @@
   age.secrets.forgejoAccessToken = {
     file = "${inputs.secrets}/forgejoAccessToken.age";
     owner = "hdjenkov";
+    group = "staff";
   };
 
   system.primaryUser = "hdjenkov";

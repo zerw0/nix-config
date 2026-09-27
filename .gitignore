@@ -1,2 +1,6 @@
 result
 result-*
+.claude/
+.DS_Store
+.direnv/
+.cache/

@@ -1,0 +1,57 @@
+{
+  "git.autofetch": true,
+  "workbench.colorTheme": "Gruvbox Dark Hard",
+  "security.workspace.trust.enabled": false,
+  "window.titleBarStyle": "custom",
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnPaste": true,
+  "css.lint.important": "warning",
+  "scss.lint.important": "warning",
+  "editor.cursorBlinking": "smooth",
+  "editor.fontLigatures": true,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "dotnet.server.useOmnisharp": true,
+  "workbench.startupEditor": "none",
+  "chat.useAgentSkills": true,
+  "lmStudioCopilot.allowFileModifications": false,
+  "lmStudioCopilot.enableLogging": true,
+  "lmStudioCopilot.preserveOriginalCode": true,
+  "lmStudioCopilot.autoLoadProject": true,
+  "lmStudioCopilot.realTimeWatch": false,
+  "lmStudioCopilot.terminalProtection": true,
+  "lmStudioCopilot.autoScrollChat": true,
+  "lmStudioCopilot.autoScrollLogs": true,
+  "lmStudioCopilot.timestampsLogs": true,
+  "lmStudioCopilot.serverUrl": "http://localhost:1234",
+  "lmStudioCopilot.model": "google/gemma-3-12b",
+  "lmStudioCopilot.modelIndex": 0,
+  "lmStudioCopilot.language": "js",
+  "lmStudioCopilot.languageIndex": 1,
+  "lmStudioCopilot.projectType": "none",
+  "lmStudioCopilot.projectTypeIndex": 0,
+  "lmStudioCopilot.intent": "modify",
+  "lmStudioCopilot.intentIndex": 1,
+  "git.confirmSync": false,
+  "editor.smoothScrolling": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "editor.fontFamily": "'CaskaydiaCove Nerd Font', monospace",
+  "extensions.ignoreRecommendations": true,
+  "chat.viewSessions.orientation": "stacked",
+  "chat.tools.urls.autoApprove": {
+    "https://www.discogs.com": {
+      "approveRequest": true,
+      "approveResponse": false
+    }
+  },
+  "security.promptForLocalFileProtocolHandling": false,
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1"
+}

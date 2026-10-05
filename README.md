@@ -63,17 +63,27 @@ Secrets: agenix, private repository.
 ```sh
 just --list
 just format
+just check
 just preflight-lambda
 just diff-lambda
-just brew-cleanup-preview
 just deploy-lambda
 just rollback-lambda
+just clean
 
 just deploy-htpc
 just deploy-hass
 just deploy-vps
 
 just update
-just update-one nixpkgs-unstable
-just update-apply
+just update nixpkgs-unstable
 ```
+
+`just update` updates public inputs and validates Lambda. Private inputs: `just update secrets fmatrix`.
+
+nix-index: `nix-locate --whole-name --at-root /bin/<command>`. Zsh suggests packages for missing commands.
+
+VSCodium: Nix IDE with nixd and nixfmt. Edit [settings.json](modules/dots/vscodium/settings.json); deployment reapplies it and keeps the original as `settings.json.before-nix-managed`.
+
+Development shells: `nix develop ~/git/nix-config#web` (Node/pnpm), `#go`, `#python`, or `#infra` (Ansible/OpenTofu). A project's `.envrc` can use `use flake "$HOME/git/nix-config#web"`.
+
+Python notebooks: `nix develop ~/git/nix-config#python --command codium .`; the shell includes ipykernel.

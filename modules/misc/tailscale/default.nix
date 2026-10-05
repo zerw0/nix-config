@@ -47,7 +47,7 @@ in
 
     services.tailscale = {
       enable = true;
-      authKeyFile = cfg.authKeyFile;
+      inherit (cfg) authKeyFile;
       extraUpFlags = [
         "--login-server=${cfg.loginServer}"
         "--reset"

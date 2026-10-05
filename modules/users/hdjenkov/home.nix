@@ -2,12 +2,14 @@
   pkgs,
   lib,
   nixvimModule,
+  inputs,
   ...
 }:
 {
   home-manager.users.hdjenkov = {
     imports = [
       nixvimModule
+      inputs.nix-index-database.homeModules.default
       ../../dots/shell
       ../../dots/fastfetch
       ../../dots/dev-tools
@@ -33,5 +35,9 @@
     };
 
     programs.home-manager.enable = true;
+    programs.nix-index = {
+      enable = true;
+      enableZshIntegration = true;
+    };
   };
 }

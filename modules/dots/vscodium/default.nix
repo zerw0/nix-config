@@ -7,6 +7,15 @@
 let
   userDir = "${config.home.homeDirectory}/Library/Application Support/VSCodium/User";
   oldUserDir = "${config.home.homeDirectory}/Library/Application Support/Code/User";
+  settingsFile = pkgs.writeText "vscodium-settings.json" (
+    builtins.toJSON (
+      builtins.fromJSON (builtins.readFile ./settings.json)
+      // {
+        "nix.serverPath" = "${pkgs.nixd}/bin/nixd";
+        "nix.serverSettings".nixd.formatting.command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
+      }
+    )
+  );
   openRemoteSsh = pkgs.vscode-utils.buildVscodeExtension {
     pname = "jeanp413.open-remote-ssh";
     version = "0.3.1";
@@ -27,7 +36,7 @@ in
 
     profiles.default.extensions =
       (with pkgs.vscode-extensions; [
-        bbenoist.nix
+        jnoortheen.nix-ide
         detachhead.basedpyright
         esbenp.prettier-vscode
         jdinhlife.gruvbox
@@ -49,7 +58,7 @@ in
   };
   home.activation.vscodiumSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run mkdir -p "${userDir}"
-    for file in settings.json keybindings.json tasks.json; do
+    for file in keybindings.json tasks.json; do
       if [ ! -e "${userDir}/$file" ] && [ -f "${oldUserDir}/$file" ]; then
         run install -m 644 $VERBOSE_ARG "${oldUserDir}/$file" "${userDir}/$file"
       fi
@@ -57,8 +66,9 @@ in
     if [ ! -e "${userDir}/snippets" ] && [ -d "${oldUserDir}/snippets" ]; then
       run cp -R "${oldUserDir}/snippets" "${userDir}/snippets"
     fi
-    if [ ! -e "${userDir}/settings.json" ]; then
-      run install -m 644 $VERBOSE_ARG ${./settings.json} "${userDir}/settings.json"
+    if [ -e "${userDir}/settings.json" ] && [ ! -e "${userDir}/settings.json.before-nix-managed" ]; then
+      run cp "${userDir}/settings.json" "${userDir}/settings.json.before-nix-managed"
     fi
+    run install -m 644 $VERBOSE_ARG ${settingsFile} "${userDir}/settings.json"
   '';
 }

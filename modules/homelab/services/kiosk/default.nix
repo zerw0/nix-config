@@ -115,7 +115,7 @@ in
   config = lib.mkIf cfg.enable {
     services.cage = {
       enable = true;
-      user = cfg.user;
+      inherit (cfg) user;
       program = browser;
       extraArguments = [
         "-s"

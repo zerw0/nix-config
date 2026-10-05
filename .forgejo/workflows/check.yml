@@ -20,12 +20,23 @@ jobs:
           echo "accept-flake-config = true" >> /etc/nix/nix.conf
       - name: Configure git auth for private flake inputs
         env:
-          FORGEJO_TOKEN: ${{ secrets.FORGEJO_REPO_RO_TOKEN }}
+          FORGEJO_SSH_KEY: ${{ secrets.NIX_PRIVATE_SSH_KEY }}
         run: |
-          if [ -n "$FORGEJO_TOKEN" ]; then
-            git config --global "http.https://git.zerw.xyz/.extraheader" \
-              "Authorization: token $FORGEJO_TOKEN"
-          fi
+          set -eu
+          test -n "$FORGEJO_SSH_KEY" || { echo "::error::NIX_PRIVATE_SSH_KEY is missing"; exit 1; }
+          command -v ssh
+          install -d -m 700 "$HOME/.ssh"
+          umask 077
+          printf '%s\n' "$FORGEJO_SSH_KEY" > "$HOME/.ssh/forgejo-flake"
+          install -m 644 .forgejo/ssh_known_hosts "$HOME/.ssh/known_hosts"
+          cat > "$HOME/.ssh/config" <<EOF
+          Host git.zerw.xyz
+            User git
+            IdentityFile $HOME/.ssh/forgejo-flake
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          EOF
+          git ls-remote ssh://git@git.zerw.xyz/hdjenkov/nix-private.git HEAD > /dev/null
 
       - name: Format check (treefmt)
         run: |
@@ -37,3 +48,7 @@ jobs:
 
       - name: Evaluate all configurations
         run: nix --extra-experimental-features 'nix-command flakes' flake check --no-build --all-systems --no-write-lock-file
+
+      - name: Remove SSH credentials
+        if: always()
+        run: rm -f "$HOME/.ssh/forgejo-flake" "$HOME/.ssh/config"

@@ -28,7 +28,7 @@ in
       enable = true;
       listeners = [
         {
-          port = cfg.port;
+          inherit (cfg) port;
           users = {
             hass = {
               acl = [ "readwrite #" ];

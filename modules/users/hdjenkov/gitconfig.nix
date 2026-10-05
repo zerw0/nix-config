@@ -5,7 +5,8 @@
     settings.user.name = "Hristo Djenkov";
     settings.user.email = "me@zerw.xyz";
     settings.core.sshCommand = "ssh -o IdentitiesOnly=yes -i ${config.home.homeDirectory}/.ssh/personal";
-    settings.credential.helper = "osxkeychain";
+    # Reset helpers, including the default supplied by Darwin Git.
+    settings.credential.helper = "";
     signing = {
       format = "ssh";
       key = "${config.home.homeDirectory}/.ssh/personal.pub";

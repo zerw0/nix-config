@@ -5,7 +5,7 @@ let
     home-manager.useUserPackages = true;
     home-manager.backupFileExtension = "hm-bak";
     home-manager.extraSpecialArgs = {
-      inputs = self.inputs;
+      inherit (self) inputs;
       nixvimNixpkgs = self.inputs.nixpkgs-unstable;
     };
   };
@@ -15,7 +15,7 @@ in
   flake.darwinConfigurations.lambda = self.inputs.nix-darwin.lib.darwinSystem {
     system = "aarch64-darwin";
     specialArgs = {
-      inputs = self.inputs;
+      inherit (self) inputs;
       nixvimModule = self.inputs.nixvim-unstable.homeModules.nixvim;
     };
     modules = [

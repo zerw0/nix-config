@@ -4,8 +4,6 @@
 
   fonts.packages = with pkgs; [
     nerd-fonts.caskaydia-cove
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.fira-code
   ];
 
   system.defaults = {
@@ -146,10 +144,6 @@
             "KeyboardLayout Name" = "Bulgarian - Phonetic";
           }
         ];
-      };
-      "com.raycast.macos" = {
-        raycastGlobalHotkey = "Command-49";
-        useHyperKeyIcon = 0;
       };
     };
   };

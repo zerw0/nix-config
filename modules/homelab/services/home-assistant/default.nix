@@ -37,7 +37,7 @@ in
     systemd.tmpfiles.rules = [ "d ${cfg.stateDir} 0700 root root -" ];
 
     virtualisation.oci-containers.containers.home-assistant = {
-      image = cfg.image;
+      inherit (cfg) image;
       volumes = [ "${cfg.stateDir}:/config" ];
       environment.TZ = config.homelab.timeZone;
       extraOptions = [ "--network=host" ];

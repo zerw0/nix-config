@@ -297,10 +297,9 @@
             "devices": [
                 {
                     "identifiers": {
-                        "is_built_in_keyboard": true,
                         "is_keyboard": true
                     },
-                    "swap_grave_accent_and_non_us_backslash": true
+                    "swap_grave_accent_and_non_us_backslash": false
                 },
                 {
                     "identifiers": {
@@ -335,7 +334,6 @@
             "name": "Default profile",
             "selected": true,
             "virtual_hid_keyboard": {
-                "keyboard_type": "ansi",
                 "keyboard_type_v2": "iso"
             }
         }

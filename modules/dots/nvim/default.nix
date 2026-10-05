@@ -161,7 +161,6 @@
 
     extraPlugins = with pkgs.vimPlugins; [
       goyo-vim
-      copilot-vim
     ];
 
     autoCmd = [

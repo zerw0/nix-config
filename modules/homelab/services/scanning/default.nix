@@ -62,7 +62,7 @@ in
     ];
 
     virtualisation.oci-containers.containers.scanservjs = {
-      image = cfg.image;
+      inherit (cfg) image;
       volumes = [
         "${cfg.outputDir}:/var/lib/scanservjs/output"
         "${saneDllConf}:/etc/sane.d/dll.conf:ro"

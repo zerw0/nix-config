@@ -36,7 +36,7 @@ in
       enable = true;
       matrix.homeserver = "https://chat.notthebe.ee";
       matrix.userId = "@fmbot:notthebe.ee";
-      secretsFile = cfg.secretsFile;
+      inherit (cfg) secretsFile;
     };
   };
 }

@@ -12,8 +12,6 @@
 
   home.sessionPath = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
     "/opt/homebrew/bin"
-    "$HOME/.android-sdk-macosx"
-    "$HOME/.npm-global/bin"
   ];
   programs.zsh.profileExtra = lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
     eval "$(/opt/homebrew/bin/brew shellenv)"

@@ -1,6 +1,11 @@
-{ ... }:
-{
+_: {
   networking.hostName = "vps";
+  services.openssh.ports = [ 8888 ];
+  system.activationScripts.retireSshPortMigration.text = ''
+    for service in sshd forgejo firewall; do
+      rm -f "/etc/systemd/system.control/$service.service.d/nix-config-ssh-port.conf"
+    done
+  '';
   networking.networkmanager.enable = true;
   networking.networkmanager.dns = "systemd-resolved";
   services.resolved.enable = true;

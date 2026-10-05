@@ -24,6 +24,11 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixvim = {
       url = "git+https://github.com/nix-community/nixvim.git?ref=nixos-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,7 +50,7 @@
     };
 
     secrets = {
-      url = "git+ssh://git@git.zerw.xyz:222/hdjenkov/nix-private.git";
+      url = "git+ssh://git@git.zerw.xyz/hdjenkov/nix-private.git";
       flake = false;
     };
     determinate = {
@@ -69,7 +74,7 @@
   };
 
   outputs =
-    inputs@{ ... }:
+    inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } (
       { ... }:
       {

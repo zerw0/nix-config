@@ -10,7 +10,7 @@ let
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
     home-manager.extraSpecialArgs = {
-      inputs = self.inputs;
+      inherit (self) inputs;
       nixvimNixpkgs = self.inputs.nixpkgs;
     };
   };
@@ -19,7 +19,7 @@ let
     name: system:
     self.inputs.nixpkgs.lib.nixosSystem {
       specialArgs = {
-        inputs = self.inputs;
+        inherit (self) inputs;
         nixvimModule = self.inputs.nixvim.homeModules.nixvim;
       };
       modules = [

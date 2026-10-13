@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf cfg.enable {
     virtualisation.oci-containers.containers.pocket-id = {
-      image = "ghcr.io/pocket-id/pocket-id:latest";
+      image = "ghcr.io/pocket-id/pocket-id:v2.18.0@sha256:7dd124e44cb65f74fe5761b85d832b285ea261d80ad28ec433f2cf80aba192e6";
       environment = {
         APP_URL = "https://${cfg.url}";
         TRUST_PROXY = "true";

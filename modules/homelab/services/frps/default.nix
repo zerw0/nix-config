@@ -1,5 +1,12 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 let
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs.stdenv.hostPlatform) system; };
   cfg = config.homelab.services.frps;
 in
 {
@@ -35,6 +42,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.frp.package = unstable.frp;
     services.frp.instances.server = {
       enable = true;
       role = "server";

@@ -78,7 +78,7 @@ in
 
   config = lib.mkIf cfg.enable {
     virtualisation.oci-containers.containers.epicgames-freegames = {
-      image = "charlocharlie/epicgames-freegames@sha256:99fbb5a34e4fe1afcaaf33b6d652e54beb7501e7c7d24262da22914151984943";
+      image = "charlocharlie/epicgames-freegames@sha256:c3caf4e667ac87c9fe50346421c5d7f68ccc13dfc1da3751aa50a2541e9054db";
       environment = {
         SERVER_PORT = "3010";
         BASE_URL = "https://${cfg.url}";

@@ -38,6 +38,8 @@
   };
   homelab.services.headscale = {
     enable = true;
+    policyMode = "database";
+    manageConfigInHeadplane = true;
     nameservers = [
       "10.0.1.1"
       "1.1.1.1"
@@ -49,6 +51,7 @@
     };
     policy = {
       tagOwners."tag:private" = [ "group:admin" ];
+      tagOwners."tag:headplane-agent" = [ "group:admin" ];
       groups = {
         "group:admin" = [ "hdjenkov@" ];
         "group:family" = [
@@ -65,6 +68,16 @@
         router = "10.0.1.1/32";
       };
       acls = [
+        # Inbound visibility lets the agent read local Tailnet host information
+        # without granting it outbound connections to members or subnet routes.
+        {
+          action = "accept";
+          src = [
+            "autogroup:member"
+            "tag:private"
+          ];
+          dst = [ "tag:headplane-agent:443" ];
+        }
         {
           action = "accept";
           src = [ "group:admin" ];
@@ -87,7 +100,7 @@
         }
         {
           action = "accept";
-          src = [ "group:family" ];
+          src = [ "autogroup:member" ];
           dst = [ "autogroup:internet:*" ];
         }
         {
@@ -98,7 +111,11 @@
       ];
     };
   };
-  homelab.services.headplane.enable = true;
+  homelab.services.headplane = {
+    enable = true;
+    agent.enable = true;
+    requireExistingDatabase = true;
+  };
   homelab.services.pocket-id = {
     enable = true;
     encryptionKeyFile = config.age.secrets.pocketIdEncryptionKey.path;

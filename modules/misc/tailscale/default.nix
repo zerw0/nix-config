@@ -2,10 +2,12 @@
   lib,
   config,
   inputs,
+  pkgs,
   ...
 }:
 let
   cfg = config.modules.tailscale;
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs.stdenv.hostPlatform) system; };
 in
 {
   options.modules.tailscale = {
@@ -47,6 +49,7 @@ in
 
     services.tailscale = {
       enable = true;
+      package = unstable.tailscale;
       inherit (cfg) authKeyFile;
       extraUpFlags = [
         "--login-server=${cfg.loginServer}"

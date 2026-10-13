@@ -1,5 +1,12 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 let
+  unstable = import inputs.nixpkgs-unstable { inherit (pkgs.stdenv.hostPlatform) system; };
   cfg = config.homelab.services.uptime-kuma;
 in
 {
@@ -13,6 +20,7 @@ in
 
   config = lib.mkIf cfg.enable {
     services.uptime-kuma = {
+      package = unstable.uptime-kuma;
       enable = true;
       settings = {
         PORT = "3001";

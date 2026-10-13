@@ -8,7 +8,7 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "ghcr.io/home-assistant/home-assistant:2026.8.3";
+      default = "ghcr.io/home-assistant/home-assistant:2026.10.1";
       description = "Pinned image — HA ships breaking changes monthly.";
     };
 

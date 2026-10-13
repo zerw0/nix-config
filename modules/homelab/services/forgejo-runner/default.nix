@@ -13,9 +13,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [ "d /var/lib/forgejo-runner 0750 1000 1000 -" ];
     virtualisation.oci-containers.containers = {
       docker-in-docker = {
-        image = "docker:dind";
+        image = "docker:29.9.0-dind@sha256:0a02e01c20ef73e6060775ba3e33e415d289af3bfcf5b1b60e95674beb894875";
         cmd = [
           "dockerd"
           "-H"
@@ -29,7 +30,7 @@ in
       };
 
       forgejo-runner = {
-        image = "code.forgejo.org/forgejo/runner:12.10.1";
+        image = "code.forgejo.org/forgejo/runner:13.2.0@sha256:68fbd60b1198116506b4cb65c63c17c65b26548932131447bb1a8ad7afb1e774";
         dependsOn = [ "docker-in-docker" ];
         cmd = [
           "/bin/sh"

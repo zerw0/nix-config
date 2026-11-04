@@ -56,6 +56,8 @@ in
         "--reset"
       ];
       extraSetFlags = [
+        # Use OpenSSH over the tunnel; do not enable tailscaled's SSH server.
+        "--ssh=false"
         "--accept-dns=${lib.boolToString cfg.acceptDns}"
       ]
       ++ lib.optional (cfg.acceptRoutes || cfg.subnetRouter) "--accept-routes"

@@ -72,6 +72,9 @@ in
     })
   ];
 
+  # Intel i915 needs the Skylake DMC firmware for display power management.
+  hardware.firmware = [ pkgs.linux-firmware ];
+
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [

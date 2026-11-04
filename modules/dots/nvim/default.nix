@@ -52,7 +52,27 @@
       lsp = {
         enable = true;
         servers = {
-          ts_ls.enable = true;
+          ts_ls = {
+            enable = true;
+            package =
+              let
+                server = pkgs.typescript-language-server;
+              in
+              if
+                pkgs.stdenv.hostPlatform.isDarwin
+                && server.version == "6.0.2"
+                && server.pnpmDeps.outputHash == "sha256-MUSxDMlbG21KSesGdEvqa2kEpuVfLlXRUX1qV/FGsSo="
+              then
+                server.overrideAttrs (old: {
+                  # The pinned 6.0.2 pnpm dependency hash differs on Darwin.
+                  # Remove this workaround when nixpkgs fixes the dependency fetcher.
+                  pnpmDeps = old.pnpmDeps.overrideAttrs {
+                    outputHash = "sha256-PmyJb8090pEPc09Tbv8RgdvQpzpba2L8ve87+aVncQU=";
+                  };
+                })
+              else
+                server;
+          };
           pyright.enable = true;
           html.enable = true;
           cssls.enable = true;

@@ -15,6 +15,67 @@ let
   unstable = import inputs.nixpkgs-unstable {
     inherit (pkgs.stdenv.hostPlatform) system;
   };
+  # Separate from the website's nginx so this ingress can be validated and
+  # reloaded independently. Limits apply to HTTP/Noise handshakes, not the
+  # encrypted registration messages inside an established Noise connection.
+  ingressConfig = pkgs.writeText "headscale-ingress.conf" ''
+    pid /run/headscale-ingress/nginx.pid;
+    error_log stderr warn;
+    events { worker_connections 1024; }
+    http {
+      access_log off;
+      client_body_temp_path /run/headscale-ingress/body;
+      proxy_temp_path /run/headscale-ingress/proxy;
+      map $http_upgrade $headscale_connection {
+        default upgrade;
+        "" close;
+      }
+      map $uri $headscale_handshake_ip {
+        default "";
+        /key $binary_remote_addr;
+        /ts2021 $binary_remote_addr;
+      }
+      map $uri $headscale_handshake_global {
+        default "";
+        /key headscale;
+        /ts2021 headscale;
+      }
+      limit_req_zone $headscale_handshake_ip zone=handshake_ip:1m rate=2r/s;
+      limit_req_zone $headscale_handshake_global zone=handshake_global:1m rate=10r/s;
+      limit_conn_zone $binary_remote_addr zone=connections_ip:1m;
+      limit_conn_zone $server_name zone=connections_global:1m;
+      server {
+        listen 127.0.0.1:8082;
+        server_name ${cfg.url};
+        # Caddy overwrites this header with the actual TCP peer address.
+        set_real_ip_from 127.0.0.1;
+        real_ip_header X-Headscale-Client-IP;
+        client_max_body_size 1m;
+        client_header_timeout 10s;
+        client_body_timeout 10s;
+        limit_req_status 429;
+        limit_conn_status 429;
+        limit_req zone=handshake_ip burst=32 nodelay;
+        limit_req zone=handshake_global burst=64 nodelay;
+        limit_conn connections_ip 32;
+        limit_conn connections_global 256;
+        location / {
+          proxy_pass http://127.0.0.1:8080;
+          proxy_http_version 1.1;
+          proxy_set_header Host $http_host;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $headscale_connection;
+          proxy_set_header X-Forwarded-For $remote_addr;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-Proto https;
+          proxy_buffering off;
+          proxy_request_buffering off;
+          proxy_read_timeout 1d;
+          proxy_send_timeout 1d;
+        }
+      }
+    }
+  '';
 in
 {
   options.homelab.services.headscale = {
@@ -99,7 +160,7 @@ in
           vendorHash = "sha256-sdSDAIBaW5c9eTgZfFSrn8LEqHg37Hnr1PszuoXPm6Y=";
         }
       );
-      address = "0.0.0.0";
+      address = "127.0.0.1";
       port = 8080;
       settings = {
         server_url = "https://${cfg.url}";
@@ -133,6 +194,68 @@ in
       text = builtins.toJSON cfg.policy;
       user = "headscale";
       mode = "0400";
+    };
+
+    # Environment overrides also cover the persistent Headplane-managed YAML.
+    # Bound resource damage; these are containment, not an upstream bug fix.
+    systemd.services.headscale = {
+      environment = {
+        HEADSCALE_LISTEN_ADDR = "127.0.0.1:8080";
+        HEADSCALE_DERP_SERVER_ENABLED = "false";
+        GOMEMLIMIT = "384MiB";
+      };
+      serviceConfig = {
+        MemoryHigh = "384M";
+        MemoryMax = "512M";
+        MemorySwapMax = "0";
+        OOMPolicy = "stop";
+        Restart = "always";
+        RestartSec = "5s";
+      };
+    };
+
+    systemd.services.headscale-ingress = {
+      description = "Rate-limited Headscale ingress";
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "headscale.service"
+      ];
+      wants = [ "headscale.service" ];
+      serviceConfig = {
+        ExecStartPre = "${pkgs.nginx}/bin/nginx -t -c ${ingressConfig} -p /run/headscale-ingress";
+        ExecStart = "${pkgs.nginx}/bin/nginx -c ${ingressConfig} -p /run/headscale-ingress -g 'daemon off;'";
+        DynamicUser = true;
+        RuntimeDirectory = "headscale-ingress";
+        Restart = "always";
+        RestartSec = "5s";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_UNIX"
+        ];
+        MemoryMax = "128M";
+        TasksMax = 16;
+      };
+    };
+
+    # Retire the scoped live mitigation when a full NixOS activation takes over.
+    system.activationScripts.retireHeadscaleTailwormOverrides = {
+      deps = [ "etc" ];
+      text = ''
+        rm -f /etc/systemd/system.control/headscale.service.d/50-tailworm.conf
+        rm -f /etc/systemd/system.control/headscale-ingress.service
+        rm -f /etc/systemd/system.control/multi-user.target.d/50-tailworm.conf
+        if test -d /var/lib/tailworm-mitigation; then
+          ln -sfn /etc/static/caddy/caddy_config /etc/caddy/caddy_config
+          rm -f /nix/var/nix/gcroots/tailworm-headscale-ingress
+          rm -f /nix/var/nix/gcroots/tailworm-headscale-service
+          rm -f /nix/var/nix/gcroots/tailworm-headscale-caddy
+        fi
+      '';
     };
 
     # Import before the server starts, so stale database policies never activate.
@@ -212,7 +335,9 @@ in
       handle /admin* {
         reverse_proxy 127.0.0.1:3002
       }
-      reverse_proxy 127.0.0.1:8080
+      reverse_proxy 127.0.0.1:8082 {
+        header_up X-Headscale-Client-IP {remote_host}
+      }
     '';
   };
 }

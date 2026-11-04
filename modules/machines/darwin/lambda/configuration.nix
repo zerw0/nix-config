@@ -5,7 +5,10 @@
   ...
 }:
 {
-  imports = [ ./system.nix ];
+  imports = [
+    ./system.nix
+    ./calibre.nix
+  ];
 
   home-manager.users.hdjenkov = {
     imports = [
@@ -70,6 +73,7 @@
       "orcaslicer"
       "sikarugir"
       "steam"
+      "utm"
     ];
   };
   determinateNix = {

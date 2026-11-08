@@ -143,36 +143,3 @@ hook then loads the environment on entry and unloads it on exit. Use `#infra`,
 paths can be excluded in the project's `.git/info/exclude`.
 
 Python notebooks: `nix develop ~/git/nix-config#python --command codium .`; the shell includes ipykernel.
-
-Oh My Pi (Lambda): `omp`, then `/login openai-codex` to sign in with ChatGPT.
-Use `/model` to choose a model. The pinned binary is in
-[dev-tools](modules/dots/dev-tools/default.nix); activation seeds writable settings
-once in `~/.omp/agent/config.yml` with the ChatGPT provider as the default.
-OMP instructions direct it to consult `~/.codex/memories/` without changing it.
-This is an agent instruction, not a filesystem sandbox. To import a saved Codex
-conversation, run `omp --from-codex` and select it. Imports are manual; the Nix
-setup does not import sessions. OMP's own memory backend starts disabled.
-
-`omp update` cannot replace the Nix-managed binary. To upgrade, update `version`,
-the immutable build URL, and `sha256` in [dev-tools](modules/dots/dev-tools/default.nix)
-using the release metadata at
-`https://build.stencil.so/api/products/omp/versions/<version>/macos-arm64`.
-Run `just preflight-lambda` to validate without activation, then, when ready to
-activate the system configuration, run `just deploy-lambda`. Restart OMP afterward.
-
-With direnv active, launch `omp` directly from the project directory. Without
-direnv, use `nix develop ~/git/nix-config#web --command omp`. For a manual
-interactive development shell, use `nix develop ~/git/nix-config#web --command zsh`.
-
-Restart an OMP session launched outside the environment; reloading LSP alone
-does not add binaries to its startup `PATH`. Server discovery also requires
-matching project-root markers (for example `.git`, `package.json`, `go.mod`,
-or `pyproject.toml`, depending on the server). Servers start on demand.
-
-Personal OMP advisors: `~/.omp/agent/WATCHDOG.yml`. The Correctness and Security
-reviewers use read-only tools and review final yields of the main session only.
-Shared and role-specific instructions append to OMP's built-in advisor prompt.
-Each review is additional model usage; subagents do not inherit this roster's
-reviewers. Use `/advisor status` to inspect them and `/advisor off` to disable
-them for the current session. Global activation is `advisor.enabled` in the
-writable OMP config.

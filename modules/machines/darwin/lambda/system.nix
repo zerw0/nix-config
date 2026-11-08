@@ -97,7 +97,10 @@
     spaces.spans-displays = false;
 
     WindowManager = {
-      EnableStandardClickToShowDesktop = true;
+      EnableStandardClickToShowDesktop = false;
+      StandardHideWidgets = true;
+      StageManagerHideWidgets = true;
+      EnableTiledWindowMargins = false;
       StandardHideDesktopIcons = false;
     };
     CustomUserPreferences = {

@@ -8,6 +8,7 @@
   imports = [
     ./system.nix
     ./calibre.nix
+    ./removemacai.nix
   ];
 
   home-manager.users.hdjenkov = {
@@ -48,12 +49,16 @@
     global.autoUpdate = false;
     global.brewfile = true;
     taps = [
+      { name = "omlahore/tap"; }
       {
         name = "Sikarugir-App/sikarugir";
         trusted = true;
       }
     ];
-    brews = [ "colima" ];
+    brews = [
+      "colima"
+      "omlahore/tap/removemacai"
+    ];
     casks = [
       "bitwarden"
       "karabiner-elements"

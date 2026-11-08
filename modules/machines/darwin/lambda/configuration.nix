@@ -15,6 +15,7 @@
       ../../../dots/ghostty
       ../../../dots/karabiner
       ../../../dots/vscodium
+      ../../../dots/gruvbox
     ];
 
     dots.dev-tools.enable = true;

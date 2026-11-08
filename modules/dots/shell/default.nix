@@ -4,6 +4,9 @@
   osConfig,
   ...
 }:
+let
+  c = import ../gruvbox/palette.nix;
+in
 {
   home.packages = with pkgs; [
     grc
@@ -26,18 +29,18 @@
       enable = true;
       enableZshIntegration = true;
       colors = {
-        fg = "#ebdbb2";
-        bg = "#282828";
-        hl = "#fabd2f";
-        "fg+" = "#ebdbb2";
-        "bg+" = "#3c3836";
-        "hl+" = "#fabd2f";
-        pointer = "#fb4934";
-        info = "#928374";
-        spinner = "#928374";
-        header = "#928374";
-        prompt = "#83a598";
-        marker = "#d3869b";
+        inherit (c) fg;
+        bg = c.bg1;
+        hl = c.yellow;
+        "fg+" = c.fg;
+        "bg+" = c.bg2;
+        "hl+" = c.yellow;
+        pointer = c.red;
+        info = c.gray;
+        spinner = c.gray;
+        header = c.gray;
+        prompt = c.blue;
+        marker = c.purple;
       };
     };
     starship = {
@@ -55,28 +58,30 @@
 
         palettes = {
           gruvbox_dark = {
-            bg = "#282828";
-            bg1 = "#3c3836";
-            bg2 = "#504945";
-            bg3 = "#665c54";
-            bg4 = "#7c6f64";
-            fg = "#ebdbb2";
-            fg1 = "#ddc7a1";
-            red = "#fb4934";
-            red_dim = "#cc241d";
-            green = "#b8bb26";
-            green_dim = "#98971a";
-            yellow = "#fabd2f";
-            yellow_dim = "#d79921";
-            blue = "#83a598";
-            blue_dim = "#458588";
-            purple = "#d3869b";
-            purple_dim = "#b16286";
-            aqua = "#8ec07c";
-            aqua_dim = "#689d6a";
-            orange = "#fe8019";
-            orange_dim = "#d65d0e";
-            gray = "#928374";
+            inherit (c)
+              fg
+              fg1
+              red
+              red_dim
+              green
+              green_dim
+              yellow
+              yellow_dim
+              blue
+              blue_dim
+              purple
+              purple_dim
+              aqua
+              aqua_dim
+              orange
+              orange_dim
+              gray
+              ;
+            bg = c.bg1;
+            bg1 = c.bg2;
+            bg2 = c.bg3;
+            bg3 = c.bg4;
+            bg4 = c.bg5;
           };
         };
       };

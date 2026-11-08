@@ -115,6 +115,8 @@ nix-index: `nix-locate --whole-name --at-root /bin/<command>`. Zsh suggests pack
 
 VSCodium: Nix IDE with nixd and nixfmt. Edit [settings.json](modules/dots/vscodium/settings.json); deployment reapplies it and keeps the original as `settings.json.before-nix-managed`.
 
+Gruvbox: [palette](modules/dots/gruvbox/palette.nix), [app themes](modules/dots/gruvbox/default.nix). Theme imports: `~/.config/gruvbox/README.txt`.
+
 Development shells: `nix develop ~/git/nix-config#<shell>`.
 
 | Shell | Tools | Language servers |

@@ -1,0 +1,61 @@
+/**
+ * @name Gruvbox Dark Hard
+ * @description Local Gruvbox colors. No remote imports or layout changes.
+ * @version 1.0.0
+ */
+.theme-dark, .theme-darker, .theme-midnight {
+  --background-primary: #1d2021;
+  --background-secondary: #282828;
+  --background-secondary-alt: #242727;
+  --background-tertiary: #1d2021;
+  --background-floating: #282828;
+  --background-accent: #3c3836;
+  --background-modifier-hover: #3c383680;
+  --background-modifier-active: #50494580;
+  --background-modifier-selected: #504945;
+  --background-base-lowest: #1d2021;
+  --background-base-lower: #282828;
+  --background-base-low: #282828;
+  --background-surface-high: #3c3836;
+  --background-surface-higher: #504945;
+  --background-surface-highest: #665c54;
+  --bg-base-primary: #1d2021;
+  --bg-base-secondary: #282828;
+  --bg-base-tertiary: #1d2021;
+  --bg-surface-overlay: #282828;
+  --bg-surface-raised: #3c3836;
+  --text-normal: #ebdbb2;
+  --text-primary: #ebdbb2;
+  --text-secondary: #a89984;
+  --text-muted: #928374;
+  --text-link: #83a598;
+  --text-positive: #b8bb26;
+  --text-warning: #fabd2f;
+  --text-danger: #fb4934;
+  --header-primary: #ebdbb2;
+  --header-secondary: #a89984;
+  --interactive-normal: #a89984;
+  --interactive-hover: #ebdbb2;
+  --interactive-active: #fabd2f;
+  --interactive-muted: #665c54;
+  --channeltextarea-background: #3c3836;
+  --input-background: #282828;
+  --modal-background: #282828;
+  --modal-footer-background: #1d2021;
+  --scrollbar-auto-thumb: #665c54;
+  --scrollbar-auto-track: #282828;
+  --scrollbar-thin-thumb: #665c54;
+  --scrollbar-thin-track: transparent;
+  --brand-500: #d79921;
+  --brand-560: #b57614;
+  --brand-600: #af3a03;
+  --button-danger-background: #9d0006;
+  --button-positive-background: #427b58;
+  --mention-background: #d7992126;
+  --mention-foreground: #fabd2f;
+  --background-mentioned: #d799211a;
+  --background-mentioned-hover: #d7992126;
+  --status-danger: #fb4934;
+  --status-positive: #b8bb26;
+  --status-warning: #fabd2f;
+}

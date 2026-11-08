@@ -8,6 +8,7 @@
 
   system.defaults = {
     NSGlobalDomain = {
+      AppleInterfaceStyle = "Dark";
       ApplePressAndHoldEnabled = false;
       InitialKeyRepeat = 15;
       KeyRepeat = 2;
@@ -72,7 +73,7 @@
       ShowStatusBar = true;
       QuitMenuItem = true;
       FXPreferredViewStyle = "Nlsv";
-      _FXShowPosixPathInTitle = true;
+      _FXShowPosixPathInTitle = false;
     };
 
     loginwindow = {
@@ -100,6 +101,12 @@
       StandardHideDesktopIcons = false;
     };
     CustomUserPreferences = {
+      NSGlobalDomain = {
+        AppleAccentColor = 1;
+        AppleHighlightColor = "0.980392 0.741176 0.184314 Gruvbox";
+        # Undocumented AppKit preferences; custom app chrome may ignore them.
+        NSConvolutionOverride1 = 10.0;
+      };
       "com.apple.screencapture" = {
         show-thumbnail = false;
       };

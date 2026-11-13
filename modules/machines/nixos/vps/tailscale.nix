@@ -5,5 +5,6 @@
     authKeyFile = config.age.secrets.tailscaleAuthKey.path;
     acceptRoutes = true;
     acceptDns = false;
+    exitNode = true;
   };
 }

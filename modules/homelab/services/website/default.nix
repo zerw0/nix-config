@@ -22,6 +22,9 @@ in
           }
         ];
         root = "/var/www/site";
+        # Caddy terminates HTTPS. Keep directory redirects relative so Nginx
+        # cannot expose its internal HTTP listener to clients or link crawlers.
+        extraConfig = "absolute_redirect off;";
       };
     };
 

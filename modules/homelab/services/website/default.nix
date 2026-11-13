@@ -22,6 +22,8 @@ in
           }
         ];
         root = "/var/www/site";
+        # Keep redirects relative behind the HTTPS-terminating Caddy proxy.
+        extraConfig = "absolute_redirect off;";
       };
     };
 

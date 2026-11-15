@@ -26,7 +26,7 @@ Secrets: agenix and a private repository.
 Headscale ACLs and DNS are managed in Headplane; rebuilds preserve UI changes.
 Persistent Headscale configuration: `/var/lib/headscale/config/server.yaml`.
 Before the first VPS deployment using persistent Headplane state, run
-`just prepare-headplane-state`.
+`just prepare-headplane-state <host>`.
 
 ## Commands
 
@@ -36,16 +36,21 @@ just format
 just check
 just preflight-lambda
 just diff-lambda
-just deploy-lambda
+just deploy lambda
 just rollback-lambda
-just deploy-htpc
-just deploy-hass
-just deploy-vps
+just deploy htpc
+just deploy hass
+just deploy vps
+just boot vps
+just dry-run vps
 just clean
 
 just update
 just update nixpkgs-unstable
 ```
+
+SSH aliases matching the configuration names supply addresses, users and ports via `~/.ssh/config`.
+NixOS builds run on the target by default; use `just --set local-build "<host>" deploy <host>` to build locally.
 
 `just update` updates public inputs and validates Lambda.
 Private inputs: `just update secrets fmatrix`.

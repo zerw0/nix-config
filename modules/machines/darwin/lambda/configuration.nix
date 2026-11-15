@@ -72,7 +72,6 @@
       "vesktop"
       "vorssaint"
       "iina"
-      "spotify"
       "transmission"
       "blender"
       "codex"

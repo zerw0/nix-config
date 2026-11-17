@@ -6,6 +6,7 @@
   ...
 }:
 let
+  twaybladePkgs = inputs.twayblade.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
   retention = {
     TIMELINE_CREATE = true;
     TIMELINE_CLEANUP = true;
@@ -153,15 +154,31 @@ in
         nur.repos.Ev357.helium
       ]
       ++ [
-        (inputs.twayblade.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
+        (inputs.twayblade.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (old: {
           RUST_MIN_STACK = "67108864";
-        })
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ twaybladePkgs.rustPlatform.bindgenHook ];
+          buildInputs = (old.buildInputs or [ ]) ++ [ twaybladePkgs.libva ];
+          postFixup = (old.postFixup or "") + ''
+            wrapProgram "$out/bin/twayblade" --prefix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [ twaybladePkgs.libva ]
+            }
+          '';
+        }))
         inputs.sidra.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
     home.sessionVariables.FORGEJO_TOKEN_FILE = config.age.secrets.forgejoAccessToken.path;
     programs.zsh.initContent = lib.mkAfter ''
       forgejo-token() { cat "$FORGEJO_TOKEN_FILE"; }
     '';
+    xdg.desktopEntries.helium = {
+      name = "Helium";
+      exec = "${lib.getExe pkgs.nur.repos.Ev357.helium} --use-angle=gl --disable-features=Vulkan --ozone-platform=x11 %U";
+      icon = "helium";
+      categories = [
+        "Network"
+        "WebBrowser"
+      ];
+    };
     xdg.configFile."baloofilerc".text = ''
       [Basic Settings]
       Indexing-Enabled=false

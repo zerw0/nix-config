@@ -53,6 +53,26 @@ in
     owner = "hdjenkov";
     group = "hdjenkov";
   };
+  age.secrets.columbiaBuilderSshKey.file = "${inputs.secrets}/columbiaBuilderSshKey.age";
+  programs.ssh.extraConfig = builtins.readFile "${inputs.secrets}/columbia-builder-ssh.conf";
+  programs.ssh.knownHosts.unraid-builder = {
+    hostNames = [ "unraid-builder" ];
+    publicKey = builtins.readFile "${inputs.secrets}/columbia-builder-hostkey.pub";
+  };
+  nix.distributedBuilds = true;
+  nix.settings.builders-use-substitutes = true;
+  nix.buildMachines = [
+    {
+      hostName = "unraid-builder";
+      protocol = "ssh-ng";
+      sshUser = "root";
+      sshKey = config.age.secrets.columbiaBuilderSshKey.path;
+      systems = [ "x86_64-linux" ];
+      maxJobs = 1;
+      speedFactor = 4;
+      supportedFeatures = [ "big-parallel" ];
+    }
+  ];
   modules.tailscale = {
     enable = true;
     authKeyFile = config.age.secrets.tailscaleAuthKey.path;
@@ -74,6 +94,21 @@ in
     ];
     dots.dev-tools.enable = true;
     dots.cloud-tools.enable = true;
+    programs.ghostty.package = lib.mkForce (
+      pkgs.symlinkJoin {
+        name = "ghostty-radeon-${pkgs.ghostty.version}";
+        inherit (pkgs.ghostty) version meta;
+        paths = [ pkgs.ghostty ];
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram "$out/bin/ghostty" --set LIBGL_ALWAYS_SOFTWARE 1
+          rm "$out/share/applications/com.mitchellh.ghostty.desktop"
+          cp "${pkgs.ghostty}/share/applications/com.mitchellh.ghostty.desktop" "$out/share/applications/"
+          substituteInPlace "$out/share/applications/com.mitchellh.ghostty.desktop" \
+            --replace-fail "${pkgs.ghostty}/bin/ghostty" "$out/bin/ghostty"
+        '';
+      }
+    );
     programs.ghostty.settings.font-size = 12;
     home.packages =
       with pkgs;
@@ -98,7 +133,9 @@ in
         blender
         bottles
         calibre
-        chromium
+        (chromium.override {
+          commandLineArgs = "--use-angle=gl --disable-features=Vulkan --ozone-platform=x11";
+        })
         codex
         element-desktop
         fladder
@@ -116,7 +153,9 @@ in
         nur.repos.Ev357.helium
       ]
       ++ [
-        inputs.twayblade.packages.${pkgs.stdenv.hostPlatform.system}.default
+        (inputs.twayblade.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs {
+          RUST_MIN_STACK = "67108864";
+        })
         inputs.sidra.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
     home.sessionVariables.FORGEJO_TOKEN_FILE = config.age.secrets.forgejoAccessToken.path;

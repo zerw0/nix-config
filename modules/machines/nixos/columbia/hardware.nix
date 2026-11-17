@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 {
   boot.kernelPackages = pkgs.linuxPackages_6_18;
+  boot.kernelParams = [ "acpi_backlight=native" ];
   boot.initrd.availableKernelModules = [
     "ahci"
     "ehci_pci"
@@ -29,16 +30,18 @@
   hardware.bluetooth.powerOnBoot = false;
 
   powerManagement.enable = true;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
   services.power-profiles-daemon.enable = false;
   services.tlp = {
     enable = true;
     settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "ondemand";
-      CPU_SCALING_GOVERNOR_ON_BAT = "ondemand";
-      CPU_BOOST_ON_BAT = 0;
-      RADEON_DPM_STATE_ON_BAT = "battery";
-      RADEON_POWER_PROFILE_ON_BAT = "low";
+      TLP_DEFAULT_MODE = "AC";
+      TLP_PERSISTENT_DEFAULT = 1;
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_MAX_FREQ_ON_AC = 3200000;
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_BOOST_ON_AC = 1;
+      RADEON_DPM_STATE_ON_AC = "performance";
     };
   };
   services.thermald.enable = true;

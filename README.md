@@ -7,6 +7,7 @@ Personal macOS and NixOS configuration. macOS tracks unstable; NixOS tracks 26.0
 | Host | System | Services |
 | --- | --- | --- |
 | [lambda](modules/machines/darwin/lambda) | macOS · aarch64 | MacBook Pro |
+| [columbia](modules/machines/nixos/columbia) | NixOS · x86_64 | EliteBook 8560p, Plasma, Btrfs + Snapper |
 | [htpc](modules/machines/nixos/htpc) | NixOS · x86_64 | Kodi + Jellycon |
 | [hass](modules/machines/nixos/hass) | NixOS · x86_64 | Home Assistant, Mosquitto, CUPS / AirPrint, scanservjs, Glances, Caddy, Chromium kiosk |
 | [vps](modules/machines/nixos/vps) | NixOS · aarch64 | Caddy, PostgreSQL, Forgejo + runner, Headscale + Headplane, Pocket ID, Uptime Kuma, frp, FMBot, Epic Games Free Games, static website |

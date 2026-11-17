@@ -1,6 +1,7 @@
 { lib, self, ... }:
 let
   hosts = {
+    columbia = "x86_64-linux";
     htpc = "x86_64-linux";
     vps = "aarch64-linux";
     hass = "x86_64-linux";

@@ -14,6 +14,11 @@ let
       5
     ];
   themeDir = "${config.home.homeDirectory}/.config/gruvbox";
+  vesktopDir =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "Library/Application Support/vesktop"
+    else
+      "${config.xdg.configHome}/vesktop";
   chromiumTheme = {
     manifest_version = 3;
     name = "Gruvbox Dark Hard";
@@ -179,7 +184,7 @@ in
     '';
   };
   home.file = {
-    "Library/Application Support/vesktop/settings/quickCss.css".source = ./vesktop.theme.css;
-    "Library/Application Support/vesktop/themes/gruvbox.theme.css".source = ./vesktop.theme.css;
+    "${vesktopDir}/settings/quickCss.css".source = ./vesktop.theme.css;
+    "${vesktopDir}/themes/gruvbox.theme.css".source = ./vesktop.theme.css;
   };
 }

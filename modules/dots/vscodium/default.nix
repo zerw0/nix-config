@@ -5,8 +5,13 @@
   ...
 }:
 let
-  userDir = "${config.home.homeDirectory}/Library/Application Support/VSCodium/User";
-  oldUserDir = "${config.home.homeDirectory}/Library/Application Support/Code/User";
+  appSupport =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "${config.home.homeDirectory}/Library/Application Support"
+    else
+      config.xdg.configHome;
+  userDir = "${appSupport}/VSCodium/User";
+  oldUserDir = "${appSupport}/Code/User";
   settingsFile = pkgs.writeText "vscodium-settings.json" (
     builtins.toJSON (
       builtins.fromJSON (builtins.readFile ./settings.json)

@@ -7,6 +7,7 @@
 }:
 let
   twaybladePkgs = inputs.twayblade.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+  ghosttyPkg = twaybladePkgs.ghostty;
   retention = {
     TIMELINE_CREATE = true;
     TIMELINE_CLEANUP = true;
@@ -97,16 +98,16 @@ in
     dots.cloud-tools.enable = true;
     programs.ghostty.package = lib.mkForce (
       pkgs.symlinkJoin {
-        name = "ghostty-radeon-${pkgs.ghostty.version}";
-        inherit (pkgs.ghostty) version meta;
-        paths = [ pkgs.ghostty ];
+        name = "ghostty-radeon-${ghosttyPkg.version}";
+        inherit (ghosttyPkg) version meta;
+        paths = [ ghosttyPkg ];
         nativeBuildInputs = [ pkgs.makeWrapper ];
         postBuild = ''
           wrapProgram "$out/bin/ghostty" --set LIBGL_ALWAYS_SOFTWARE 1
           rm "$out/share/applications/com.mitchellh.ghostty.desktop"
-          cp "${pkgs.ghostty}/share/applications/com.mitchellh.ghostty.desktop" "$out/share/applications/"
+          cp "${ghosttyPkg}/share/applications/com.mitchellh.ghostty.desktop" "$out/share/applications/"
           substituteInPlace "$out/share/applications/com.mitchellh.ghostty.desktop" \
-            --replace-fail "${pkgs.ghostty}/bin/ghostty" "$out/bin/ghostty"
+            --replace-fail "Exec=ghostty " "Exec=$out/bin/ghostty "
         '';
       }
     );

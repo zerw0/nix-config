@@ -2,7 +2,7 @@
 set quiet
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-public_inputs := "agenix claude-code determinate disko flake-parts home-manager home-manager-unstable nix-darwin nix-index-database nixpkgs nixpkgs-unstable nixvim nixvim-unstable treefmt-nix"
+public_inputs := "agenix claude-code determinate disko flake-parts home-manager home-manager-unstable nix-darwin nix-flatpak nix-index-database nixpkgs nixpkgs-unstable nixvim nixvim-unstable nur sidra treefmt-nix twayblade"
 
 default:
     @just --list

@@ -46,5 +46,4 @@ in
 
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/var/log".neededForBoot = true;
-  # Compressed RAM swap comes from _common. No disk swap / hibernation.
 }

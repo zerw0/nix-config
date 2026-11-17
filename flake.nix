@@ -71,6 +71,18 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    twayblade.url = "github:zerw0/twayblade";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/v0.8.0";
+    sidra = {
+      url = "github:wimpysworld/sidra";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs =

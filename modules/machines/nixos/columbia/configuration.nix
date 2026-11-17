@@ -1,4 +1,10 @@
-{ pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   retention = {
     TIMELINE_CREATE = true;
@@ -16,9 +22,11 @@ in
   imports = [
     ./hardware.nix
     ./disk-config.nix
+    inputs.nix-flatpak.nixosModules.nix-flatpak
   ];
 
   system.stateVersion = "26.05";
+  nixpkgs.overlays = [ inputs.nur.overlays.default ];
   networking.hostName = "columbia";
   networking.networkmanager.enable = true;
   networking.networkmanager.dns = "systemd-resolved";
@@ -30,11 +38,31 @@ in
     "libvirtd"
   ];
 
-  # Set the initial login password with nixos-enter + passwd during installation.
   virtualisation.docker.enable = true;
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = false;
+    defaultNetwork.settings.dns_enabled = true;
+  };
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-  services.tailscale.enable = true;
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.secrets.tailscaleAuthKey.file = lib.mkForce "${inputs.secrets}/columbiaTailscaleAuthKey.age";
+  age.secrets.forgejoAccessToken = {
+    file = "${inputs.secrets}/forgejoAccessToken.age";
+    owner = "hdjenkov";
+    group = "hdjenkov";
+  };
+  modules.tailscale = {
+    enable = true;
+    authKeyFile = config.age.secrets.tailscaleAuthKey.path;
+  };
+  services.tailscale.extraSetFlags = [ "--operator=hdjenkov" ];
+  services.netbird.enable = true;
+  services.flatpak = {
+    enable = true;
+    packages = [ "eu.betterbird.Betterbird" ];
+  };
   programs.steam.enable = true;
   programs.localsend.enable = true;
 
@@ -47,32 +75,54 @@ in
     dots.dev-tools.enable = true;
     dots.cloud-tools.enable = true;
     programs.ghostty.settings.font-size = 12;
-    # Linux counterparts of Lambda's Homebrew applications.
-    home.packages = with pkgs; [
-      eza
-      fd
-      ffmpeg
-      htop
-      localsend
-      ncdu
-      ripgrep
-      wget
-      yt-dlp
-      bitwarden-desktop
-      blender
-      calibre
-      chromium
-      codex
-      element-desktop
-      libreoffice
-      mpv
-      orca-slicer
-      rustdesk-flutter
-      telegram-desktop
-      transmission_4-qt
-      vesktop
-    ];
-    # Baloo's background content indexing is costly on this dual-core laptop.
+    home.packages =
+      with pkgs;
+      [
+        eza
+        fd
+        ffmpeg
+        htop
+        localsend
+        ncdu
+        ripgrep
+        wget
+        yt-dlp
+        ansible
+        (anydesk.overrideAttrs (old: {
+          src = pkgs.fetchurl {
+            inherit (old.src) url;
+            hash = "sha256-zS5P2eyTHZY7cBW8mQ2Q6M0lXcx9VZZTtpG3Bb6u7IQ=";
+          };
+        }))
+        bitwarden-desktop
+        blender
+        bottles
+        calibre
+        chromium
+        codex
+        element-desktop
+        fladder
+        haruna
+        libreoffice
+        mpv
+        orca-slicer
+        rustdesk-flutter
+        remmina
+        telegram-desktop
+        transmission_4-qt
+        trayscale
+        vesktop
+        viber
+        nur.repos.Ev357.helium
+      ]
+      ++ [
+        inputs.twayblade.packages.${pkgs.stdenv.hostPlatform.system}.default
+        inputs.sidra.packages.${pkgs.stdenv.hostPlatform.system}.default
+      ];
+    home.sessionVariables.FORGEJO_TOKEN_FILE = config.age.secrets.forgejoAccessToken.path;
+    programs.zsh.initContent = lib.mkAfter ''
+      forgejo-token() { cat "$FORGEJO_TOKEN_FILE"; }
+    '';
     xdg.configFile."baloofilerc".text = ''
       [Basic Settings]
       Indexing-Enabled=false
@@ -82,21 +132,21 @@ in
   environment.systemPackages = with pkgs; [
     btrfs-progs
     docker-compose
+    podman-compose
     pciutils
     usbutils
     libva-utils
   ];
 
   services.desktopManager.plasma6.enable = true;
+  services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "radeon" ];
   services.displayManager.sddm.enable = true;
   services.displayManager.defaultSession = "plasma";
   programs.kde-pim.enable = false;
   services.orca.enable = false;
 
-  # Retain Dolphin, Ark, Okular, Gwenview, Spectacle and System Settings.
-  # Ghostty and VSCodium supply the terminal and editor.
   environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    elisa
     kate
     konsole
     khelpcenter
@@ -129,7 +179,6 @@ in
       };
     };
   };
-  # Disko mounts separate snapshot subvolumes; Snapper must not create them.
   systemd.tmpfiles.rules = [
     "d /.snapshots 0750 root root -"
     "d /home/.snapshots 0750 root root -"

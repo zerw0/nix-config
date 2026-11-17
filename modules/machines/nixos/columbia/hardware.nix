@@ -1,7 +1,5 @@
 { lib, pkgs, ... }:
 {
-  # Sandy Bridge i5-2520M: use the cached, supported LTS kernel rather than
-  # rebuilding the entire package set with CPU-specific compiler flags.
   boot.kernelPackages = pkgs.linuxPackages_6_18;
   boot.initrd.availableKernelModules = [
     "ahci"
@@ -26,7 +24,6 @@
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    # HD 6470M uses the kernel's radeon driver and Mesa's r600 driver.
   };
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = false;
@@ -46,7 +43,41 @@
   };
   services.thermald.enable = true;
   services.fstrim.enable = true;
-  # Keep build pressure manageable on the 2-core / 4-thread CPU.
+
+  systemd.services.radeon-resume-display = {
+    description = "Restore Radeon display after resume";
+    wantedBy = [
+      "suspend.target"
+      "hibernate.target"
+      "hybrid-sleep.target"
+      "suspend-then-hibernate.target"
+    ];
+    after = [
+      "suspend.target"
+      "hibernate.target"
+      "hybrid-sleep.target"
+      "suspend-then-hibernate.target"
+    ];
+    path = [
+      pkgs.kbd
+      pkgs.coreutils
+    ];
+    serviceConfig = {
+      Type = "oneshot";
+      TimeoutStartSec = 15;
+    };
+    script = ''
+      sleep 1
+      active_vt=$(fgconsole)
+      spare_vt=$(fgconsole --next-available)
+      if [ "$active_vt" = "$spare_vt" ] || [ "$spare_vt" -le 0 ]; then
+        exit 0
+      fi
+      trap 'chvt "$active_vt"' EXIT
+      chvt "$spare_vt"
+      sleep 1
+    '';
+  };
   nix.settings = {
     max-jobs = 1;
     cores = 2;

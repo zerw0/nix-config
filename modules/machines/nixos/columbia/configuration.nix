@@ -67,7 +67,7 @@ in
       libreoffice
       mpv
       orca-slicer
-      rustdesk
+      rustdesk-flutter
       telegram-desktop
       transmission_4-qt
       vesktop

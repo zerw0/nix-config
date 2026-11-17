@@ -9,8 +9,7 @@ in
 {
   disko.devices.disk.main = {
     type = "disk";
-    # Replace with the target's stable /dev/disk/by-id/... path before installing.
-    device = lib.mkDefault "/dev/disk/by-id/REPLACE_WITH_INSTALL_DISK";
+    device = lib.mkDefault "/dev/disk/by-id/ata-TEAM_T253LE240G_115E070303CD00011568";
     content = {
       type = "gpt";
       partitions = {

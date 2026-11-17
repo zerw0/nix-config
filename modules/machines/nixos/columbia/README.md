@@ -31,9 +31,9 @@ The installer needs an SSH identity authorized for `nix-private`; do not copy
 private keys into this repository. Run the following from the checkout.
 
 1. Identify the target disk with `lsblk -o NAME,SIZE,MODEL,SERIAL,MOUNTPOINTS`
-   and `ls -l /dev/disk/by-id/`. Replace `REPLACE_WITH_INSTALL_DISK` in
-   `disk-config.nix` with its stable disk ID. The placeholder intentionally
-   points to a nonexistent device. Review the disk choice before continuing.
+   and `ls -l /dev/disk/by-id/`. The layout targets Columbia's 240 GB TEAM SSD
+   by its stable disk ID in `disk-config.nix`. Verify that it matches the
+   intended disk before continuing.
 2. Inspect the evaluated disk selection:
 
    ```sh
